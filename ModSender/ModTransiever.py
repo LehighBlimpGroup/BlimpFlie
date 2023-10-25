@@ -65,11 +65,11 @@ try:
         outputs, y = joyhandler.get_outputs()
         fx = outputs[1]
         #values from the Nicla
-        feedback = esp_now.getFeedback() 
-        _x = feedback[1][2] * 1000
-        _y = feedback[1][3] * 1000
-        _w = feedback[1][4] * 1000
-        _h = feedback[1][5] * 1000
+        feedback = esp_now.getFeedback(1) 
+        _x = feedback[2] * 1000
+        _y = feedback[3] * 1000
+        _w = feedback[4] * 1000
+        _h = feedback[5] * 1000
         if _x == -1 or _y == -1 or _w == -1 or _h == -1:
             continue
         if x != _x or y != _y or w != _w or h != _h:
