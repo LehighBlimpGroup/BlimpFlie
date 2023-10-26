@@ -1,11 +1,11 @@
 #include "modBlimp.h"
 #include "BNO85.h"
-#include "baro390.h"
+#include "baro280.h"
 
 
 ModBlimp blimp;
 BNO85 bno;
-baro390 baro;
+baro280 baro;
 
 //IBusBM IBus; 
 
@@ -305,21 +305,17 @@ void loop() {
     Serial.print(',');
     Serial.print((bool)controls.ready);
     Serial.print(',');
-    Serial.print(controls.absz);
+    Serial.print(sensors.estimatedZ - sensors.groundZ);
+    Serial.print(',');
+    Serial.print(sensors.yaw);
     Serial.print(',');
     Serial.print(espSendData.values[2]);
     Serial.print(',');
-    Serial.print(raws.data[0]);
-    Serial.print(',');
     Serial.print(espSendData.values[3]);
     Serial.print(',');
-    Serial.print(sensors.estimatedZ - sensors.groundZ);
+    Serial.print(espSendData.values[4]);
     Serial.print(',');
-    Serial.print(sensors.pitch);
-    Serial.print(',');
-    Serial.print(sensors.roll);
-    Serial.print(',');
-    Serial.println(sensors.yaw);
+    Serial.println(espSendData.values[5]);
     counter2 = 0;
   }
   lastflag = flag;

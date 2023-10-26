@@ -96,7 +96,12 @@ class KeyboardHandler:
         self.fx = -1* self.right_vertical
         self.fz = self.fz + self.left_vertical * dt if self.lb_state else 0
         self.tz = self.right_horizontal
-        return [self.lb_state, self.fx, 0, self.fz, 0, 0, self.tz, 0, 0, 0, 0, 0], self.y_state
+        stop = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                pygame.quit()
+                stop = True
+        return [self.lb_state, self.fx, 0, self.fz, 0, 0, self.tz, 0, 0, 0, 0, 0, 0], stop
 
 if __name__ == "__main__":
     handler = KeyboardHandler()

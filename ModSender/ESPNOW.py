@@ -80,13 +80,15 @@ class ESPNOWControl:
 
             # Using findall to get all matches since there may be multiple flags in a single message
             matches = re.findall(pattern, incoming)
-
-            for match in matches:
-                flag = int(match[0])
-                values_str = match[1]
-                values = [float(val) for val in values_str.split(',')]
-                # Store the data in the dictionary
-                self.parsed_data[flag] = values
+            try:
+                for match in matches:
+                    flag = int(match[0])
+                    values_str = match[1]
+                    values = [float(val) for val in values_str.split(',')]
+                    # Store the data in the dictionary
+                    self.parsed_data[flag] = values
+            except ValueError:
+                print("Received malformed data!")
 
             if self.verbose:
                 print("Received:", incoming)
