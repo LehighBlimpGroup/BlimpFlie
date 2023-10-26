@@ -56,7 +56,6 @@ max_x = 240
 max_y = 160
 x, y, w, h = -1, -1, -1, -1
 
-
 y = False
 try:
     time_prev = time.time()
