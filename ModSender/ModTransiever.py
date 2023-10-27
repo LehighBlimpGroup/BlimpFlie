@@ -29,10 +29,10 @@ robConfig.startTranseiver(BRODCAST_CHANNEL, SLAVE_INDEX, MASTER_MAC)  # Start co
 y_pressed = False
 try:
     while not y_pressed:
-        outputs, y_pressed = joyhandler.get_outputs()  # get joystick input
         # outputs = [0]*13
         feedback = esp_now.getFeedback(1)  # get sensor data from robot
-        # print(feedback)
+        outputs, y_pressed = joyhandler.get_outputs(start_yaw = feedback[3], default_height=0)  # get joystick input
+        print(feedback)
 
         mygui.update_interface(feedback[3], outputs[6], feedback[0], outputs[3])  # display sensor data
 

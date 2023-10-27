@@ -1,11 +1,11 @@
 
 
-ROBOT_CONFIG_FILE = "./robot_configs.json"
+ROBOT_CONFIG_FILE = "ModSender/robot_configs.json"
 
 #ESPNOW PARAMS
 # MASTER_MAC = "34:85:18:91:C7:80" #address of the transiever
 ESP_VERBOSE = True
-PORT = "COM12" #serial port for the transiever
+PORT = "/dev/tty.usbmodem14401"
 LIST_OF_MAC_ADDRESS = [
     "34:85:18:91:BC:94",
     "34:85:18:91:BE:34",
@@ -21,6 +21,6 @@ LIST_OF_MAC_ADDRESS = [
 
 
 ]
-MASTER_MAC = "C0:49:EF:EB:FE:34"
+MASTER_MAC = "34:85:18:91:49:C0"
 SLAVE_INDEX = 10 #-1 means broadcast
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1

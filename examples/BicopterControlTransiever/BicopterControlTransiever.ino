@@ -296,8 +296,17 @@ void loop() {
     Serial.println(flag);
     baro.init();
     getLatestSensorData(&sensors);
-    delay(200);
+    delay(30);
     sensors.groundZ = baro.getEstimatedZ();
+    delay(30);
+    getLatestSensorData(&sensors);
+    while (abs(sensors.groundZ - baro.getEstimatedZ()) > .4 || sensors.groundZ == baro.getEstimatedZ()){
+      
+      sensors.groundZ = baro.getEstimatedZ();
+      delay(100);
+
+      getLatestSensorData(&sensors);
+    }
   }
   else if (flag == 97 && lastflag != flag){
     Serial.print("Set flags: ");
@@ -552,7 +561,7 @@ void addFeedback(controller_t *controls, sensors_t *sensors) {
         z_integral = clamp(z_integral, z_int_low,z_int_high);
         //Serial.println(z_integral);
       } 
-      controls->fz = (controls->fz + controls->absz - (sensors->estimatedZ-sensors->groundZ))*PDterms->kpz 
+      controls->fz = controls->fz + (controls->absz - (sensors->estimatedZ-sensors->groundZ))*PDterms->kpz 
                       - (sensors->velocityZ)*PDterms->kdz + (z_integral) * kiz;
       
       // fzave = fzave * .9 + controls->fz * .1;
