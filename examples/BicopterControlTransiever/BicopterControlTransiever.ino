@@ -298,7 +298,7 @@ void loop() {
 
   }
   else if (flag == 98 && lastflag != flag){
-    Serial.print("Set flags: ");
+    Serial.print(“Set flags: “);
     Serial.println(flag);
     baro.init();
     getLatestSensorData(&sensors);

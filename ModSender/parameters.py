@@ -1,4 +1,7 @@
-ROBOT_CONFIG_FILE = "/ModSender/robot_configs.json"
+
+
+ROBOT_CONFIG_FILE = "./robot_configs.json"
+ROBOT_JASON = "bicopterbasic"
 
 #ESPNOW PARAMS
 # MASTER_MAC = "34:85:18:91:C7:80" #address of the transceiver
@@ -22,7 +25,7 @@ MASTER_MAC = "34:85:18:91:49:C0"
 SLAVE_INDEX = 10 #-1 means broadcast
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
-YAW_SENSOR = True
+
 
 GUI_ENABLED = True
 
