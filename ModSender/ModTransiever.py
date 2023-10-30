@@ -7,7 +7,7 @@ import math
 
 #ESPNOW PARAMS
 ESP_VERBOSE = False #True
-PORT = "/dev/cu.usbmodem101"
+PORT = "/dev/cu.usbmodem1101"
 LIST_OF_MAC_ADDRESS = [
     "34:85:18:91:BC:94",
     "34:85:18:91:BE:34",
@@ -20,11 +20,12 @@ LIST_OF_MAC_ADDRESS = [
     "48:27:E2:E6:E6:44", #8 kim
     "34:85:18:91:24:F0", #9
     "34:85:18:91:20:a8", #10 Leo
+    "48:27:E2:E6:E6:50", #11 BX
 ]
 
 MASTER_MAC = "34:85:18:91:BC:94" #address of the transiever
 
-SLAVE_INDEX = 2 #-1 means broadcast
+SLAVE_INDEX = 11 #-1 means broadcast
 
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
@@ -58,13 +59,13 @@ max_x = 240
 max_y = 160
 x, y, w, h = -1, -1, -1, -1
 
-y = False
+y_value = False
 try:
     time_prev = time.time()
     while True:
         # under joystick control
-        outputs, y = joyhandler.get_outputs()
-        if y:
+        outputs, y_value = joyhandler.get_outputs()
+        if y_value:
             break
         fx = outputs[1]
         #values from the Nicla
@@ -75,8 +76,6 @@ try:
         _y = feedback[3] * 1000
         _w = feedback[4] * 1000
         _h = feedback[5] * 1000
-
-
 
         #If the Nicla updates the desired yaw and height
         if x != _x or y != _y or w != _w or h != _h:
