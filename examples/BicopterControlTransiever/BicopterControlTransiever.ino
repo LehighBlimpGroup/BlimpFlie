@@ -2,6 +2,7 @@
 
 #include "BNO85.h"
 #include "baro390.h"
+#include "GY_US42V2.h"  // Include the header file
 
 // #include "BNO55.h"
 // #include "baro280.h"
@@ -9,6 +10,8 @@
 ModBlimp blimp;
 BNO85 bno;
 baro390 baro;
+GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
+
 
 IBusBM IBus;
 
@@ -230,6 +233,13 @@ void loop() {
   int flag = raws.flag;
   getLatestSensorData(&sensors);
   blimp.getSensorRaws(&sensorData); //reading from Ultrasound wireless
+
+
+  int sonar_sensor_enabled = 1;
+
+  if(sonar_sensor_enabled){
+    sensorData.values[0] = sonar_sensor.readDistance();  // Read distance from sensor
+  }
   
 
     if ((int)(flag/10) == 0){// flag == 0, 1, 2 uses control of what used to be the correct way
