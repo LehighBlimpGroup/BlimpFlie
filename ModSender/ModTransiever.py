@@ -18,6 +18,7 @@ robConfig = RobotConfig(esp_now, ROBOT_CONFIG_FILE)
 # Set configs for all slave indexes that you want to use
 # Bicopter basic contains configs for a robot with no feedback
 robConfig.sendAllFlags(BRODCAST_CHANNEL, SLAVE_INDEX, ROBOT_JASON)
+robConfig.sendAllFlags(BRODCAST_CHANNEL, SLAVE_INDEX, ROBOT_JASON)
 # robConfig.sendSetupFlags(BRODCAST_CHANNEL, SLAVE_INDEX, "bicopterbasic")
 
 YAW_SENSOR, Z_SENSOR = robConfig.getFeedbackParams(ROBOT_JASON)
@@ -25,24 +26,27 @@ YAW_SENSOR, Z_SENSOR = robConfig.getFeedbackParams(ROBOT_JASON)
 # Joystick
 joyhandler = JoystickHandler(yaw_sensor=YAW_SENSOR)
 
+
+robConfig.startTranseiver(BRODCAST_CHANNEL, SLAVE_INDEX, MASTER_MAC)  # Start communicatio
+
 if YAW_SENSOR:
     robConfig.startBNO(BRODCAST_CHANNEL, SLAVE_INDEX)  # Configure IMU
 
 if Z_SENSOR:
     robConfig.startBaro(BRODCAST_CHANNEL, SLAVE_INDEX)  # Configure Barometer
 
-robConfig.startThrustRange(BRODCAST_CHANNEL, SLAVE_INDEX, "bicopterbasic")  # Motor specifications
-
-robConfig.startTranseiver(BRODCAST_CHANNEL, SLAVE_INDEX, MASTER_MAC)  # Start communication
-
+# robConfig.startThrustRange(BRODCAST_CHANNEL, SLAVE_INDEX, "bicopterbasic")  # Motor specifications
+robConfig.startThrustRange(BRODCAST_CHANNEL, SLAVE_INDEX, "bicopterspin")  # Motor specifications
 ###### Communicate until Y button (Exit) is pressed #####
 y_pressed = False
 try:
     while not y_pressed:
         # outputs = [0]*13
+        feedback = esp_now.getFeedback(2)  # get sensor data from robot
+        #print(feedback)
+
         feedback = esp_now.getFeedback(1)  # get sensor data from robot
-        outputs, y_pressed = joyhandler.get_outputs(start_yaw = feedback[3], default_height=0)  # get joystick input
-        print(feedback)
+        outputs, y_pressed = joyhandler.get_outputs(start_yaw = feedback[3], default_height = feedback[0])  # get joystick input
 
         mygui.update_interface(feedback[3], outputs[6], feedback[0], outputs[3])  # display sensor data
 

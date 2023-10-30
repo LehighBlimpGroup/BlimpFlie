@@ -93,6 +93,7 @@ class RobotConfig:
         for data in data_sets:
             if not self._send_data(data, BRODCAST_CHANNEL, SLAVE_INDEX):
                 return False
+            time.sleep(0.1)
 
         print("All Flags Sent on ", SLAVE_INDEX, " for ", CONFIG_INDEX)
         return True
@@ -127,6 +128,7 @@ class RobotConfig:
         return True
     
     def startBNO(self, BRODCAST_CHANNEL, SLAVE_INDEX):
+        print("starting BNO")
         time.sleep(0.1)
         if not self._send_data([97], BRODCAST_CHANNEL, SLAVE_INDEX):
             time.sleep(1)
@@ -135,6 +137,7 @@ class RobotConfig:
     
 
     def startBaro(self, BRODCAST_CHANNEL, SLAVE_INDEX):
+        print("starting Baro")
         time.sleep(0.1)
         if not self._send_data([98], BRODCAST_CHANNEL, SLAVE_INDEX):
             time.sleep(1)

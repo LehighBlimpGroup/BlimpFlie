@@ -1,5 +1,4 @@
 #include "modBlimp.h"
-
 #include "BNO85.h"
 #include "baro390.h"
 
@@ -9,13 +8,15 @@
 ModBlimp blimp;
 BNO85 bno;
 baro390 baro;
+// BNO55 bno;
+// baro280 baro;
 
 IBusBM IBus; 
 
 
 robot_specs_s robot_specs = {
     .min_thrust = 1000,
-    .max_thrust = 2000,
+    .max_thrust = 1800,
 };
 
 /*
@@ -200,6 +201,7 @@ bool snapon = 0;
 // float resyncTimer = 0;
 unsigned long timed = micros();
 
+float yaw_error_feedback = 0;
 int lastflag = 0;
 
 int counter2 = 0;
@@ -228,7 +230,6 @@ void loop() {
   
   int flag = raws.flag;
   getLatestSensorData(&sensors);
-  
   
 
   if ((int)(flag/10) == 0){// flag == 0, 1, 2 uses control of what used to be the correct way
@@ -298,7 +299,7 @@ void loop() {
 
   }
   else if (flag == 98 && lastflag != flag){
-    Serial.print(“Set flags: “);
+    Serial.print("Set flags: ");
     Serial.println(flag);
     baro.init();
     getLatestSensorData(&sensors);
@@ -347,6 +348,18 @@ void loop() {
       espSendData.values[4] = sensors.pitchrate;
       espSendData.values[5] = sensors.rollrate;
 
+      blimp.send_esp_feedback(transceiverAddress, &espSendData);
+    }
+
+    if (transceiverEnabled){
+      
+      espSendData.flag = 2;
+      espSendData.values[0] = outputs.m1;
+      espSendData.values[1] = outputs.m2;
+      espSendData.values[2] = outputs.s1;
+      espSendData.values[3] = outputs.s2;
+      espSendData.values[4] = 0;
+      espSendData.values[5] = yaw_error_feedback;      
       blimp.send_esp_feedback(transceiverAddress, &espSendData);
     }
   }
@@ -523,7 +536,7 @@ void addFeedback(controller_t *controls, sensors_t *sensors) {
         z_integral = clamp(z_integral, z_int_low,z_int_high);
         //Serial.println(z_integral);
       } 
-      controls->fz = controls->fz + (controls->absz - (sensors->estimatedZ-sensors->groundZ))*PDterms->kpz 
+      controls->fz = (controls->fz + controls->absz - (sensors->estimatedZ-sensors->groundZ))*PDterms->kpz 
                       - (sensors->velocityZ)*PDterms->kdz + (z_integral) * kiz;
       
       // fzave = fzave * .9 + controls->fz * .1;
@@ -535,6 +548,7 @@ void addFeedback(controller_t *controls, sensors_t *sensors) {
       // Computing error between angles
       float e_yaw = controls->tz - sensors->yaw;
       e_yaw = atan2(sin(e_yaw), cos(e_yaw));
+      yaw_error_feedback = e_yaw;
       // PD for yaw control
       controls->tz = e_yaw * PDterms->kpyaw - sensors->yawrate*PDterms->kdyaw;
       
@@ -621,11 +635,11 @@ void getOutputs270(controller_t *controls, sensors_t *sensors, actuation_t *out)
   out->m2 = clamp(f2, 0, 1);
   if (out->m1 < 0.02f)
   {
-    t1 = PI/2;
+    t1 = PI/3;
   }
   if (out->m2 < 0.02f)
   {
-    t2 = PI/2;
+    t2 = PI/3;
   }
   
   out->s1 = clamp(t1 + servo1offset, 0, 3*PI/2) / (3*PI/2); // cant handle values between PI and 2PI
