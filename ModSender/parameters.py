@@ -8,6 +8,12 @@ ROBOT_JASON = "bicopterbasic"
 ESP_VERBOSE = False
 PORT = "COM15" #serial port for the transiever
 
+
+# robots = {
+# # "48:27:E2:E6:E4:0C": "Big wall",
+#     "48:27:E2:E6:E1:00": "david"
+# }
+
 LIST_OF_MAC_ADDRESS = [
     # "34:85:18:91:BC:94",
     # "34:85:18:91:BE:34",
