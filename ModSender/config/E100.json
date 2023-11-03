@@ -71,7 +71,7 @@
                     "mode" : 2,
                     "control" : 0,
                     "min_thrust": 1050,
-                    "max_thrust": 1800
+                    "max_thrust": 2000
                     }
     },
     "bicopterbasicAGAIN": {
