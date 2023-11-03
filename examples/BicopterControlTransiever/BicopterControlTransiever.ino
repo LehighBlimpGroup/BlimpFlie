@@ -348,7 +348,7 @@ void loop() {
     counter2 += 1;
     if (counter2%5 == 0){
         if (transceiverEnabled){
-            espSendData.flag = 1;
+            //espSendData.flag = 1;
             espSendData.values[0] = sensors.estimatedZ - sensors.groundZ;
             espSendData.values[1] = sensors.pitch;
             espSendData.values[2] = sensors.roll;
@@ -471,6 +471,7 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
     } else if (raws->flag == 17){
         if (transceiverEnabled == false){
             //uint8_t transceiverAddress[6];
+            espSendData.flag = (int) raws->data[6];
             transceiverEnabled = true;
             for (int i = 0; i < 6; i++) {
                 // print((uint8_t)raws->data[i]);
@@ -482,6 +483,7 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
             } else {
                 Serial.println(" Peer added successfully!");
             }
+            
         }
     }
 

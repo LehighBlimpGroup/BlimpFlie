@@ -8,11 +8,14 @@
 
 #include "GY_US42V2.h"  // Include the header file
 
+
+int NUM_SAMPLES = 5;
+
 // Constructor implementation
 GY_US42V2::GY_US42V2(uint8_t address) : sensorAddress(address) {
     Wire.begin();  // Initialize the I2C bus
     delay(100);
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < NUM_SAMPLES; ++i) {
         distanceBuffer[i] = 720;  // Initialize buffer with an invalid distance value
     }
 }
@@ -41,7 +44,7 @@ uint16_t GY_US42V2::readDistance() {
 // Method to get the minimum distance from the last three readings
 uint16_t GY_US42V2::getMinimumDistance() {
   uint16_t minDistance = distanceBuffer[0];
-  for (int i = 1; i < 3; ++i) {
+  for (int i = 1; i < NUM_SAMPLES; ++i) {
     if (distanceBuffer[i] < minDistance) {
       minDistance = distanceBuffer[i];
     }

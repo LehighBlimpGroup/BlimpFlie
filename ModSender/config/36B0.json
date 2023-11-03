@@ -27,7 +27,7 @@
                         "kdx" : 0,
                         "kpy" : 0,
                         "kdy" : 0,
-                        "kpz" : 0.5,
+                        "kpz" : 1,
                         "kdz" : 0.3,
                         "kiz" : 0.0,
 
@@ -42,8 +42,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : -0.6,
-                        "servo2offset" : 0.0
+                        "servo1offset" : 0.0,
+                        "servo2offset" : 0.3
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
