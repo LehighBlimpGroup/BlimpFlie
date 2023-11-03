@@ -30,7 +30,7 @@ BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is no
 
 
 
-GUI_ENABLED = True
+GUI_ENABLED = False
 
 
 MIN_Z = 0
