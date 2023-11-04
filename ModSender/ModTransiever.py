@@ -37,13 +37,13 @@ try:
         feedback = esp_now.getFeedback(1)  # get sensor data from robot
         # print(feedback)
 
-        # ------- Autonomous mode ----------
-        a_key_pressed = joyhandler.a_state
-        if a_key_pressed:
-            des_fx, des_z, des_yaw = autonomous.execute(feedback)
-            outputs[1] = des_fx  # Forward
-            outputs[3] = des_z  # Z
-            joyhandler.tz = des_yaw  # Yaw control
+        # # ------- Autonomous mode ----------
+        # a_key_pressed = joyhandler.a_state
+        # if a_key_pressed:
+        #     des_fx, des_z, des_yaw = autonomous.execute(feedback)
+        #     outputs[1] = des_fx  # Forward
+        #     outputs[3] = des_z  # Z
+        #     joyhandler.tz = des_yaw  # Yaw control
 
         # Display sensors and output
         mygui.update_interface(feedback[3], outputs[6], feedback[0], outputs[3], feedback[5])  # display sensor data

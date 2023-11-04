@@ -90,7 +90,7 @@ class JoystickHandler:
         else:
             self.tz = -1 * self.right_horizontal
 
-        return [int(self.b_state), self.fx, self.fy, self.fz, self.tx, self.ty, self.tz, 0, 0, 0, 0, 0, 0]
+        return [int(self.b_state), self.fx, self.fy, self.fz, self.tx, self.ty, self.tz, 0, 0, int(self.a_state), 0, 0, 0]
 
     def get_sblimp_controls(self):
         """Return controls for sblimp."""
