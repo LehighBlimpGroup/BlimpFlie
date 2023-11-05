@@ -77,6 +77,7 @@ void RandomWalk::action_move_backward(float &force, int &z, float &yaw) {
 // Action method to rotate
 void RandomWalk::action_rotate(float &force, int &z, float &yaw) {
     _des_yaw += random(0, 314) / 100.0 + PI / 2;  // Generate a random yaw value
+//    _des_yaw +=  PI / 2;  // Generate a random yaw value
     force = _forward_force;
     z = _des_z;
     yaw = _des_yaw;

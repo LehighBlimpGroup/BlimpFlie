@@ -12,7 +12,7 @@ void Sonar_sensor(controller_t *controls, int sonar_sensor_enabled, int randomWa
         // Serial.print(sensorData.values[0]);
         
 
-        controls->fx = -randomW_force;
+        controls->fx = randomW_force;
         // controls->fz = randomW_z;
        controls->tz += randomW_yaw;
 
