@@ -134,21 +134,21 @@ void BlendedgetOutputs(controller_t *controls, sensors_t *sensors, actuation_t *
 float updateFunction(float currentTime) {
 
     // Check if the state of ss has changed
-    if (ss != lastState) {
+    if (actionFlag != lastState) {
         stateChangeTime = currentTime; // Update the starting time
-        lastState = ss; // Update the last state
+        lastState = actionFlag; // Update the last state
     }
 
     float x = currentTime - stateChangeTime;
 
     // If ss is 1, plot the sigmoid for up to 3 seconds
-    if (ss == 1) {
+    if (actionFlag == 1) {
         if (x >= 0 && x <= 5) { // Check if x is within the 0 to 3-second range
             sigmoi = 0.5 * (x * alpha / (1 + abs(x*alpha))) + 0.5;
         }
     }
     // If ss is 0, decrease the sigmoid value over time
-    else if (ss == 0) {
+    else if (actionFlag == 0) {
         if (x >= 0 && x <= 5) { // Check if x is within the 0 to 3-second range
             sigmoi = 1.0 - (0.5 * (x * alpha / (1 + abs(x*alpha))) + 0.5);
         }

@@ -1,7 +1,7 @@
 import time
 import json
 
-from parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
+from ModSender.parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
 
 
 class RobotConfig:
