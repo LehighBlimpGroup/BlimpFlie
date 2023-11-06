@@ -49,7 +49,7 @@ try:
 
         # For each robot
         for i, robotConfig in enumerate(robotConfigs):
-            feedback = esp_now.getFeedback(i)  # get sensor data from robot
+            feedback = esp_now.getFeedback(1)  # get sensor data from robot
 
              # ------- Autonomous mode ----------
             if a_key_pressed:
@@ -60,7 +60,7 @@ try:
 
 
             # Display sensors and output
-            sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[2])  # display sensor data
+            sensor_guis[i].update_interface(feedback[3], outputs[6], feedback[0], outputs[3], feedback[2])  # display sensor data
 
             # Send message to all robots
             esp_now.send([21] + outputs[:-1], BRODCAST_CHANNEL, robotConfig.slave_index)  # send control command to robot

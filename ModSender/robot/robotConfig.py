@@ -1,7 +1,7 @@
 import time
 import json
 
-from ModSender.parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
+from parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
 
 
 class RobotConfig:
@@ -9,8 +9,7 @@ class RobotConfig:
         self.mac = mac_address
         self.slave_index = slave_index
 
-        self.config_file = "config/" + mac_address.replace(":", "")[-4:] + ".json"
-
+        self.config_file = "ModSender/config/" + mac_address.replace(":", "")[-4:] + ".json"
         self.esp_now = esp_now
 
 
@@ -201,7 +200,7 @@ class RobotConfig:
 
     def initialize_system(self):
         # Set configs for all slave indexes that you want to use
-
+        print(self.config_file)
         with open(self.config_file, 'r') as f:
             self.configs = json.load(f)
 
