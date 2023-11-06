@@ -86,7 +86,7 @@ class JoystickHandler:
             des_yaw = atan2(-self.right_vertical, self.right_horizontal)
             magnitude = sqrt(self.right_vertical**2 + self.right_horizontal**2)
 
-            if magnitude > 0.2:
+            if magnitude > 0.5:
                 self.tz = des_yaw
 
             if not self.b_state:

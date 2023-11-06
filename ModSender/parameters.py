@@ -1,4 +1,6 @@
-# ROBOT_CONFIG_FILE = "./ModSender/robot_configs.json"
+
+
+
 ROBOT_JASON = "bicopterbasic"
 
 #ESPNOW PARAMS
@@ -28,7 +30,7 @@ MASTER_MAC = "34:85:18:91:49:C0"
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
 
-
+JOYSTICK_YAW_MODE = 1
 GUI_ENABLED = True
 
 

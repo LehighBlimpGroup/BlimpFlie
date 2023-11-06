@@ -30,20 +30,22 @@ flags to be used in the init
 -int motor_type: determines if you are using brushless or brushed motors: 0 = brushless, 1 = brushed;
 -int mode: sets which controller to listen to: 0 = UDP, 1 = IBUS,2 = espnow, -1 = None;
 -int control: sets which type of controller to use: 0 = bicopter, 1 = spinning(TODO),2 = s-blimp, -1 = None;
+-int spinning: sets which type of controller for spinning to use: 0 = off, 1 = spinning, 2 = blended bicopter;
 */
 init_flags_t init_flags = {
-        .verbose = false,
-        .sensors = false,
-        .escarm = true,
-        .calibrate_esc = false,
-        .UDP = false,
-        .Ibus = false,
-        .ESPNOW = true,
-        .servo = false,
-        .PORT = 1345,
-        .motor_type = 0,
-        .mode = 2,
-        .control = 0,
+  .verbose = false,
+  .sensors = false,
+  .escarm = true,
+  .calibrate_esc = false,
+  .UDP = false,
+  .Ibus = false,
+  .ESPNOW = true,
+  .servo = false,
+  .PORT = 1345,
+  .motor_type = 0,
+  .mode = 2,
+  .control = 0,
+  .spinning = 1,
 };
 
 
@@ -306,6 +308,15 @@ void loop() {
     if (init_flags.servo == 0){
         // 180 degree servo getOutputs
         getOutputs(&controls, &sensors, &outputs);
+    } else if ((init_flags.spinning == 1)){
+        // Calls the blendedbicopter.ino file for the modified
+        // spinning blimp only function
+        SpinniggetOutputs(&controls, &sensors, &outputs);
+        // blendedgetOutputs(&controls, &sensors, &outputs);
+    } else if ((init_flags.spinning == 2)){
+        // Calls the blendedbicopter.ino file for the modified
+        // spinning blimp + bicopter getOutputs function
+        BlendedgetOutputs(&controls, &sensors, &outputs);
     } else {
         // 270 degree servo getOutputs
         getOutputs270(&controls, &sensors, &outputs);

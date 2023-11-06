@@ -2,7 +2,7 @@
 
 // Sensors
 #include "BNO85.h"
-#include "baro280.h"
+#include "baro390.h"
 #include "GY_US42V2.h"  // Include the header file
 
 
@@ -15,7 +15,7 @@
 // Sensors instances
 ModBlimp blimp;
 BNO85 bno;
-baro280 baro;
+baro390 baro;
 GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
 
 
@@ -37,7 +37,7 @@ flags to be used in the init
 -bool verbose: allows some debug print statments
 -bool sensors: enables or disables the sensorsuite package: if false all values will be 0, and sensorReady =false in the sensor
 -bool UDP: starts up the UDP connection such that other UDP functions will be enabled
--bool servo: switching between 180 degree servo and 270 degree: false will be 180 degree and true will be 270
+-bool servo: switching between 180 and 270 degree: false will be 180 degree and true will be 270
 -int motor_type: determines if you are using brushless or brushed motors: 0 = brushless, 1 = brushed;
 -int mode: sets which controller to listen to: 0 = UDP, 1 = IBUS,2 = espnow, -1 = None;
 -int control: sets which type of controller to use: 0 = bicopter, 1 = spinning(TODO),2 = s-blimp, -1 = None;
@@ -340,9 +340,9 @@ void loop() {
 
 
         // Init flags to select which getOutput function is selected
-        if (init_flags.servo == 1){
-            // 270 degree servo getOutputs
-            getOutputs270(&controls, &sensors, &outputs);
+        if (init_flags.servo == 0){
+            // 180 degree servo getOutputs
+            getOutputs(&controls, &sensors, &outputs);
         } else if ((init_flags.spinning == 1)){
             // Calls the blendedbicopter.ino file for the modified
             // spinning blimp only function
@@ -353,9 +353,10 @@ void loop() {
             // spinning blimp + bicopter getOutputs function
             BlendedgetOutputs(&controls, &sensors, &outputs);
         } else {
-            // 180 degree servo getOutputs
-            getOutputs(&controls, &sensors, &outputs);
+            // 270 degree servo getOutputs
+            getOutputs270(&controls, &sensors, &outputs);
         }
+
     }
     else if (flag == 98 && lastflag != flag){
         Serial.print("Set flags: ");
@@ -598,11 +599,6 @@ void addFeedback(controller_t *controls, sensors_t *sensors) {
         // PD for yaw control
         controls->tz = e_yaw * PDterms->kpyaw - sensors->yawrate*PDterms->kdyaw;
 
-        // Debug the yaw
-        if (init_flags.spinning == 1){
-            s_yaw = sensors->yaw;
-        }
-
     }
 
     //roll feedback
@@ -702,8 +698,7 @@ void getOutputs270(controller_t *controls, sensors_t *sensors, actuation_t *out)
 //creates the output values used for actuation from the control values
 void getOutputs(controller_t *controls, sensors_t *sensors, actuation_t *out)
 {
-
-  // set up output
+    // set up output
 
     // set output to default if controls not ready
     if (controls->ready == false)
@@ -775,7 +770,6 @@ void getOutputs(controller_t *controls, sensors_t *sensors, actuation_t *out)
     }
     return;
 }
-
 
 float clamp(float in, float min, float max){
     if (in< min){
