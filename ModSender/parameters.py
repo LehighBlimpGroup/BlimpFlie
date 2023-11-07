@@ -21,7 +21,8 @@ LIST_OF_MAC_ADDRESS = [
     # "48:27:E2:E6:E6:44", #8 kim
     # "34:85:18:91:24:F0", #9
     # "48:27:E2:E6:E4:0C", #10 Big Wall
-    # "48:27:E2:E6:E1:00", #11 david
+    # "48:27:E2:E6:E1:00",  # 11 david
+    # "34:85:18:8F:36:B0" # Diego
     # "48:27:E2:E6:E6:44", #12 spinning blimp 1
     "34:85:18:91:B7:4C", #13 spinning blimp 2
     # "34:85:18:91:20:A8", #small blended bicopter

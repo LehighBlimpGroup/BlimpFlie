@@ -9,6 +9,7 @@ from gui.visualizer import SensorGUI
 
 # Override feedback params for multiple robots
 YAW_SENSOR = True
+Z_SENSOR = True
 
 
 # User interface
