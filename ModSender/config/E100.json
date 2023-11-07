@@ -20,8 +20,8 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.6,
-                        "kdyaw" : -0.01,
+                        "kpyaw" : -1.50,
+                        "kdyaw" : -0.03,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
                         "yawRateIntegralRange"  : 2,
@@ -34,6 +34,8 @@
                         "kdz" : 0.5,
                         "kiz" : 0.0,
 
+                        "errorYawrateRange" : 0.6,
+                        "errorYawRange" : 1,
 
                         "integral_dt" : 0,
                         "z_int_low" : 0,
@@ -81,9 +83,17 @@
             "kf1": 1,
             "kf2": 1,
             "maxRadsYaw" : 0.07,
-            "fxyawScale" : 0.2,
+            "fxyawScale" : 0,
             "yawScaleEnable" : 0
 
+        },
+        "nicla": {
+            "goal_theta_back": 0,
+            "goal_theta_front": 3.14,
+            "goal_dist_thresh" : 0,
+            "max_move_x" : 0.2,
+            "goal_ratio" : 1,
+            "yaw_move_threshold" : 0.2
         }
     }
 }
