@@ -353,10 +353,10 @@ void loop() {
       espSendData1.values[5] = outputs.s2;
       blimp.send_esp_feedback(transceiverAddress, &espSendData1);
       espSendData2.flag = 2;
-      espSendData2.values[0] = (float)blimp.IBus.readChannel(0);
-      espSendData2.values[1] = (float)blimp.IBus.readChannel(1);
-      espSendData2.values[2] = (float)blimp.IBus.readChannel(2);
-      espSendData2.values[3] = (float)blimp.IBus.readChannel(3);
+      espSendData2.values[0] = (float)blimp.IBus.readChannel(5);
+      espSendData2.values[1] = (float)blimp.IBus.readChannel(6);
+      espSendData2.values[2] = (float)blimp.IBus.readChannel(7);
+      espSendData2.values[3] = (float)blimp.IBus.readChannel(8);
       espSendData2.values[4] = controls.tz;
       espSendData2.values[5] = battery_level;
       blimp.send_esp_feedback(transceiverAddress, &espSendData2);
