@@ -14,13 +14,14 @@ void SpinniggetOutputs(controller_t *controls, sensors_t *sensors, actuation_t *
     return;
   }
   out->ready = true;
-  // Spinning Blimp
+
+
+  // Spinning Blimp periodic controller
   float yaw_calibrate = 0;
   float joytheta = raws.data[5];
   float joymag   = raws.data[0];
-  // float joytheta = controls->tz;
-  // float joymag = controls->fx;
 
+  // sensors->yaw is the raw senor reading without feedback
   s_yaw = sensors->yaw;
 
   if (0 <= ((s_yaw + joytheta)) && ((s_yaw + joytheta)) < PI){
