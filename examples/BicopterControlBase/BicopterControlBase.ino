@@ -1,7 +1,7 @@
 #include "modBlimp.h"
 
 #include "BNO85.h"
-#include "baro390.h"
+#include "baro280.h"
 #include "GY_US42V2.h"  // Include the header file
 
 // #include "BNO55.h"
@@ -9,7 +9,7 @@
 
 ModBlimp blimp;
 BNO85 bno;
-baro390 baro;
+baro280 baro;
 GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
 
 
@@ -305,22 +305,20 @@ void loop() {
     addFeedback(&controls, &sensors); //this function is implemented here for you to customize
 
     // Init flags to select which getOutput function is selected
-    if (init_flags.servo == 0){
+    if (init_flags.servo == 0 && init_flags.spinning == 0){
         // 180 degree servo getOutputs
         getOutputs(&controls, &sensors, &outputs);
-    } else if ((init_flags.spinning == 1)){
-        // Calls the blendedbicopter.ino file for the modified
-        // spinning blimp only function
+    } else if (init_flags.spinning == 1){
+        // Calls the spinning blimp only function
         SpinniggetOutputs(&controls, &sensors, &outputs);
-        // blendedgetOutputs(&controls, &sensors, &outputs);
-    } else if ((init_flags.spinning == 2)){
-        // Calls the blendedbicopter.ino file for the modified
-        // spinning blimp + bicopter getOutputs function
+    } else if (init_flags.spinning == 2){
+        // Calls the spinning blimp + bicopter getOutputs function
         BlendedgetOutputs(&controls, &sensors, &outputs);
     } else {
         // 270 degree servo getOutputs
         getOutputs270(&controls, &sensors, &outputs);
     }
+
 
   }
   

@@ -1,13 +1,27 @@
 // creates the output values used for actuation from the control values
 void SpinniggetOutputs(controller_t *controls, sensors_t *sensors, actuation_t *out)
 {
+  // set output to default if controls not ready
+  if (controls->ready == false)
+  {
+    out->s1 = 0.5f; // angle  is based on 0 > PI and 0.5 is based on the normalized value.
+    out->s2 = 0.5f; // this portion means that 0.5 should be centered
+    // out->s1 = PI * 0.35;
+    // out->s2 = PI * 0.35;
+    out->m1 = 0;
+    out->m2 = 0;
+    out->ready = false;
+    return;
+  }
   out->ready = true;
-
   // Spinning Blimp
-
   float yaw_calibrate = 0;
-  float joytheta = raws.data[5]; 
+  float joytheta = raws.data[5];
   float joymag   = raws.data[0];
+  // float joytheta = controls->tz;
+  // float joymag = controls->fx;
+
+  s_yaw = sensors->yaw;
 
   if (0 <= ((s_yaw + joytheta)) && ((s_yaw + joytheta)) < PI){
     tau = joymag;

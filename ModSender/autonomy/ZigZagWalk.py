@@ -12,7 +12,7 @@ class DeterministicWalk(Autonomous):
 
 
 
-    def __init__(self, forward_force=0.3, min_distance=500, des_z=7):
+    def __init__(self, forward_force=0.15, min_distance=500, des_z=4):
         # Constants
         self.forward_zig_zag = 1
         self.zz_counter = 0
