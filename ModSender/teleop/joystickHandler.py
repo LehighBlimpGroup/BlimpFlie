@@ -96,6 +96,8 @@ class JoystickHandler:
             self.tz += -1 * self.right_horizontal*dt if self.b_state else base_yaw
         else:
             self.tz = -1 * self.right_horizontal
+        
+        
 
         return [int(self.b_state), self.fx, self.fy, self.fz, self.tx, self.ty, self.tz, 0, 0, 0, 0, 0, 0]
 

@@ -1,6 +1,6 @@
 {
     "bicopterbasic": {
-        "feedbackPD" : { "roll" : 0,
+        "feedbackPD" : { "roll" : 1,
                         "pitch" : 1,
                         "yaw" : 1,
                         "x" : 0,
@@ -16,7 +16,7 @@
                         "Cz" : 1,
                         "Cabsz" : 1,
 
-                        "kproll" : -0.02,
+                        "kproll" : 0.02,
                         "kdroll" : 0,
                         "kppitch" : 0,
                         "kdpitch" : 0,
@@ -27,19 +27,19 @@
                         "kdx" : 0,
                         "kpy" : 0.07,
                         "kdy" : 0.06,
-                        "kpz" : 0.4,
+                        "kpz" : 0.6,
                         "kdz" : 0.4,
-                        "kiz" : 0.03,
+                        "kiz" : 0.05,
 
-                        "kiyaw": -1,
-                        "kiyawrate" : -1,
+                        "kiyaw": -0.0,
+                        "kiyawrate" : 0,
                         "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
 
                         "integral_dt" : 0,
-                        "z_int_low" : 0,
-                        "z_int_high" : 0.15,
+                        "z_int_low" : 0.05,
+                        "z_int_high" : 0.2,
 
                         "lx" : 0.15,
                         "pitchSign" : 1,
@@ -90,10 +90,15 @@
         "nicla": {
             "goal_theta_back": 0,
             "goal_theta_front": 3.14,
-            "goal_dist_thresh" : 0,
+            "goal_dist_thresh" : 240,
             "max_move_x" : 0.2,
             "goal_ratio" : 1,
-            "yaw_move_threshold" : 0.2
+            "yaw_move_threshold" : 0.2,
+            "height_threshold" : 0.645,
+            "height_strength" : 0.7,
+            "x_cal_weight" : 1,
+            "spiral_strength" : 0.5
+
         }
     }
 }

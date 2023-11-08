@@ -113,7 +113,11 @@ class RobotConfig:
              nicla["goal_dist_thresh"],
              nicla["max_move_x"],
              nicla["goal_ratio"],
-             nicla["yaw_move_threshold"]]
+             nicla["yaw_move_threshold"],
+             nicla["height_threshold"],
+             nicla["height_strength"],
+             nicla["x_cal_weight"],
+             nicla["spiral_strength"]]
         ]
 
         for data in data_sets:
