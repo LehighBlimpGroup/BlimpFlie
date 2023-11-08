@@ -6,6 +6,7 @@ LastEditTime : 2023-10-24 19:45:46
 FilePath     : /ModSender/visualizer.py
 Description  : Simple GUI for ModSender
 """
+import math
 import time
 from math import pi
 from random import random
@@ -15,6 +16,8 @@ import numpy as np
 
 import matplotlib.widgets as widgets
 import matplotlib.patches as patches
+
+LOW_BATTERY = 3.2
 
 
 class SensorGUI:
@@ -160,8 +163,8 @@ class SensorGUI:
         if not self.enable_gui:
             return
 
-        cur_x, cur_y = self._angle_to_coordinates(cur_yaw)
-        des_x, des_y = self._angle_to_coordinates(des_yaw)
+        cur_x, cur_y = self._angle_to_coordinates(cur_yaw + math.pi)
+        des_x, des_y = self._angle_to_coordinates(des_yaw + math.pi)
 
         # Remove the previous yaws1
         self.current_yaw.remove()
@@ -226,7 +229,7 @@ class SensorGUI:
         self.battery_value.set_text(
             f"Battery: {battery:.2f} V"
         )
-        if battery > 3.9:
+        if battery > LOW_BATTERY:
             self.battery_value.set_color("g")
         else:
             self.battery_value.set_color("r")

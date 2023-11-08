@@ -20,7 +20,7 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.50,
+                        "kpyaw" : -1.5,
                         "kdyaw" : -0.01,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
@@ -28,11 +28,11 @@
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0,
-                        "kdy" : 0,
+                        "kpy" : 0.01,
+                        "kdy" : 0.01,
                         "kpz" : 0.4,
-                        "kdz" : 0.5,
-                        "kiz" : 0.0,
+                        "kdz" : 0.6,
+                        "kiz" : 0.03,
 
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
@@ -49,11 +49,11 @@
                         "rollPitchSwitch" : 0,
 
                         "servo1offset" : 0.0,
-                        "servo2offset" : -0.2
+                        "servo2offset" : 0.0
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
-                    "yawRateGamma" : 0.975,
+                    "yawRateGamma" : 0.9,
                     "pitchRateGamma" : 0.7,
                     "zGamma" : 0.5,
                     "vzGamma" : 0.5
