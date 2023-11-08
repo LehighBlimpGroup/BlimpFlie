@@ -1,4 +1,4 @@
-from autonomy.ZigZagWalk import DeterministicWalk
+from autonomy.ZigZagWalk import ZigZagWalk
 from autonomy.RandomWalk import RandomWalk
 from parameters import *
 from teleop.joystickHandler import JoystickHandler
@@ -38,7 +38,7 @@ for robConfig in robotConfigs:
 
 
 # Autonomous Behavior
-behavior_robots = [DeterministicWalk() for _ in robotConfigs]
+behavior_robots = [ZigZagWalk() for _ in robotConfigs]
 for robot_behavior in behavior_robots:
     robot_behavior.begin()
 

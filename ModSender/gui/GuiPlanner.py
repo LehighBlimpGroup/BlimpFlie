@@ -1,75 +1,108 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-def draw_zigzag(ax, x_start, y_start, width, height, num_zigs, scaling_factor):
-    x_end = x_start + width
-    y_end = y_start + height
+def draw_zigzag(ax, x_start, y_start, length, num_zigs, angle):
+    # Convert acute angle to radians
+    angle_rad = np.radians(angle)
 
     # Calculate the zigzag step size
-    zigzag_step = width / (2 * num_zigs)
+    zigzag_step = length / (2 * num_zigs)
 
-    # Define a list of colors for the zigzag lines
-    zigzag_colors = ['red', 'green', 'blue', 'purple', 'orange', 'pink']
+    # Calculate the horizontal and vertical distances between zigzags
+    horizontal_distance = zigzag_step
+    vertical_distance = horizontal_distance * np.tan(angle_rad)
 
-    # Draw the top horizontal line
-    ax.plot([x_start, x_end], [y_start, y_start], color=zigzag_colors[0])
+    # Calculate the coordinates for the zigzag pattern
+    x_coords = [x_start]
+    y_coords = [y_start]
 
-    # Draw the bottom horizontal line
-    ax.plot([x_start, x_end], [y_end, y_end], color=zigzag_colors[1])
-
-    # Draw the left vertical line
-    ax.plot([x_start, x_start], [y_start, y_end], color=zigzag_colors[2])
-
-    # Draw the right vertical line
-    ax.plot([x_end, x_end], [y_start, y_end], color=zigzag_colors[3])
-
-    # Draw the larger zigzag pattern
     for i in range(num_zigs):
-        x1 = x_start + i * 2 * zigzag_step
+        x1 = x_coords[-1] + horizontal_distance
+        y1 = y_coords[-1] + vertical_distance
+        x2 = x1 + horizontal_distance
+        y2 = y1 - vertical_distance
+        x_coords.extend([x1, x2])
+        y_coords.extend([y1, y2])
+
+    # Draw the zigzag pattern
+    ax.plot(x_coords, y_coords, 'k-')
+
+def draw_zigzag_arrows(ax, x_start, y_start, length, num_zigs, angle):
+    # Convert angle to radians
+    angle_rad = np.radians(angle)
+
+    # Calculate the zigzag step size
+    zigzag_step = length / (2 * num_zigs)
+
+    # Calculate the horizontal and vertical distances between zigzags
+    horizontal_distance = zigzag_step
+    vertical_distance = horizontal_distance * np.tan(angle_rad)
+
+    # Draw the zigzag pattern using arrows
+    for i in range(num_zigs):
+        x1 = x_start + i * 2 * horizontal_distance
         y1 = y_start
-        x2 = x1 + zigzag_step
-        y2 = y_start + height
-        x3 = x2 + zigzag_step
+        x2 = x1 + horizontal_distance
+        y2 = y_start + vertical_distance
+        x3 = x2 + horizontal_distance
         y3 = y_start
-        ax.plot([x1, x2, x3], [y1, y2, y3], color=zigzag_colors[i % len(zigzag_colors)])
-
-    # Draw the smaller zigzag pattern with scaling factor
-    for i in range(num_zigs):
-        x1 = x_start + i * 2 * zigzag_step + (zigzag_step * scaling_factor)
-        y1 = y_start + (height * scaling_factor)
-        x2 = x1 + (zigzag_step * scaling_factor)
-        y2 = y_start + height
-        x3 = x2 + (zigzag_step * scaling_factor)
-        y3 = y_start + (height * scaling_factor)
-        ax.plot([x1, x2, x3], [y1, y2, y3], color=zigzag_colors[i % len(zigzag_colors)])
-
-
+        ax.arrow(x1, y1, x2 - x1, y2 - y1, head_width=0.1, head_length=0.2, fc='k', ec='k')
+        ax.arrow(x2, y2, x3 - x2, y3 - y2, head_width=0.1, head_length=0.2, fc='k', ec='k')
 
 
 # Define the rectangle parameters
 x_start = 1
 y_start = 1
-width = 51  # 168
-height = 56
+width = 51  # 168 ft
+height = 17  # 56 ft
 num_zigs = 6
 scaling_factor = 0.5  # Set the scaling factor for the smaller zigzag
 
 
+def draw_rectangle(ax, x_start, y_start, width, height, color='k-'):
+    x_end = x_start + width
+    y_end = y_start + height
+
+    # Draw the top horizontal line
+    ax.plot([x_start, x_end], [y_start, y_start], color)
+
+    # Draw the bottom horizontal line
+    ax.plot([x_start, x_end], [y_end, y_end], color)
+
+    # Draw the left vertical line
+    ax.plot([x_start, x_start], [y_start, y_end], color)
+
+    # Draw the right vertical line
+    ax.plot([x_end, x_end], [y_start, y_end], color)
+
+
+def draw_goal(ax, x, y, width=2, color='b'):
+    ax.plot([x, x], [y-width/2, y+width/2], color)
+
+def draw_field(ax):
+    draw_rectangle(ax, -width/2, -height/2, width, height, 'k')  # Main field
+    draw_rectangle(ax, -width / 2 - 12, -height / 2, 12, height, '--k') # extended field
+
+    # draw green goals
+    draw_goal(ax, 6,0, color='g')
+    draw_goal(ax, 2*6, 6, color='g')
+    draw_goal(ax, 2*6, -6, color='g')
+    # draw orange goals
+    draw_goal(ax, -6, 0, color='r')
+    draw_goal(ax, -2 * 6, 6, color='r')
+    draw_goal(ax, -2 * 6, -6, color='r')
 
 
 if __name__ == "__main__":
     # Create a figure and axis
     fig, ax = plt.subplots()
 
-    # Call the function to draw the zigzags inside the rectangle
-    draw_zigzag(ax, x_start, y_start, width, height, num_zigs, scaling_factor)
+    draw_field(ax)
 
-    # Set a different color for the rectangle
-    rect = plt.Rectangle((x_start, y_start), width, height, fill=False, color='blue', linewidth=2)
-    ax.add_patch(rect)
+    # draw zigzag
+    draw_zigzag_arrows(ax,0,0,5,3,80)
 
-    # Set axis limits and show the plot
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 5)
     plt.gca().set_aspect('equal', adjustable='box')
+    plt.grid()
     plt.show()
