@@ -1,4 +1,4 @@
-from ModSender.autonomy.ZigZagWalk import DeterministicWalk
+from autonomy.ZigZagWalk import ZigZagWalk
 from autonomy.RandomWalk import RandomWalk
 from parameters import *
 from teleop.joystickHandler import JoystickHandler
@@ -38,7 +38,7 @@ for robConfig in robotConfigs:
 
 
 # Autonomous Behavior
-behavior_robots = [DeterministicWalk() for _ in robotConfigs]
+behavior_robots = [ZigZagWalk() for _ in robotConfigs]
 for robot_behavior in behavior_robots:
     robot_behavior.begin()
 
@@ -47,10 +47,12 @@ y_pressed = False
 try:
     while not y_pressed:
         outputs, y_pressed, a_key_pressed = joyhandler.get_outputs(yaw_mode=JOYSTICK_YAW_MODE)  # get joystick input
+        #outputs[8] = int(a_key_pressed)
 
         # For each robot
         for i, robotConfig in enumerate(robotConfigs):
             feedback = esp_now.getFeedback(i)  # get sensor data from robot
+            # nicla = esp_now.getFeedback(2)  # get sensor data from robot
 
              # ------- Autonomous mode ----------
             if a_key_pressed:
@@ -62,7 +64,7 @@ try:
 
             # Display sensors and output
             # sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)
-            sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[1])  # display sensor data
+            sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[2], feedback[3])  # display sensor data
 
             # Send message to all robots
             esp_now.send([21] + outputs[:-1], BRODCAST_CHANNEL, robotConfig.slave_index)  # send control command to robot

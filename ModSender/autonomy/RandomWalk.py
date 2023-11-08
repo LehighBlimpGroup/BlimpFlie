@@ -2,14 +2,14 @@ import time
 
 import numpy as np
 
-from ModSender.autonomy.Autonomous import Autonomous
+from autonomy.Behavior import Behavior
 
 
 
 
-class RandomWalk(Autonomous):
+class RandomWalk(Behavior):
 
-    def __init__(self, forward_force=0.2, min_distance=400, des_z=4):
+    def __init__(self, forward_force=0.2, min_distance=400, des_z=7):
         # Constants
         self.forward_force = forward_force
         self.min_distance = min_distance
