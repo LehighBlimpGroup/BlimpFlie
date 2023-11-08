@@ -14,13 +14,23 @@ typedef struct robot_specs_s {
     int min_thrust, max_thrust;
 } robot_specs_s;
 
+typedef struct nicla_tuning_s  {
+    float goal_theta_back;
+    float goal_theta_front;
+    float goal_dist_thresh;
+    float max_move_x;
+    float goal_ratio;
+    float yaw_move_threshold;
+
+} nicla_tuning_s;
 
 typedef struct init_flags_s {
     bool verbose, sensors, escarm, calibrate_esc, UDP, Ibus, ESPNOW, servo;
     int PORT, motor_type, mode, control, spinning;
 } init_flags_t;
 
-typedef struct sensor_weights_s {
+
+typedef struct sensor_weights_t {
     float eulerGamma;
     float rollRateGamma, yawRateGamma, pitchRateGamma;
     float zGamma, vzGamma;

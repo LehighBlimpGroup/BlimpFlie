@@ -31,26 +31,24 @@ void addFeedback(controller_t *controls, sensors_t *sensors) {
       // Computing error between angles
       float e_yaw = controls->tz - sensors->yaw;
       e_yaw = atan2(sin(e_yaw), cos(e_yaw));
-      e_yaw = clamp(e_yaw, -PI/3, PI/3);
+      e_yaw = clamp(e_yaw, -errorYawRange, errorYawRange);
 
-      if (false){
-        yaw_integral += e_yaw *((float)dt)/1000000.0f* kiyaw;
+
+      yaw_integral += e_yaw *((float)dt)/1000000.0f* kiyaw;
         
-        yaw_integral = clamp(yaw_integral, -PI/4, PI/4);
-      }
+      yaw_integral = clamp(yaw_integral, -PI/4, PI/4);
+
 
       float yaw_desired_rate = (e_yaw * PDterms->kpyaw+ yaw_integral);
       
       float e_yawrate = yaw_desired_rate - sensors->yawrate;
-      if (controls->fx != 0){
-        yawrate_integral += e_yawrate *((float)dt)/1000000.0f * kiyawrate;
-        yawrate_integral = clamp(yawrate_integral, -yawRateIntegralRange, yawRateIntegralRange);
-        controls->tz = e_yawrate*PDterms->kdyaw + yawrate_integral;
+      yawrate_integral += e_yawrate *((float)dt)/1000000.0f * kiyawrate;
+      yawrate_integral = clamp(yawrate_integral, -yawRateIntegralRange, yawRateIntegralRange);
 
-      } else{
-      // PD for yaw control
-        controls->tz = e_yawrate*PDterms->kdyaw;
-      }
+      // both legacy and cascading are active at the same time, just set terms to 0 if unused
+      controls->tz = e_yaw *PDterms->kpy + sensors->yawrate * PDterms->kdy; //legacy mode
+      controls->tz += e_yawrate*PDterms->kdyaw + yawrate_integral; //cascading control mode
+
     }
     
     //roll feedback

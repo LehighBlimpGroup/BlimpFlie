@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import matplotlib.widgets as widgets
+import matplotlib.patches as patches
 
 
 class SensorGUI:
@@ -112,6 +113,11 @@ class SensorGUI:
         x = self.circle.center[0] + radius * np.cos(radians)
         y = self.circle.center[1] + radius * np.sin(radians)
         return x, y
+
+    def update_nicla_box(self, x,y, w, h, max_x, max_y):
+        self.nicla_rect.set_xy(((x - w/2)/max_x, (y - h/2)/max_y))
+        self.nicla_rect.set_width(w/max_x)
+        self.nicla_rect.set_height(h/max_y)
 
     def update_interface(
         self, cur_yaw: float, des_yaw: float, cur_height: float, des_height: float, distance: float
