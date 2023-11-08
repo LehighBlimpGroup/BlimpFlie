@@ -101,6 +101,30 @@ class SensorGUI:
         self.radio = widgets.RadioButtons(self.radio_ax, ['Case 1', 'Case 2', 'Case 3'], activecolor='red')
         self.radio.on_clicked(self.on_radio_click)
 
+        # Adding an enclosing square for Nicla Detection visuals
+        self.enclosing_square = patches.Rectangle(
+            (0, 0),  # will be updated in update_interface
+            1,  # width w, will be updated in update_interface
+            1,  # height h, will be updated in update_interface
+            linewidth=1,
+            edgecolor='yellow',
+            facecolor='none',
+            zorder=4  # ensure it's drawn below the Nicla Detection visuals
+        )
+        self.ax.add_patch(self.enclosing_square)
+        # Adding the Nicla Detection Rectangle
+        self.nicla_rect = patches.Rectangle(
+            (0, 0),  # (x, y)
+            1,  # width w
+            1,  # height h
+            linewidth=1,
+            edgecolor='blue',
+            facecolor='none',
+            label='Nicla Detection',
+            zorder=3  # ensure it's drawn on top
+        )
+        self.ax.add_patch(self.nicla_rect)
+
 
     def _angle_to_coordinates(self, radians: float, radius: float = 1.0) -> tuple:
         """

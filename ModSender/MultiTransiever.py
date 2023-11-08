@@ -1,4 +1,4 @@
-from ModSender.autonomy.Sweep import DeterministicWalk
+from ModSender.autonomy.ZigZagWalk import DeterministicWalk
 from autonomy.RandomWalk import RandomWalk
 from parameters import *
 from teleop.joystickHandler import JoystickHandler
@@ -57,11 +57,12 @@ try:
                 des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
                 outputs[1] = des_fx  # Forward
                 outputs[3] = des_z  # Z
-                outputs[6] = des_yaw  # Yaw control
+                joyhandler.tz = des_yaw  # Yaw control
 
 
             # Display sensors and output
-            sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[2])  # display sensor data
+            # sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)
+            sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[1])  # display sensor data
 
             # Send message to all robots
             esp_now.send([21] + outputs[:-1], BRODCAST_CHANNEL, robotConfig.slave_index)  # send control command to robot

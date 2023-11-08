@@ -1,5 +1,5 @@
 
-void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *weights, raw_t *raws, RollPitchAdjustments *rollPitchAdjust ){
+void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *weights, raw_t *raws, RollPitchAdjustments *rollPitchAdjust, nicla_tuning_s *nicla_tuning){
   if (lastflag == raws->flag)
   {
     return;

@@ -12,7 +12,7 @@ class DeterministicWalk(Autonomous):
 
 
 
-    def __init__(self, forward_force=0.15, min_distance=500, des_z=5):
+    def __init__(self, forward_force=0.15, min_distance=500, des_z=6):
         # Constants
         self.forward_zig_zag = 1
         self.zz_counter = 0
@@ -44,7 +44,7 @@ class DeterministicWalk(Autonomous):
         self.yaw = feedback[1]
 
 
-        SWITCH_TIME = 5
+        SWITCH_TIME = 999
         # ---------- Switch actions based on timer and distance -----------
         if self.current_action == 0 and (distance < self.min_distance or time_elapsed > SWITCH_TIME):
             self.current_action = 1  # Move backwards
