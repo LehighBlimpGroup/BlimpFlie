@@ -190,6 +190,7 @@ float sf1, sf2, bf1, bf2 = 0;
 float st1, st2, bt1, bt2 = 0;
 float f1, f2, t1, t2 = 0;
 float sigmoi, s_yaw, tau, ss = 0;
+int yaw_calibrate;
 float alpha = 1;
 float lastState = -1; // Initialized to a value that is not 0 or 1 to ensure the initial check works
 unsigned long stateChangeTime = 0; // Time at which controls->ss changes state
@@ -294,6 +295,7 @@ void loop() {
     controls.tz = raws.data[5];
     controls.absz = raws.data[6];
     actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
+    yaw_calibrate = (int)raws.data[8];
 
     if (actionFlag == 1){// nicla controller
       addNiclaControl(&controls, &sensors, &blimp);

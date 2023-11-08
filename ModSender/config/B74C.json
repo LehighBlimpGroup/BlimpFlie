@@ -34,7 +34,6 @@
                         "kdz" : 0.2,
                         "kiz" : 0.02,
 
-
                         "integral_dt" : 0,
                         "z_int_low" : 0,
                         "z_int_high" : 200,
