@@ -29,7 +29,6 @@ typedef struct init_flags_s {
     int PORT, motor_type, mode, control;
 } init_flags_t;
 
-
 typedef struct sensor_weights_t {
     float eulerGamma;
     float rollRateGamma, yawRateGamma, pitchRateGamma;
@@ -95,6 +94,11 @@ typedef struct RollPitchAdjustments {
     bool rollPitchSwitch;
     float pitchSign, pitchOffset, rollSign, rollOffset;
 } RollPitchAdjustments;
+
+typedef struct randomwalk_values_t {
+    int forward_force, desired_z, desired_yaw, min_distance;
+    bool randomWalk_enabled;
+} randomwalk_values_t;
 
 
 #endif

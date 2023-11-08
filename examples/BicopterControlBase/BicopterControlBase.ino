@@ -1,19 +1,35 @@
 #include "modBlimp.h"
 
+// Sensors
 #include "BNO85.h"
 #include "baro390.h"
 #include "GY_US42V2.h"  // Include the header file
 
-// #include "BNO55.h"
-// #include "baro280.h"
+// Strategy
+#include "RandomWalk.h"
 
+// Sensors instances
 ModBlimp blimp;
 BNO85 bno;
 baro390 baro;
 GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
 
 
+// Strategy instances
+RandomWalk randomWalk;
+
+
 IBusBM IBus;
+
+
+
+randomwalk_values_t randomwalk_specs = {
+        .forward_force = 0.3,
+        .desired_z = 5,
+        .desired_yaw = 0,
+        .min_distance = 400,
+        .randomWalk_enabled = 1,
+};
 
 
 robot_specs_s robot_specs = {
@@ -211,6 +227,16 @@ const int ANGLE_INCREMENT = 10;
 const int TOTAL_ANGLES = 360;
 const int ARRAY_SIZE = TOTAL_ANGLES / ANGLE_INCREMENT;
 
+
+// random walk variables
+float randomW_force;
+int randomW_z;
+float randomW_yaw;
+
+int sonar_sensor_enabled = 1;  //FIXME make this a flag
+int randomWalk_enabled = 1; //FIXME make this a flag
+
+
 void setup() {
 
 
@@ -223,6 +249,12 @@ void setup() {
 
     getLatestSensorData(&sensors);
     sensors.groundZ = baro.getEstimatedZ();
+
+    // Random walk definitions
+    randomWalk.setForwardForce(randomwalk_specs.forward_force);
+    randomWalk.setMinDistance(randomwalk_specs.min_distance);
+    randomWalk.setDesZ(5);
+    randomWalk.begin();
 
 
 }
@@ -261,7 +293,7 @@ void loop() {
 
   int flag = raws.flag;
   getLatestSensorData(&sensors);
-  blimp.getSensorRaws(&sensorData); //reading from Ultrasound wireless
+  // blimp.getSensorRaws(&sensorData); //reading from Ultrasound wireless
 
 
 
@@ -292,11 +324,11 @@ void loop() {
           outputs.m2 = raws.data[1];
           outputs.s1 = raws.data[2];
           outputs.s2 = raws.data[3];
-      
+
 
   }
   else if (flag == 21){ // A-matrix high level control
-  
+
     controls.ready = raws.ready;
     controls.fx = raws.data[0];
     controls.fy = raws.data[1];
@@ -305,12 +337,17 @@ void loop() {
     controls.ty = raws.data[4];
     controls.tz = raws.data[5];
     controls.absz = raws.data[6];
-    actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
+    actionFlag = raws.data[7]; // for the spinning blimp switch states X button, in python code is outputs[8]
+    // randomWalk_enabled = raws.data[8]; // for the random walk enable with A button, in python code is outputs[9]
+
+
+    // actionFlag = 2;
 
     if (actionFlag == 1){// nicla controller
       addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning);
     } else if (actionFlag == 2) { //random walk
       actionFlag = 0;// put random walk here
+      Sonar_sensor(&controls, sonar_sensor_enabled, randomWalk_enabled);
     } else if (actionFlag == 3) { // full control flow
       actionFlag = 0; // put control flow function to do state control here. 
     } //else just use joystick controls
