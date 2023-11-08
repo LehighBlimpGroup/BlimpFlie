@@ -70,6 +70,7 @@ class SensorGUI:
         self.current_yaw_value = self.ax.text(-0.4, 1.1, "", fontsize=12, color="white")
         self.desired_yaw_value = self.ax.text(-0.4, 1.3, "", fontsize=12, color="white")
         self.distance_value = self.ax.text(-0.4, 1.5, "", fontsize=12, color="white")
+        self.battery_value = self.ax.text(-0.1, -1.5, "", fontsize=12, color="Red")
 
         self.current_height_value = self.ax.text(
             1.6, -1.1, "", fontsize=12, color="white"
@@ -144,7 +145,8 @@ class SensorGUI:
         self.nicla_rect.set_height(h/max_y)
 
     def update_interface(
-        self, cur_yaw: float, des_yaw: float, cur_height: float, des_height: float, distance: float
+        self, cur_yaw: float, des_yaw: float, cur_height: float, des_height: float, distance: float,
+            battery: float
     ) -> None:
         """
         @description: Update the gui interface
@@ -221,6 +223,14 @@ class SensorGUI:
         self.distance_value.set_position((2.2,-1.4))
         self.distance_value.set_color("b")  # Setting the text color to red
 
+        self.battery_value.set_text(
+            f"Battery: {battery:.2f} V"
+        )
+        if battery > 3.9:
+            self.battery_value.set_color("g")
+        else:
+            self.battery_value.set_color("r")
+
         plt.draw()
 
     def on_button_click(self, event):
@@ -253,8 +263,8 @@ if __name__ == "__main__":
 
     # Test plotting with increasing numbers
     for i in range(100):
-        mygui1.update_interface(i*2*pi/100, pi*random()/6, i*0.2, 0, i)
-        mygui2.update_interface(i * 2 * pi / 100, pi * random() / 6, i * 0.2, 0, i)
+        # mygui1.update_interface(i*2*pi/100, pi*random()/6, i*0.2, 0, i,0)
+        mygui2.update_interface(i * 2 * pi / 100, pi * random() / 6, i * 0.2, 0, i,5*(1-1/(100-i)))
         mygui1.sleep()
 
     plt.ioff()
