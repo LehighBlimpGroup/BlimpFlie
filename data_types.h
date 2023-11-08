@@ -21,7 +21,6 @@ typedef struct nicla_tuning_s  {
     float max_move_x;
     float goal_ratio;
     float yaw_move_threshold;
-
 } nicla_tuning_s;
 
 typedef struct init_flags_s {
