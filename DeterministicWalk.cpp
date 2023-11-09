@@ -93,9 +93,9 @@ void DeterministicWalk::action_rotate(float yaw_sensor, float &force, int &z, fl
     float normalized_yaw = atan2(sin(yaw_sensor), cos(yaw_sensor));
 
     if (normalized_yaw > 0) {
-        _des_yaw = radians(275 + 3) + _step_zig_zag * _forward_zig_zag;
+        _des_yaw = radians(270 + 8) + _step_zig_zag * _forward_zig_zag;
     } else {
-        _des_yaw = radians(90 + 3) - _step_zig_zag * _forward_zig_zag;
+        _des_yaw = radians(90 + 8) - _step_zig_zag * _forward_zig_zag;
     }
 
     force = 0;
