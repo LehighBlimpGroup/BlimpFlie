@@ -20,7 +20,7 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.5,
+                        "kpyaw" : -1.6,
                         "kdyaw" : -0.01,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
@@ -28,14 +28,15 @@
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.01,
-                        "kdy" : 0.01,
+                        "kpy" : 0,
+                        "kdy" : 0,
                         "kpz" : 0.4,
-                        "kdz" : 0.6,
-                        "kiz" : 0.03,
+                        "kdz" : 0.5,
+                        "kiz" : 0.0,
 
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
+
 
                         "integral_dt" : 0,
                         "z_int_low" : 0,
@@ -48,18 +49,18 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.0,
-                        "servo2offset" : 0.0
+                        "servo1offset" : 0.15,
+                        "servo2offset" : 0.05
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
-                    "yawRateGamma" : 0.9,
+                    "yawRateGamma" : 0.975,
                     "pitchRateGamma" : 0.7,
                     "zGamma" : 0.5,
                     "vzGamma" : 0.5
                     },
         "initflags": {
-                    "_comment": "flags to be used in the init", 
+                    "_comment": "flags to be used in the init",
                     "_comment": "-bool verbose: allows some debug print statments",
                     "_comment": "-bool sensors: enables or disables the sensorsuite package: if false all values will be 0, and sensorReady =false in the sensor ",
                     "_comment":"-bool UDP: starts up the UDP connection such that other UDP functions will be enabled",
@@ -83,7 +84,7 @@
             "kf1": 1,
             "kf2": 1,
             "maxRadsYaw" : 0.07,
-            "fxyawScale" : 0,
+            "fxyawScale" : 0.2,
             "yawScaleEnable" : 0
 
         },
