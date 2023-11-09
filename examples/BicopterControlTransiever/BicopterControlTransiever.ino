@@ -274,9 +274,6 @@ void loop() {
 
 
 
-
-
-
     if ((int)(flag/10) == 0){// flag == 0, 1, 2 uses control of what used to be the correct way
         zero(init_flags.servo, &outputs); // call zeroing function for servo
         return; //changes outputs using the old format

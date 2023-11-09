@@ -125,6 +125,9 @@ class RobotConfig:
         return True
     
 
+    def sendCustomFloats(self, BRODCAST_CHANNEL, CustomFloats): #customFloats is an array of 11 floats
+        if not self._send_data([30, 0] + CustomFloats, BRODCAST_CHANNEL):
+            return False
     def sendSetupFlags(self, BRODCAST_CHANNEL, CONFIG_INDEX):
         print("send all flags!")
 

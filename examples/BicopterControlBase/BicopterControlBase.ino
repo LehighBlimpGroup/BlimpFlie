@@ -210,6 +210,9 @@ controller_t controls;
 raw_t raws;
 actuation_t outputs;
 
+
+float customFlags[11];
+
 int actionFlag = 0;
 
 int dt; //microseconds
@@ -318,6 +321,11 @@ void loop() {
     outputs.ready = false;
     z_integral = 0;
 
+  } else if (raws->flag == 30) {//custom flags
+    for (int i = 0; i < 11; i ++){
+        customFlags[i] = raws.data[i];
+    }
+    
   } else if (flag == 20){ //motor servo level control
           outputs.ready = raws.ready;
           outputs.m1 = raws.data[0];
