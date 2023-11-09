@@ -92,10 +92,10 @@
             "goal_theta_front": 3.14,
             "goal_dist_thresh" : 240,
             "max_move_x" : 0.2,
-            "goal_ratio" : 1,
+            "goal_ratio" : 2.0,
             "yaw_move_threshold" : 0.2,
-            "height_threshold" : 0.645,
-            "height_strength" : 0.7,
+            "height_threshold" : 0.2,
+            "height_strength" : 10.0,
             "x_cal_weight" : 1,
             "spiral_strength" : 0.5
 

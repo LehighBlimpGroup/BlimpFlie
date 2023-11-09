@@ -72,7 +72,6 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     detected = false;
   } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
     float x_cal = tracking_x / max_x;
-    float y_cal = tracking_y / max_y;
     des_yaw = ((x_cal - 0.5) * nicla_tuning->x_cal_weight);
     robot_to_goal = _yaw - des_yaw;
     if (nicla_flag == 1) {
@@ -86,7 +85,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
         control_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
         control_yaw = atan2(sin(control_yaw), cos(control_yaw));
         last_front_goal_time = millis();
-        // changeHeight(y, _height, nicla_tuning);
+        changeHeight(tracking_y, detection_h, _height, nicla_tuning);
       } else if (abs(relative_to_goal) > PI/2){ //seeing noise
         last_noise_time = millis();
       } else{ // seeing back goal
@@ -94,10 +93,12 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
         goal_act = atan2(sin(goal_act), cos(goal_act));
         control_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
         control_yaw = atan2(sin(control_yaw), cos(control_yaw));
-        // changeHeight(y, _height, nicla_tuning);
+        changeHeight(tracking_y, detection_h, _height, nicla_tuning);
       }
     } else if (nicla_flag == 0) {
-
+      detected = true;
+      control_yaw = atan2(sin(robot_to_goal), cos(robot_to_goal));
+      changeHeight(tracking_y, detection_h, _height, nicla_tuning);
     }
   }
 
@@ -168,11 +169,9 @@ void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
   
 }
 
-void changeHeight(float y, float _height,  nicla_tuning_s *nicla_tuning) {
-  float y_cal = (last_tracking_y / max_y); 
-  float h_cal = (last_detection_h / max_y);
-  if (max(last_detection_w, last_detection_h) < nicla_tuning->goal_dist_thresh && max(last_detection_w, last_detection_h) > 20){
-    // if (y_cal - h_cal/2 > nicla_tuning->height_threshold || y_cal + h_cal/2 < nicla_tuning->height_threshold) {
+void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuning) {
+  float y_cal = (_y / max_y);
+  if (_h < nicla_tuning->goal_dist_thresh && _h > 20){
     des_height = des_height - ((y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength)*((float)dt)/1000000.0f;
   }
 }
