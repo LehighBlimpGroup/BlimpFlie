@@ -28,7 +28,11 @@ nicla_tuning_s nicla_tuning = {
         .goal_dist_thresh = 0,
         .max_move_x = 0.4,
         .goal_ratio = 0.5,
-        .yaw_move_threshold = 0.2
+        .yaw_move_threshold = 0.2,
+        .height_threshold = 0.5,
+        .height_strength = 0.2,
+        .x_cal_weight = 1.6,
+        .spiral_strength  = 0.2,
         
 };
 
@@ -187,6 +191,12 @@ ReceivedData espSendData2;
 float battery_level = 0;
 ReceivedData sensorData;
 
+
+
+float _dist = 0;
+
+
+
 feedback_t * PDterms = &feedbackPD;
 //storage variables
 sensors_t sensors;
@@ -196,7 +206,7 @@ actuation_t outputs;
 
 int actionFlag = 0;
 
-int dt; //microseconds
+int dt = 0; //microseconds
 // Spinning Blimp Variables
 float sf1, sf2, bf1, bf2 = 0;
 float st1, st2, bt1, bt2 = 0;
@@ -232,6 +242,8 @@ bool snapon = 0;
 // float resyncPitchTemp = 0;
 // float resyncTimer = 0;
 unsigned long timed = micros();
+
+bool init_bool = true;
 
 int lastflag = 0;
 
@@ -308,12 +320,16 @@ void loop() {
     actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
 
     if (actionFlag == 1){// nicla controller
-      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning);
+      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, init_bool);
+      init_bool = false;
     } else if (actionFlag == 2) { //random walk
       actionFlag = 0;// put random walk here
     } else if (actionFlag == 3) { // full control flow
       actionFlag = 0; // put control flow function to do state control here. 
-    } //else just use joystick controls
+    } 
+    else {//else just use joystick controls 
+      init_bool = true;
+    }
     addFeedback(&controls, &sensors); //this function is implemented here for you to customize
 
     // Init flags to select which getOutput function is selected
@@ -328,7 +344,7 @@ void loop() {
   }
   
   battery_level = blimp.executeOutputs(&outputs, &robot_specs);
-  int dt = (int)(micros()-timed);
+  dt = (int)(micros()-timed);
   while (4000 - dt > 0){
       dt = (int)(micros()-timed);
   }
@@ -356,9 +372,9 @@ void loop() {
     counter2 = 0;
     if (transceiverEnabled){
       
-      // blimp.IBus.loop();
+      blimp.IBus.loop();
 
-      // espSendData1.flag = 1;
+      espSendData1.flag = 1;
       espSendData1.values[0] = sensors.estimatedZ - sensors.groundZ;
       espSendData1.values[1] = sensors.yaw;
       espSendData1.values[2] = sensorData.values[0];
@@ -366,14 +382,14 @@ void loop() {
       espSendData1.values[4] = outputs.m1;
       espSendData1.values[5] = outputs.s1;
       blimp.send_esp_feedback(transceiverAddress, &espSendData1);
-      // espSendData2.flag = 2;
-      // espSendData2.values[0] = (float)blimp.IBus.readChannel(5);
-      // espSendData2.values[1] = (float)blimp.IBus.readChannel(6);
-      // espSendData2.values[2] = (float)blimp.IBus.readChannel(7);
-      // espSendData2.values[3] = (float)blimp.IBus.readChannel(8);
-      // espSendData2.values[4] = controls.tz;
-      // espSendData2.values[5] = battery_level;
-      // blimp.send_esp_feedback(transceiverAddress, &espSendData2);
+      espSendData2.flag = 2;
+      espSendData2.values[0] = (float)blimp.IBus.readChannel(5);
+      espSendData2.values[1] = (float)blimp.IBus.readChannel(6);
+      espSendData2.values[2] = (float)blimp.IBus.readChannel(7);
+      espSendData2.values[3] = (float)blimp.IBus.readChannel(8);
+      espSendData2.values[4] = (float)blimp.IBus.readChannel(9);
+      espSendData2.values[5] = battery_level;
+      blimp.send_esp_feedback(transceiverAddress, &espSendData2);
     }
   }
 

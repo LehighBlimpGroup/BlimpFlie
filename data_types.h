@@ -21,6 +21,10 @@ typedef struct nicla_tuning_s  {
     float max_move_x;
     float goal_ratio;
     float yaw_move_threshold;
+    float height_threshold;
+    float height_strength;
+    float x_cal_weight;
+    float spiral_strength;
         
 } nicla_tuning_s;
 
