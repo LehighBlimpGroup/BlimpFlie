@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 
-class Behavior:
+class Autonomous:
     def __init__(self):
         pass
 

@@ -84,6 +84,18 @@
             "fxyawScale" : 0.2,
             "yawScaleEnable" : 0
 
+        },
+        "nicla": {
+            "goal_theta_back": 0,
+            "goal_theta_front": 3.14,
+            "goal_dist_thresh" : 240,
+            "max_move_x" : 0.2,
+            "goal_ratio" : 1,
+            "yaw_move_threshold" : 0.2,
+            "height_threshold" : 0.645,
+            "height_strength" : 0.7,
+            "x_cal_weight" : 1,
+            "spiral_strength" : 0.5
         }
     }
 }

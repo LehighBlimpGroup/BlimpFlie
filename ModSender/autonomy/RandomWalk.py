@@ -2,14 +2,14 @@ import time
 
 import numpy as np
 
-from autonomy.Behavior import Behavior
+from autonomy.Autonomous import Autonomous
 
 
 
 
-class RandomWalk(Behavior):
+class RandomWalk(Autonomous):
 
-    def __init__(self, forward_force=0.2, min_distance=400, des_z=7):
+    def __init__(self, forward_force=0.3, min_distance=400, des_z=7):
         # Constants
         self.forward_force = forward_force
         self.min_distance = min_distance

@@ -6,7 +6,6 @@ LastEditTime : 2023-10-24 19:45:46
 FilePath     : /ModSender/visualizer.py
 Description  : Simple GUI for ModSender
 """
-import math
 import time
 from math import pi
 from random import random
@@ -16,8 +15,6 @@ import numpy as np
 
 import matplotlib.widgets as widgets
 import matplotlib.patches as patches
-
-LOW_BATTERY = 3.2
 
 
 class SensorGUI:
@@ -73,7 +70,6 @@ class SensorGUI:
         self.current_yaw_value = self.ax.text(-0.4, 1.1, "", fontsize=12, color="white")
         self.desired_yaw_value = self.ax.text(-0.4, 1.3, "", fontsize=12, color="white")
         self.distance_value = self.ax.text(-0.4, 1.5, "", fontsize=12, color="white")
-        self.battery_value = self.ax.text(-0.1, -1.5, "", fontsize=12, color="Red")
 
         self.current_height_value = self.ax.text(
             1.6, -1.1, "", fontsize=12, color="white"
@@ -148,8 +144,7 @@ class SensorGUI:
         self.nicla_rect.set_height(h/max_y)
 
     def update_interface(
-        self, cur_yaw: float, des_yaw: float, cur_height: float, des_height: float, distance: float,
-            battery: float
+        self, cur_yaw: float, des_yaw: float, cur_height: float, des_height: float, distance: float
     ) -> None:
         """
         @description: Update the gui interface
@@ -163,8 +158,8 @@ class SensorGUI:
         if not self.enable_gui:
             return
 
-        cur_x, cur_y = self._angle_to_coordinates(cur_yaw + math.pi)
-        des_x, des_y = self._angle_to_coordinates(des_yaw + math.pi)
+        cur_x, cur_y = self._angle_to_coordinates(cur_yaw)
+        des_x, des_y = self._angle_to_coordinates(des_yaw)
 
         # Remove the previous yaws1
         self.current_yaw.remove()
@@ -226,14 +221,6 @@ class SensorGUI:
         self.distance_value.set_position((2.2,-1.4))
         self.distance_value.set_color("b")  # Setting the text color to red
 
-        self.battery_value.set_text(
-            f"Battery: {battery:.2f} V"
-        )
-        if battery > LOW_BATTERY:
-            self.battery_value.set_color("g")
-        else:
-            self.battery_value.set_color("r")
-
         plt.draw()
 
     def on_button_click(self, event):
@@ -266,8 +253,8 @@ if __name__ == "__main__":
 
     # Test plotting with increasing numbers
     for i in range(100):
-        # mygui1.update_interface(i*2*pi/100, pi*random()/6, i*0.2, 0, i,0)
-        mygui2.update_interface(i * 2 * pi / 100, pi * random() / 6, i * 0.2, 0, i,5*(1-1/(100-i)))
+        mygui1.update_interface(i*2*pi/100, pi*random()/6, i*0.2, 0, i)
+        mygui2.update_interface(i * 2 * pi / 100, pi * random() / 6, i * 0.2, 0, i)
         mygui1.sleep()
 
     plt.ioff()

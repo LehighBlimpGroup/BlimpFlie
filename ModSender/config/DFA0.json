@@ -31,9 +31,11 @@
                         "kdz" : 0.3,
                         "kiz" : 0.03,
 
-                        "kiyaw": 0,
-                        "kiyawrate" : -0.1,
-                        "yawRateIntegralRange"  : 20,
+                        "kiyaw": -0.0,
+                        "kiyawrate" : 0,
+                        "yawRateIntegralRange"  : 200,
+                        "errorYawrateRange" : 0.6,
+                        "errorYawRange" : 1,
 
                         "integral_dt" : 0,
                         "z_int_low" : 0,
@@ -84,6 +86,18 @@
             "fxyawScale" : 0.2,
             "yawScaleEnable" : 0
 
+        },
+        "nicla": {
+            "goal_theta_back": 0,
+            "goal_theta_front": 3.14,
+            "goal_dist_thresh" : 240,
+            "max_move_x" : 0.2,
+            "goal_ratio" : 1,
+            "yaw_move_threshold" : 0.2,
+            "height_threshold" : 0.645,
+            "height_strength" : 0.7,
+            "x_cal_weight" : 1,
+            "spiral_strength" : 0.5
         }
     }
 }

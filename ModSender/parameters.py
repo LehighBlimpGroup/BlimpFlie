@@ -30,6 +30,7 @@ LIST_OF_MAC_ADDRESS = [
 MASTER_MAC = "34:85:18:91:B5:B4"#address of the transceiver
 BRODCAST_CHANNEL = 1             # SLAVE_INDEX will override this value if SLAVE_INDEX is not -
 
+JOYSTICK_YAW_MODE = 0
 GUI_ENABLED = True
 
 MIN_Z = 0
