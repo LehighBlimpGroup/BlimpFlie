@@ -17,8 +17,19 @@ IBusBM IBus;
 
 
 robot_specs_s robot_specs = {
-        .min_thrust = 1000,
+        .min_thrust = 1050,
         .max_thrust = 2000,
+};
+
+
+nicla_tuning_s nicla_tuning = {
+        .goal_theta_back = 0,
+        .goal_theta_front = 3.14,
+        .goal_dist_thresh = 0,
+        .max_move_x = 0.4,
+        .goal_ratio = 0.5,
+        .yaw_move_threshold = 0.2
+        
 };
 
 /*
@@ -148,7 +159,8 @@ float z_integral = 0;
 
 float yawrate_integral = 0;
 float yaw_integral = 0;
-
+float maxRadsYaw = 0; //.1f                                 //.175;
+float fxyawScale = 0;
 //z feedback terms
 float kiz = 0;
 float z_int_low = 0;
@@ -158,6 +170,8 @@ float z_int_high = 50;
 float kiyaw = 0;
 float kiyawrate = 0;
 float yawRateIntegralRange = 10;
+float errorYawrateRange = 1;
+float errorYawRange = .2;
 
 //motor tuning terms
 float kf1 = 1;
@@ -251,7 +265,7 @@ void loop() {
 
 
 
-  int sonar_sensor_enabled = 1;  //FIXME make this a flag
+  int sonar_sensor_enabled = 1;  // FIXME make this a flag
 
   if(sonar_sensor_enabled){
     sensorData.values[0] = sonar_sensor.readDistance();  // Read distance from sensor
@@ -264,7 +278,7 @@ void loop() {
     return; //changes outputs using the old format
   } else if ((int)(flag/10) == 1 or (int)(flag/10) == 9){ //flag in 10, or 90
     //set FLAGS for other stuff
-    setPDflags(&init_flags, PDterms,&weights, &raws, &rollPitchAdjust);
+    setPDflags(&init_flags, PDterms,&weights, &raws, &rollPitchAdjust, &nicla_tuning);
     outputs.m1 = 0;
     outputs.m2 = 0;
     outputs.s1 = 0;
@@ -294,7 +308,7 @@ void loop() {
     actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
 
     if (actionFlag == 1){// nicla controller
-      addNiclaControl(&controls, &sensors, &blimp);
+      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning);
     } else if (actionFlag == 2) { //random walk
       actionFlag = 0;// put random walk here
     } else if (actionFlag == 3) { // full control flow
@@ -322,44 +336,44 @@ void loop() {
   timed = micros();
   counter2 += 1;
   if (counter2 >= 25){
-    Serial.print(dt);
-    Serial.print(',');
-    Serial.print((bool)controls.ready);
-    Serial.print(',');
-    Serial.print(sensors.estimatedZ - sensors.groundZ);
-    Serial.print(',');
-    Serial.print(sensors.yaw);
-    Serial.print(',');
-    Serial.print(battery_level);
-    Serial.print(',');
-    Serial.print(espSendData1.values[2]);
-    Serial.print(',');
-    Serial.print(espSendData1.values[3]);
-    Serial.print(',');
-    Serial.print(espSendData1.values[4]);
-    Serial.print(',');
-    Serial.println(espSendData1.values[5]);
+    // Serial.print(dt);
+    // Serial.print(',');
+    // Serial.print((bool)controls.ready);
+    // Serial.print(',');
+    // Serial.print(sensors.estimatedZ - sensors.groundZ);
+    // Serial.print(',');
+    // Serial.print(sensors.yaw);
+    // Serial.print(',');
+    // Serial.print(battery_level);
+    // Serial.print(',');
+    // Serial.print(espSendData2.values[0]);
+    // Serial.print(',');
+    // Serial.print(espSendData2.values[1]);
+    // Serial.print(',');
+    // Serial.print(espSendData2.values[2]);
+    // Serial.print(',');
+    // Serial.println(espSendData2.values[3]);
     counter2 = 0;
     if (transceiverEnabled){
       
-      blimp.IBus.loop();
+      // blimp.IBus.loop();
 
-      espSendData1.flag = 1;
+      // espSendData1.flag = 1;
       espSendData1.values[0] = sensors.estimatedZ - sensors.groundZ;
       espSendData1.values[1] = sensors.yaw;
-      espSendData1.values[2] = outputs.m1;
-      espSendData1.values[3] = outputs.m2;
-      espSendData1.values[4] = outputs.s1;
-      espSendData1.values[5] = outputs.s2;
+      espSendData1.values[2] = sensorData.values[0];
+      espSendData1.values[3] = battery_level;
+      espSendData1.values[4] = outputs.m1;
+      espSendData1.values[5] = outputs.s1;
       blimp.send_esp_feedback(transceiverAddress, &espSendData1);
-      espSendData2.flag = 2;
-      espSendData2.values[0] = (float)blimp.IBus.readChannel(5);
-      espSendData2.values[1] = (float)blimp.IBus.readChannel(6);
-      espSendData2.values[2] = (float)blimp.IBus.readChannel(7);
-      espSendData2.values[3] = (float)blimp.IBus.readChannel(8);
-      espSendData2.values[4] = controls.tz;
-      espSendData2.values[5] = battery_level;
-      blimp.send_esp_feedback(transceiverAddress, &espSendData2);
+      // espSendData2.flag = 2;
+      // espSendData2.values[0] = (float)blimp.IBus.readChannel(5);
+      // espSendData2.values[1] = (float)blimp.IBus.readChannel(6);
+      // espSendData2.values[2] = (float)blimp.IBus.readChannel(7);
+      // espSendData2.values[3] = (float)blimp.IBus.readChannel(8);
+      // espSendData2.values[4] = controls.tz;
+      // espSendData2.values[5] = battery_level;
+      // blimp.send_esp_feedback(transceiverAddress, &espSendData2);
     }
   }
 

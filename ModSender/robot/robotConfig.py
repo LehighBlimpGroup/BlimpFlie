@@ -1,19 +1,21 @@
 import time
 import json
 
+from parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
+
+
 class RobotConfig:
     def __init__(self, esp_now, slave_index, mac_address):
         self.mac = mac_address
         self.slave_index = slave_index
 
-        config_file = "ModSender/config/" + mac_address.replace(":", "")[-4:] + ".json"
+        self.config_file = "config/" + mac_address.replace(":", "")[-4:] + ".json"
 
         self.esp_now = esp_now
-        with open(config_file, 'r') as f:
-            self.configs = json.load(f)
+
 
     def get_config(self, CONFIG_INDEX):
-        return self.configs.get(str(CONFIG_INDEX), {'feedbackPD': {}, 'weights': {}, 'initflags': {}, 'hardware': {}})
+        return self.configs.get(str(CONFIG_INDEX), {'feedbackPD': {}, 'weights': {}, 'initflags': {}, 'hardware': {}, 'nicla': {}})
     
     def _fill_with_zeros(self, data, size=13):
         """Fill the given list with zeros until it reaches the specified size."""
@@ -41,6 +43,7 @@ class RobotConfig:
         feedbackPD = config['feedbackPD']
         weights = config['weights']
         hardware = config['hardware']
+        nicla = config['nicla']
         
 
         data_sets = [
@@ -69,7 +72,9 @@ class RobotConfig:
              feedbackPD["kdyaw"],
              feedbackPD["kiyaw"], 
              feedbackPD["kiyawrate"], 
-             feedbackPD["yawRateIntegralRange"]],
+             feedbackPD["yawRateIntegralRange"],
+             feedbackPD["errorYawrateRange"],
+             feedbackPD["errorYawRange"]],
             [13, 0, 
              feedbackPD["kpx"], 
              feedbackPD["kdx"], 
@@ -101,7 +106,14 @@ class RobotConfig:
              hardware["kf1"],
              hardware["kf2"],
              hardware["maxRadsYaw"],
-             hardware["fxyawScale"]]
+             hardware["fxyawScale"]],
+             [95, 0, 
+             nicla["goal_theta_back"], 
+             nicla["goal_theta_front"], 
+             nicla["goal_dist_thresh"],
+             nicla["max_move_x"],
+             nicla["goal_ratio"],
+             nicla["yaw_move_threshold"]]
         ]
 
         for data in data_sets:
@@ -139,7 +151,7 @@ class RobotConfig:
             if not self._send_data(data, BRODCAST_CHANNEL):
                 return False
 
-        print("All inits Sent on ", SLAVE_INDEX, " for ", CONFIG_INDEX)
+        print("All inits Sent on ", self.slave_index, " for ", CONFIG_INDEX)
         return True
     
     def startBNO(self, BRODCAST_CHANNEL):
@@ -197,29 +209,24 @@ class RobotConfig:
 
         return yaw_enabled,z_endabled
 
-    def InicializationSystem(self):
+    def initialize_system(self):
         # Set configs for all slave indexes that you want to use
 
         with open(self.config_file, 'r') as f:
             self.configs = json.load(f)
 
         # Bicopter basic contains configs for a robot with no feedback
-        active = self.sendAllFlags(self.BRODCAST_CHANNEL, self.SLAVE_INDEX, self.ROBOT_JASON)
+        active = self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)
         if not active:
             quit()
-        self.sendAllFlags(self.BRODCAST_CHANNEL, self.SLAVE_INDEX, self.ROBOT_JASON)  # Redundant sent.
-        # robConfig.sendSetupFlags(BRODCAST_CHANNEL, SLAVE_INDEX, "bicopterbasic")
 
-        YAW_SENSOR, Z_SENSOR = self.getFeedbackParams(self.ROBOT_JASON)
+        self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # Redundant sent.
+
+        # Configure sensors
+        self.startBNO(BRODCAST_CHANNEL)  # Configure IMU
+        self.startBaro(BRODCAST_CHANNEL)  # Configure Barometer
 
 
-
-        if YAW_SENSOR:
-            self.startBNO(self.BRODCAST_CHANNEL, self.SLAVE_INDEX)  # Configure IMU
-
-        if Z_SENSOR:
-            self.startBaro(self.BRODCAST_CHANNEL, self.SLAVE_INDEX)  # Configure Barometer
-
-        self.startThrustRange(self.BRODCAST_CHANNEL, self.SLAVE_INDEX, "bicopterbasic")  # Motor specifications
-        self.startTranseiver(self.BRODCAST_CHANNEL, self.SLAVE_INDEX, self.MASTER_MAC)  # Start communication
+        self.startThrustRange(BRODCAST_CHANNEL, "bicopterbasic")  # Motor specifications
+        self.startTranseiver(BRODCAST_CHANNEL, MASTER_MAC)  # Start communication
 

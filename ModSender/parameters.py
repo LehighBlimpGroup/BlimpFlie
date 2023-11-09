@@ -14,7 +14,7 @@ LIST_OF_MAC_ADDRESS = [
 #     # "34:85:18:91:B5:B4", #1 KKL Back-up sender
     # "48:27:E2:E6:EC:CC", #2 Sensor test drone
 #     # "48:27:E2:E6:E4:0C", #3 Big diego drone first
-    "48:27:E2:E6:DF:A0" #4 KKL Nicla drone
+      "48:27:E2:E6:DF:A0" #4 KKL Nicla drone
 #     # "48:27:E2:E6:ED:24", #5 bingxu
 #     # "48:27:E2:E6:DE:3C", #6
 #     # "DC:54:75:D7:F7:FC", #7 hanqing
@@ -30,9 +30,7 @@ LIST_OF_MAC_ADDRESS = [
 MASTER_MAC = "34:85:18:91:B5:B4"#address of the transceiver
 BRODCAST_CHANNEL = 1             # SLAVE_INDEX will override this value if SLAVE_INDEX is not -
 
-
 GUI_ENABLED = True
-
 
 MIN_Z = 0
 MAX_Z = 50

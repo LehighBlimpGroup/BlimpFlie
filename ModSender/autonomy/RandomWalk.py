@@ -2,14 +2,14 @@ import time
 
 import numpy as np
 
-from autonomy.Autonomous import Autonomous
+from autonomy.Behavior import Behavior
 
 
 
 
-class RandomWalk(Autonomous):
+class RandomWalk(Behavior):
 
-    def __init__(self, forward_force=0.3, min_distance=400, des_z=7):
+    def __init__(self, forward_force=0.2, min_distance=400, des_z=7):
         # Constants
         self.forward_force = forward_force
         self.min_distance = min_distance
@@ -32,7 +32,7 @@ class RandomWalk(Autonomous):
 
     def _choose_action(self, feedback):
         # Variables to make decisions
-        distance = feedback[5]  # Distance from the sonar
+        distance = feedback[2]  # Distance from the sonar
         time_elapsed = self._time_elapsed()
 
         # ---------- Switch actions based on timer and distance -----------

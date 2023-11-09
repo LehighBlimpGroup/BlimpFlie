@@ -1,5 +1,5 @@
 
-void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *weights, raw_t *raws, RollPitchAdjustments *rollPitchAdjust ){
+void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *weights, raw_t *raws, RollPitchAdjustments *rollPitchAdjust, nicla_tuning_s *nicla_tuning){
   if (lastflag == raws->flag)
   {
     return;
@@ -34,6 +34,8 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
     kiyaw = raws->data[6];
     kiyawrate = raws->data[7];
     yawRateIntegralRange = raws->data[8];
+    errorYawrateRange = raws->data[9];
+    errorYawRange = raws->data[10];
   }
   else if (raws->flag == 13){
     PDterms->kpx = raws->data[0];
@@ -68,8 +70,8 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
     rollPitchAdjust->rollPitchSwitch = raws->data[6] == 1.0f;
     kf1 = raws->data[7];
     kf2 = raws->data[8];
-    // maxRadsYaw = raws->data[9]; //.1f                                 //.175;
-    // fxyawScale = raws->data[10];
+    maxRadsYaw = raws->data[9]; //.1f                                 //.175;
+    fxyawScale = raws->data[10];
     
   }
 
@@ -91,7 +93,7 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
     if (transceiverEnabled == false){
       //uint8_t transceiverAddress[6];
       transceiverEnabled = true;
-       espSendData1.flag = (int) raws->data[6   ];
+      espSendData1.flag = (int) raws->data[6];
       for (int i = 0; i < 6; i++) {
         // print((uint8_t)raws->data[i]);
         // print(":");
@@ -104,8 +106,7 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
     }
     }
   } else if (raws->flag == 98 ){
-      Serial.print("Set flags: ");
-      Serial.println(raws->flag);
+    
       baro.init();
       getLatestSensorData(&sensors);
       delay(30);
@@ -118,14 +119,13 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
           getLatestSensorData(&sensors);
       }
   }
-  else if (raws->flag == 97){
-      Serial.print("Set flags: ");
-      Serial.println(raws->flag);
+  else if (raws->flag == 97){ //IMU initialization
+  
       bno.init();
 
       //getLatestSensorData(&sensors);
   }
-  else if (raws->flag == 96 ){
+  else if (raws->flag == 96 ){// min_max thrust
       // Extract data from raw message
       robot_specs.min_thrust = (int) raws->data[0];
       robot_specs.max_thrust = (int) raws->data[1];
@@ -133,6 +133,13 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
       Serial.println(robot_specs.min_thrust);
       Serial.print("Max thrust: ");
       Serial.println(robot_specs.max_thrust);
+  } else if (raws->flag == 95){//nicla specs
+    nicla_tuning->goal_theta_back = raws->data[0];
+    nicla_tuning->goal_theta_front = raws->data[1];
+    nicla_tuning->goal_dist_thresh = raws->data[2];
+    nicla_tuning->max_move_x = raws->data[3];
+    nicla_tuning->goal_ratio = raws->data[4];
+    nicla_tuning->yaw_move_threshold = raws->data[5];
   }
 
 }
