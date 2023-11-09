@@ -67,63 +67,61 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
   }
 
 
-  if (nicla_flag != 3) { 
+  if (nicla_flag == 3) {
     // Some Detection
-    detected = true;
-  }
-
-  if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {  
-    float x_cal = tracking_x / max_x; 
+    detected = false;
+  } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
+    float x_cal = tracking_x / max_x;
     float y_cal = tracking_y / max_y;
     des_yaw = ((x_cal - 0.5) * nicla_tuning->x_cal_weight);
-    robot_to_goal = _yaw - des_yaw; 
-    detected = true;
-  }
-    
-  if (nicla_flag == 1) {
-    float relative_to_goal = nicla_tuning->goal_theta_back - robot_to_goal;
-    relative_to_goal = atan2(sin(relative_to_goal), cos(relative_to_goal));
-    goal_act = nicla_tuning->goal_theta_back;
-  
-    if (abs(relative_to_goal) > 3*PI/4) { // seeing front goal
-      goal_act = goal_act + PI;
-      goal_act = atan2(sin(goal_act), cos(goal_act));
-      control_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
-      control_yaw = atan2(sin(control_yaw), cos(control_yaw));
-      last_front_goal_time = millis();
-      // changeHeight(y, _height, nicla_tuning);
-    } else if (abs(relative_to_goal) > PI/2){ //seeing noise
-      last_noise_time = millis();
-    } else{ // seeing back goal
-      last_back_goal_time = millis();
-      goal_act = atan2(sin(goal_act), cos(goal_act));
-      control_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
-      control_yaw = atan2(sin(control_yaw), cos(control_yaw));
-      // changeHeight(y, _height, nicla_tuning);
+    robot_to_goal = _yaw - des_yaw;
+    if (nicla_flag == 1) {
+      detected = true;
+      float relative_to_goal = nicla_tuning->goal_theta_back - robot_to_goal;
+      relative_to_goal = atan2(sin(relative_to_goal), cos(relative_to_goal));
+      goal_act = nicla_tuning->goal_theta_back;
+      if (abs(relative_to_goal) > 3*PI/4) { // seeing front goal
+        goal_act = goal_act + PI;
+        goal_act = atan2(sin(goal_act), cos(goal_act));
+        control_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
+        control_yaw = atan2(sin(control_yaw), cos(control_yaw));
+        last_front_goal_time = millis();
+        // changeHeight(y, _height, nicla_tuning);
+      } else if (abs(relative_to_goal) > PI/2){ //seeing noise
+        last_noise_time = millis();
+      } else{ // seeing back goal
+        last_back_goal_time = millis();
+        goal_act = atan2(sin(goal_act), cos(goal_act));
+        control_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
+        control_yaw = atan2(sin(control_yaw), cos(control_yaw));
+        // changeHeight(y, _height, nicla_tuning);
+      }
+    } else if (nicla_flag == 0) {
+
     }
   }
-  
+
   // else {// nicla has seen something, but not right now}
 
   if (detected == false) {
     randomWalkGoal(controls,  nicla_tuning);
   } else {
     random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
-    
+
     if (max(last_detection_w, last_detection_h) > nicla_tuning->goal_dist_thresh){
       fullCharge(controls, nicla_tuning);
     } else{
-      
+
       chargeGoal(controls, goal_act, robot_to_goal, nicla_tuning);
     }
   }
-  
-  
-  
+
+
+
   // controls->fz = des_height;
   controls->tz = control_yaw;
   controls->fx = control_fx;
-  
+
   last_tracking_x = tracking_x;
   last_tracking_y = tracking_y;
   last_detection_w = detection_w;
@@ -135,26 +133,26 @@ void chargeGoal(controller_t *controls, float goal_act, float robot_to_goal, nic
   /*
     If I see a goal at the proper angle, I want to charge towards it and pass through
       If the goal is small in the image, I want to change height and adjust
-        maybe we should include the centering command to the code, also make sure that last known location in yaw is used if we want to random search for it again. 
+        maybe we should include the centering command to the code, also make sure that last known location in yaw is used if we want to random search for it again.
       if the goal is large, the change in angle and height should be massively reduced or non exsistant, so that it can confidently move through the hole
-        Once we have charged through, we should try to determine if we have passed through by turing around and detecting a large goal. 
+        Once we have charged through, we should try to determine if we have passed through by turing around and detecting a large goal.
           If not true then we move away and try again
 
   */
-  
+
   if (abs(control_yaw - _yaw) < nicla_tuning->yaw_move_threshold){
     control_fx = nicla_tuning->max_move_x;
   } else {
     control_fx = 0;
-  } 
+  }
 }
 
 void randomWalkGoal(controller_t *controls,  nicla_tuning_s *nicla_tuning){
   /*
     If I have seen a 'wall' recently time < 10 seconds, then I want to stop(move backwards) (3 seconds), turn around opposite to the wall found(2 seconds), then move foward for 5 seconds
-    If I have not seen a wall recently > 10 seconds and I havent seen a goal recently > 10 seconds, then I want to perform a random walk for 10 seconds up and down the highbay, 
+    If I have not seen a wall recently > 10 seconds and I havent seen a goal recently > 10 seconds, then I want to perform a random walk for 10 seconds up and down the highbay,
               this procedure stops and resets if a goal has been seen or 10 more seconds have passed.
-    If I have not seen anything in 20 seconds, reset by finding a wall again. 
+    If I have not seen anything in 20 seconds, reset by finding a wall again.
   */
   random_spiral -= .05 * ((float)dt)/1000000.0f;
   if (random_spiral < .1) {
@@ -163,10 +161,6 @@ void randomWalkGoal(controller_t *controls,  nicla_tuning_s *nicla_tuning){
   control_yaw = control_yaw  + nicla_tuning->spiral_strength*((float)dt)/1000000.0f; //TODO add constant for speed of spin
   control_yaw = atan2(sin(control_yaw), cos(control_yaw));
   control_fx = random_spiral;
-  
-  
-  
-
 }
 
 void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
