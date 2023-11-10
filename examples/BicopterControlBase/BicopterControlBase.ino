@@ -7,6 +7,8 @@
 
 // Strategy
 #include "RandomWalk.h"
+#include "DeterministicWalk.h"
+
 
 // Sensors instances
 ModBlimp blimp;
@@ -17,7 +19,7 @@ GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
 
 // Strategy instances
 RandomWalk randomWalk;
-
+DeterministicWalk zigzag;
 
 IBusBM IBus;
 
@@ -45,7 +47,7 @@ nicla_tuning_s nicla_tuning = {
         .max_move_x = 0.4,
         .goal_ratio = 0.5,
         .yaw_move_threshold = 0.2
-        
+
 };
 
 /*
@@ -258,6 +260,9 @@ void setup() {
     randomWalk.setMinDistance(randomwalk_specs.min_distance);
     randomWalk.setDesZ(5);
     randomWalk.begin();
+
+
+    zigzag.begin();
 
 
 }
