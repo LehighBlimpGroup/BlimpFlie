@@ -54,7 +54,7 @@ try:
             feedback = esp_now.getFeedback(1)  # get sensor data from robot
             nicla = esp_now.getFeedback(2)  # get sensor data from robot
 
-             # ------- Autonomous mode ----------
+            # ------- Autonomous mode ----------
             # if a_key_pressed:
             #     des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
             #     outputs[1] = des_fx  # Forward

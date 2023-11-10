@@ -66,7 +66,6 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     height_diff = controls->fz - _height;
   }
 
-
   if (nicla_flag == 3) {
     // Some Detection
     detected = false;
@@ -117,9 +116,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     }
   }
 
-
-
-  // controls->fz = des_height;
+  controls->fz = des_height;
   controls->tz = control_yaw;
   controls->fx = control_fx;
 
@@ -138,9 +135,7 @@ void chargeGoal(controller_t *controls, float goal_act, float robot_to_goal, nic
       if the goal is large, the change in angle and height should be massively reduced or non exsistant, so that it can confidently move through the hole
         Once we have charged through, we should try to determine if we have passed through by turing around and detecting a large goal.
           If not true then we move away and try again
-
   */
-
   if (abs(control_yaw - _yaw) < nicla_tuning->yaw_move_threshold){
     control_fx = nicla_tuning->max_move_x;
   } else {
@@ -166,7 +161,6 @@ void randomWalkGoal(controller_t *controls,  nicla_tuning_s *nicla_tuning){
 
 void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
   control_fx = nicla_tuning->max_move_x;
-  
 }
 
 void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuning) {
