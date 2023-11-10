@@ -73,7 +73,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     height_diff = controls->fz - _height;
   }
 
-  if (nicla_flag == 3 || nicla_flag == 4 || max(_w,_h) < 15) {
+  if (nicla_flag == 3 || nicla_flag == 4 || max(tracking_h, tracking_w) < 15) {
     detected = false;
   } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
     float x_cal = tracking_x / max_x;
@@ -89,7 +89,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     goal_yaw = robot_to_goal * nicla_tuning->goal_ratio;
     
     if (nicla_flag == 1) {
-      changeHeight(_y, max(_h, _w), _height, nicla_tuning);
+      changeHeight(tracking_y, max(detection_h, detection_w), _height, nicla_tuning);
       last_front_goal_time = millis();
       detected = true;
       
@@ -125,7 +125,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
   
   if (millis() - near_time_dist > 3000){//detect if time of flight is too near (stuck on a goal)
   //TODO make a flag that turns this off
-    tooCloseGoal(nicla_tuning)
+    tooCloseGoal(nicla_tuning);
   } else if (millis() - full_charge_timer < 6000){
     random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
     fullCharge(controls, nicla_tuning);
