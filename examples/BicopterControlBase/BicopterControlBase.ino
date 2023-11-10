@@ -442,4 +442,3 @@ void zero(bool servo, actuation_t *out){
         out->ready = false;
     }
 }
-

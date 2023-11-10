@@ -1,7 +1,7 @@
 {
     "bicopterbasic": {
         "feedbackPD" : { "roll" : 0,
-                        "pitch" : 0,
+                        "pitch" : 1,
                         "yaw" : 1,
                         "x" : 0,
                         "y" : 0,
@@ -16,22 +16,22 @@
                         "Cz" : 1,
                         "Cabsz" : 1,
 
-                        "kproll" : -0.02,
+                        "kproll" : 0,
                         "kdroll" : 0,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -0.4,
-                        "kdyaw" : -0.1,
+                        "kpyaw" : -1.5,
+                        "kdyaw" : -0.03,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0,
-                        "kdy" : 0,
+                        "kpy" : 0.08,
+                        "kdy" : 0.08,
                         "kpz" : 0.4,
                         "kdz" : 0.3,
                         "kiz" : 0.03,
 
-                        "kiyaw": -0.0,
+                        "kiyaw": -0.7,
                         "kiyawrate" : 0,
                         "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
@@ -53,7 +53,7 @@
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
-                    "yawRateGamma" : 0.9,
+                    "yawRateGamma" : 0.95,
                     "pitchRateGamma" : 0.7,
                     "zGamma" : 0.8,
                     "vzGamma" : 0.9
@@ -83,7 +83,7 @@
             "kf1": 1,
             "kf2": 1,
             "maxRadsYaw" : 0.07,
-            "fxyawScale" : 0.2,
+            "fxyawScale" : 0,
             "yawScaleEnable" : 0
 
         },
@@ -91,13 +91,13 @@
             "goal_theta_back": 0,
             "goal_theta_front": 3.14,
             "goal_dist_thresh" : 240,
-            "max_move_x" : 0.2,
+            "max_move_x" : 0.13,
             "goal_ratio" : 1.0,
-            "yaw_move_threshold" : 0.2,
+            "yaw_move_threshold" : 0.4,
             "height_threshold" : 0.2,
             "height_strength" : 5,
             "x_cal_weight" : 1,
-            "spiral_strength" : 0.5
+            "spiral_strength" : 0.3
         }
     }
 }
