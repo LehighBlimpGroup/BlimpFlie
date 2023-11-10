@@ -56,10 +56,12 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
   */
   blimp->IBus.loop();
   int nicla_flag = (int)blimp->IBus.readChannel(0);
-  tracking_x = (float)blimp->IBus.readChannel(1);
+  //tracking is exact
+  tracking_x = (float)blimp->IBus.readChannel(1); 
   tracking_y = (float)blimp->IBus.readChannel(2);
   tracking_w = (float)blimp->IBus.readChannel(3);
   tracking_h = (float)blimp->IBus.readChannel(4);
+  //detection is the larger slower bounding box
   detection_x = (float)blimp->IBus.readChannel(5);
   detection_y = (float)blimp->IBus.readChannel(6);
   detection_w = (float)blimp->IBus.readChannel(7);
@@ -73,7 +75,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     height_diff = controls->fz - _height;
   }
 
-  if (nicla_flag == 3 || nicla_flag == 4 || max(tracking_h, tracking_w) < 15) {
+  if (nicla_flag == 3 || nicla_flag == 4 || max(detection_h, detection_w) < 15) {
     detected = false;
   } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
     float x_cal = tracking_x / max_x;
@@ -87,11 +89,11 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     relative_to_goal = atan2(sin(relative_to_goal), cos(relative_to_goal));
     goal_act = nicla_tuning->goal_theta_back;
     goal_yaw = robot_to_goal * nicla_tuning->goal_ratio;
+    changeHeight(tracking_y, max(detection_h, detection_w), _height, nicla_tuning);
+    detected = true;
     
     if (nicla_flag == 1) {
-      changeHeight(tracking_y, max(detection_h, detection_w), _height, nicla_tuning);
       last_front_goal_time = millis();
-      detected = true;
       
       // check if goal is in the proper position or if it is actually seeing a wall. 
       // if (abs(relative_to_goal) > 3*PI/4) { // seeing front goal
