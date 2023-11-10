@@ -321,7 +321,7 @@ void loop() {
     outputs.ready = false;
     z_integral = 0;
 
-  } else if (raws->flag == 30) {//custom flags
+  } else if (raws.flag == 30) {//custom flags
     for (int i = 0; i < 11; i ++){
         customFlags[i] = raws.data[i];
     }
