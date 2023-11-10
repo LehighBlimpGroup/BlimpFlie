@@ -8,6 +8,7 @@
 
 // Strategy
 #include "RandomWalk.h"
+#include "DeterministicWalk.h"
 
 // #include "BNO55.h"
 // #include "baro280.h"
@@ -24,7 +25,7 @@ IBusBM IBus;
 
 // Strategy instances
 RandomWalk randomWalk;
-
+DeterministicWalk zigzag;
 
 // Robot specifications
 robot_specs_s robot_specs = {
@@ -216,7 +217,7 @@ void setup() {
 
     randomWalk.begin();
 
-
+    zigzag.begin();
 
 }
 

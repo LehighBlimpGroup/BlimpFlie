@@ -5,7 +5,7 @@
 
 class DeterministicWalk {
   public:
-    DeterministicWalk(float forward_force = 0.3, int min_distance = 500, int des_z = 7);
+    DeterministicWalk(float forward_force = 0.5, int min_distance = 500, int des_z = 7);
 
     void begin();
     void execute(int distance_sensor, float yaw_sensor, float &force, int &z, float &yaw);
