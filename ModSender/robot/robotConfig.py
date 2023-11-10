@@ -44,7 +44,6 @@ class RobotConfig:
         weights = config['weights']
         hardware = config['hardware']
         nicla = config['nicla']
-        
 
         data_sets = [
             [10, 0, 
@@ -212,6 +211,7 @@ class RobotConfig:
         z_endabled = feedbackPD["z"]
 
         return yaw_enabled,z_endabled
+
 
     def initialize_system(self):
         # Set configs for all slave indexes that you want to use
