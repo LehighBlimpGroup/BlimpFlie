@@ -7,11 +7,12 @@ from autonomy.Behavior import Behavior
 from autonomy.Walk import Walk
 
 # Number of turns before coming back
-SWITCH_TIME = 2
+SWITCH_TIME = 5
 NUM_ZIGS = 5
 Z_LEVEL = 3  # level height
 TIME_ROTATE = 4  # Time to rotate in seconds
 ANGLE_THRESH = 10 # Angle threshold in degrees
+STEP_ZIG_ZAG = np.radians(15)
 
 class ZigZagWalk(Walk):
 
@@ -31,8 +32,9 @@ class ZigZagWalk(Walk):
             self._restart_timer()
         elif self.current_action == 2:
             self.current_action = 3  # Wait
-        # elif self.current_action == 3 and time_elapsed > TIME_ROTATE:
-        elif self.current_action == 3 and abs(self._angle_bounded(self.yaw-self.des_yaw)) < radians(ANGLE_THRESH):
+        elif self.current_action == 3 and time_elapsed > TIME_ROTATE:
+        # elif self.current_action == 3 and abs(self._angle_bounded(s
+        # elf.yaw-self.des_yaw)) < radians(ANGLE_THRESH):
             self.current_action = 0  # Move forward
             self._restart_timer()
 
@@ -57,9 +59,9 @@ class ZigZagWalk(Walk):
         yaw = self. _angle_bounded( self.yaw)  # bound angle from -pi to pi
 
         if yaw > 0: # 90
-            self.des_yaw = np.radians(270+8) + 1 * self.step_zig_zag * self.forward_zig_zag
+            self.des_yaw = np.radians(270+8) + 1 * STEP_ZIG_ZAG * self.forward_zig_zag
         else:
-            self.des_yaw = np.radians(90+8) - 1 * self.step_zig_zag * self.forward_zig_zag
+            self.des_yaw = np.radians(90+8) - 1 * STEP_ZIG_ZAG * self.forward_zig_zag
 
         return 0, self.des_z, self.des_yaw
 
