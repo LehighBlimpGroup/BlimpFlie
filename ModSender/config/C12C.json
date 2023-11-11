@@ -11,7 +11,7 @@
                         "Croll" : 1,
                         "Cpitch" : 0, 
                         "Cyaw" : 1,
-                        "Cx" : 0.5,
+                        "Cx" : 0.15,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -49,8 +49,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.1,
-                        "servo2offset" : 0.0
+                        "servo1offset" : -0.42,
+                        "servo2offset" : 0.42
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
@@ -60,7 +60,7 @@
                     "vzGamma" : 0.5
                     },
         "initflags": {
-                    "_comment": "flags to be used in the init", 
+                    "_comment": "flags to be used in the init",
                     "_comment": "-bool verbose: allows some debug print statments",
                     "_comment": "-bool sensors: enables or disables the sensorsuite package: if false all values will be 0, and sensorReady =false in the sensor ",
                     "_comment":"-bool UDP: starts up the UDP connection such that other UDP functions will be enabled",

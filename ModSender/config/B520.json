@@ -1,8 +1,8 @@
 {
     "bicopterbasic": {
         "feedbackPD" : { "roll" : 0,
-                        "pitch" : 1,
-                        "yaw" : 1,
+                        "pitch" : 0,
+                        "yaw" : 0,
                         "x" : 0,
                         "y" : 0,
                         "z" : 1,
@@ -49,8 +49,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.15,
-                        "servo2offset" : 0.05
+                        "servo1offset" : 0.4,
+                        "servo2offset" : 0.4
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,

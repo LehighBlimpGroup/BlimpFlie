@@ -52,6 +52,8 @@ try:
         for i, robotConfig in enumerate(robotConfigs):
             feedback = esp_now.getFeedback(i)  # get sensor data from robot
 
+            # robotConfig.sendCustomFloats(BRODCAST_CHANNEL, CustomFloats)
+
             #  # ------- Autonomous mode ----------
             # if a_key_pressed:
             #     des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
