@@ -24,7 +24,7 @@ class Walk(Behavior):
         # Variable
         self.des_yaw = np.radians(295)
 
-        self.step_zig_zag = np.radians(10)
+
 
         # current action
         self.current_action = 0
