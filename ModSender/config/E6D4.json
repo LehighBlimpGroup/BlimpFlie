@@ -20,18 +20,18 @@
                         "kdroll" : 0,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.00,
-                        "kdyaw" : -0.05,
+                        "kpyaw" : -0.50,
+                        "kdyaw" : -0.01,
 
                         "kpx" : 0,
                         "kdx" : 0,
                         "kpy" : 0.05,
-                        "kdy" : 0.04,
-                        "kpz" : 0.8,
-                        "kdz" : 0.5,
-                        "kiz" : 0.05,
+                        "kdy" : 0.02,
+                        "kpz" : 2.5,
+                        "kdz" : 2.5,
+                        "kiz" : 0.1,
 
-                        "kiyaw": -0.0,
+                        "kiyaw": -0.5,
                         "kiyawrate" : 0,
                         "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
@@ -94,9 +94,9 @@
             "max_move_x" : 0.12,
             "goal_ratio" : 1.0,
             "yaw_move_threshold" : 0.2,
-            "height_threshold" : 0.6,
-            "height_strength" : 1.0,
-            "x_cal_weight" : 1.2,
+            "height_threshold" : 0.75,
+            "height_strength" : 7.5,
+            "x_cal_weight" : 2.0,
             "spiral_strength" : 0.2
 
         }
