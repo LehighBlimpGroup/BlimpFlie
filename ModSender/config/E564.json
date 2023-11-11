@@ -49,8 +49,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.15,
-                        "servo2offset" : 0.05
+                        "servo1offset" : 0.45,
+                        "servo2offset" : 0.45
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,

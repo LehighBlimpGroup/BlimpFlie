@@ -17,6 +17,9 @@ import numpy as np
 import matplotlib.widgets as widgets
 import matplotlib.patches as patches
 
+from parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
+
+
 LOW_BATTERY = 3.2
 
 
@@ -27,6 +30,9 @@ class SensorGUI:
         # To modify from esp_now and robConfig
         self.esp_now = esp_now
         self.robConfig = robConfig
+
+        # Flag to turn of the robot 1 is power, 0 is off
+        self.toggle_power = 1
 
         if not enable_gui:
             return
@@ -97,8 +103,10 @@ class SensorGUI:
 
         ### Toggle Button
         self.toggle_ax = plt.axes([0.65, 0.9, 0.15, 0.05])  # Adjust the position and size of the toggle button
-        self.toggle = widgets.CheckButtons(self.toggle_ax, ['Toggle'], [False])
+        self.toggle = widgets.CheckButtons(self.toggle_ax, ['toggle_power'], [False])
         self.toggle.on_clicked(self.on_toggle_click)
+
+
 
         ### Case Selection Radio Buttons
         self.radio_ax = plt.axes([0.8, 0.80, 0.15, 0.05*3])  # Adjust the position and size of the radio buttons
@@ -242,7 +250,7 @@ class SensorGUI:
 
     def on_toggle_click(self, label):
         print(f'Toggle {label} clicked.')
-        # You can add logic here to handle toggle actions
+        self.toggle_power = not self.toggle.get_status()[0]
 
     def on_radio_click(self, label):
         print(f'Radio button {label} selected.')
