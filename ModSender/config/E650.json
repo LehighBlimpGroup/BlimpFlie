@@ -11,7 +11,7 @@
                         "Croll" : 1,
                         "Cpitch" : 0, 
                         "Cyaw" : 1,
-                        "Cx" : 0.1,
+                        "Cx" : 0.3,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -49,8 +49,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.15,
-                        "servo2offset" : 0.05
+                        "servo1offset" : 0.1,
+                        "servo2offset" : 0.1
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
