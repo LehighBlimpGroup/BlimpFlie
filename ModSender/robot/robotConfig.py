@@ -233,3 +233,7 @@ class RobotConfig:
         self.startThrustRange(BRODCAST_CHANNEL, "bicopterbasic")  # Motor specifications
         self.startTranseiver(BRODCAST_CHANNEL, MASTER_MAC)  # Start communication
 
+    def send_flags(self):
+        self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # sent.
+
+

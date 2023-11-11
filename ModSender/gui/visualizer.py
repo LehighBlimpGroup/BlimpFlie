@@ -99,19 +99,24 @@ class SensorGUI:
         ### Buttons
         self.button_ax = plt.axes([0.5, 0.9, 0.15, 0.05])  # Adjust the position and size of the button
         self.button = widgets.Button(self.button_ax, 'Reconnect')
-        self.button.on_clicked(self.on_button_click)
+        self.button.on_clicked(self.on_btn_reconnect_click)
+
+        self.button_ax = plt.axes([0.65, 0.9, 0.15, 0.05])  # Adjust the position and size of the button
+        self.button_flags = widgets.Button(self.button_ax, 'Flags')
+        self.button_flags.on_clicked(self.on_btn_flags_click)
+
 
         ### Toggle Button
-        self.toggle_ax = plt.axes([0.65, 0.9, 0.15, 0.05])  # Adjust the position and size of the toggle button
-        self.toggle = widgets.CheckButtons(self.toggle_ax, ['toggle_power'], [False])
+        self.toggle_ax = plt.axes([0.8, 0.9, 0.15, 0.05])  # Adjust the position and size of the toggle button
+        self.toggle = widgets.CheckButtons(self.toggle_ax, ['On/Off'], [False])
         self.toggle.on_clicked(self.on_toggle_click)
 
 
 
         ### Case Selection Radio Buttons
-        self.radio_ax = plt.axes([0.8, 0.80, 0.15, 0.05*3])  # Adjust the position and size of the radio buttons
-        self.radio = widgets.RadioButtons(self.radio_ax, ['Case 1', 'Case 2', 'Case 3'], activecolor='red')
-        self.radio.on_clicked(self.on_radio_click)
+        # self.radio_ax = plt.axes([0.8, 0.80, 0.15, 0.05*3])  # Adjust the position and size of the radio buttons
+        # self.radio = widgets.RadioButtons(self.radio_ax, ['Case 1', 'Case 2', 'Case 3'], activecolor='red')
+        # self.radio.on_clicked(self.on_radio_click)
 
         # Adding an enclosing square for Nicla Detection visuals
         self.enclosing_square = patches.Rectangle(
@@ -244,9 +249,13 @@ class SensorGUI:
 
         plt.draw()
 
-    def on_button_click(self, event):
+    def on_btn_reconnect_click(self, event):
         self.robConfig.initialize_system()
         print("Restart")
+
+    def on_btn_flags_click(self, event):
+        self.robConfig.send_flags()
+        print("Send Flags")
 
     def on_toggle_click(self, label):
         print(f'Toggle {label} clicked.')
@@ -265,6 +274,7 @@ class SensorGUI:
             plt.pause(delay)
         else:
             time.sleep(delay)
+
 
 
 
