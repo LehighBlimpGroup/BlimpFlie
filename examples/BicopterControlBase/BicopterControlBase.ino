@@ -348,6 +348,8 @@ void loop() {
     Serial.print("Set force: ");
     Serial.println(randomwalk_specs.forward_force);    
     zigzag.setForwardForce(randomwalk_specs.forward_force);
+    zigzag.set_SWITCH_TIME(randomwalk_specs.SWITCH_TIME);
+    zigzag.set_TIME_ROTATE(randomwalk_specs.TIME_ROTATE);
 
     Serial.print("Set flags: ");
     Serial.println(flag);

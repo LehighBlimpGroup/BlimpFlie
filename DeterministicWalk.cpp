@@ -43,8 +43,8 @@ void DeterministicWalk::set_SWITCH_TIME(float SWITCH_TIME) {
   _SWITCH_TIME = SWITCH_TIME;
 }
 
-void DeterministicWalk::set_SWITCH_TIME(float SWITCH_TIME) {
-  _SWITCH_TIME = SWITCH_TIME;
+void DeterministicWalk::set_TIME_ROTATE(float TIME_ROTATE) {
+  _TIME_ROTATE = TIME_ROTATE;
 }
 
 
@@ -73,7 +73,7 @@ void DeterministicWalk::choose_action(int distance_sensor, float yaw_sensor) {
     restart_timer();
   } else if (_current_action == 2) {
     _current_action = 3;
-  } else if (_current_action == 3 && (time_elapsed > _TIME_ROTATE || yaw_sensor - yaw ) ) {
+  } else if (_current_action == 3 && (time_elapsed > _TIME_ROTATE) ) {// || yaw_sensor - yaw < 0.1
     _current_action = 0;
     restart_timer();
   }
