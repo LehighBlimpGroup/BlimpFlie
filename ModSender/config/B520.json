@@ -49,8 +49,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.4,
-                        "servo2offset" : 0.4
+                        "servo1offset" : 0.0,
+                        "servo2offset" : 0.1
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
@@ -97,13 +97,13 @@
             "yaw_move_threshold" : 0.2
         },
         "deterministic_walk": {
-            "SWITCH_TIME": 5,
+            "SWITCH_TIME": 5000,
             "NUM_ZIGS": 5,
             "Z_LEVEL" : 3,
-            "TIME_ROTATE" : 4,
+            "TIME_ROTATE" : 5000,
             "ANGLE_THRESH" : 10,
-            "STEP_ZIG_ZAG" : 15,
-            "FORWARD_FORCE" : 0.5
+            "STEP_ZIG_ZAG" : 180,
+            "FORWARD_FORCE" : 0.4
         }
     }
 }

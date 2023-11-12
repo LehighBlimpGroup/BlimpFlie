@@ -96,9 +96,9 @@ typedef struct RollPitchAdjustments {
 } RollPitchAdjustments;
 
 typedef struct randomwalk_values_t {
-    float forward_force, desired_z, desired_yaw;
+    float forward_force, desired_z, desired_yaw, STEP_ZIG_ZAG;
     int min_distance, NUM_ZIGS, Z_LEVEL, SWITCH_TIME;
-    int TIME_ROTATE, ANGLE_THRESH, STEP_ZIG_ZAG;
+    int TIME_ROTATE, ANGLE_THRESH;
     bool randomWalk_enabled;
 } randomwalk_values_t;
 

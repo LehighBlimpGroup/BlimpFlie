@@ -10,11 +10,17 @@ void Sonar_sensor(controller_t *controls, int sonar_sensor_enabled, int randomWa
 
         zigzag.execute(sensorData.values[0], controls->tz, randomW_force, randomW_z, randomW_yaw);
 
+        
         controls->fx = randomW_force;
         // controls->fz = randomW_z;
         controls->tz += randomW_yaw;
-
-
+        
+        Serial.print("des_yaw_actual = ");
+        Serial.print(degrees(controls->tz));
+        Serial.print("des_yaw = ");
+        Serial.print(degrees(randomW_yaw));
+        Serial.print("randomW_force = ");
+        Serial.println(degrees(randomW_force));
       // }else{
         // }
     // }

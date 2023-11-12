@@ -29,13 +29,13 @@ randomwalk_values_t randomwalk_specs = {
         .forward_force = 0.4,
         .desired_z = 7,
         .desired_yaw = 0,
+        .STEP_ZIG_ZAG = 15,
         .min_distance = 500,
         .NUM_ZIGS = 5,
         .Z_LEVEL = 3,
         .SWITCH_TIME = 5000,
         .TIME_ROTATE = 4000,
         .ANGLE_THRESH = 10,
-        .STEP_ZIG_ZAG = 15.0 * 3.14 / 180.0,
         .randomWalk_enabled = 1,
 };
 
@@ -261,13 +261,13 @@ void setup() {
     sensors.groundZ = baro.getEstimatedZ();
 
     // Random walk definitions
-    randomWalk.setForwardForce(randomwalk_specs.forward_force);
-    randomWalk.setMinDistance(randomwalk_specs.min_distance);
-    randomWalk.setDesZ(5);
-    randomWalk.begin();
+    // randomWalk.setForwardForce(randomwalk_specs.forward_force);
+    // randomWalk.setMinDistance(randomwalk_specs.min_distance);
+    // randomWalk.setDesZ(5);
+    // randomWalk.begin();
 
 
-    zigzag.setForwardForce(randomwalk_specs.forward_force);
+    // zigzag.setForwardForce(randomwalk_specs.forward_force);
     zigzag.begin();
     
 
@@ -342,7 +342,7 @@ void loop() {
     randomwalk_specs.Z_LEVEL = customFlags[2];
     randomwalk_specs.TIME_ROTATE = (int)customFlags[3];
     randomwalk_specs.ANGLE_THRESH = customFlags[4];
-    randomwalk_specs.STEP_ZIG_ZAG = customFlags[5] * 3.14 / 180;
+    randomwalk_specs.STEP_ZIG_ZAG = radians(customFlags[5]);
     randomwalk_specs.forward_force = customFlags[6];
 
     Serial.print("Set force: ");
@@ -350,6 +350,7 @@ void loop() {
     zigzag.setForwardForce(randomwalk_specs.forward_force);
     zigzag.set_SWITCH_TIME(randomwalk_specs.SWITCH_TIME);
     zigzag.set_TIME_ROTATE(randomwalk_specs.TIME_ROTATE);
+    zigzag.set_STEP_ZIG_ZAG(randomwalk_specs.STEP_ZIG_ZAG);
 
     Serial.print("Set flags: ");
     Serial.println(flag);
@@ -382,7 +383,6 @@ void loop() {
     if (actionFlag == 1){// nicla controller
       addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning);
     } else if (actionFlag == 2) { //random walk
-      actionFlag = 0;// put random walk here
       Sonar_sensor(&controls, sonar_sensor_enabled, randomWalk_enabled);
     } else if (actionFlag == 3) { // full control flow
       actionFlag = 0; // put control flow function to do state control here. 
@@ -499,4 +499,4 @@ void zero(bool servo, actuation_t *out){
         out->ready = false;
     }
 }
-
+

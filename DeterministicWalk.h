@@ -19,6 +19,8 @@ class DeterministicWalk {
 
     void set_TIME_ROTATE(float TIME_ROTATE);
 
+    void set_STEP_ZIG_ZAG(float STEP_ZIG_ZAG);
+
 
 
 
@@ -33,14 +35,13 @@ class DeterministicWalk {
     unsigned long _time_elapse;
     int _forward_zig_zag;
     int _zz_counter;
-    float _step_zig_zag;
 
     float _forward_force = 0.3;
     int NUM_ZIGS = 5;
     int Z_LEVEL = 3;
     float _SWITCH_TIME;
     float _TIME_ROTATE;
-    float STEP_ZIG_ZAG;
+    float _STEP_ZIG_ZAG;
 
 
     void choose_action(int distance_sensor, float yaw_sensor);

@@ -63,6 +63,8 @@ class ZigZagWalk(Walk):
         else:
             self.des_yaw = np.radians(90+8) - 1 * STEP_ZIG_ZAG * self.forward_zig_zag
 
+
+
         return 0, self.des_z, self.des_yaw
 
 
