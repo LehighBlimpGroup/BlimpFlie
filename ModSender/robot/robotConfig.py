@@ -15,7 +15,7 @@ class RobotConfig:
 
 
     def get_config(self, CONFIG_INDEX):
-        return self.configs.get(str(CONFIG_INDEX), {'feedbackPD': {}, 'weights': {}, 'initflags': {}, 'hardware': {}, 'nicla': {}})
+        return self.configs.get(str(CONFIG_INDEX), {'feedbackPD': {}, 'weights': {}, 'initflags': {}, 'hardware': {}, 'nicla': {}, 'deterministic_walk': {}})
     
     def _fill_with_zeros(self, data, size=13):
         """Fill the given list with zeros until it reaches the specified size."""
@@ -44,6 +44,7 @@ class RobotConfig:
         weights = config['weights']
         hardware = config['hardware']
         nicla = config['nicla']
+        deterministic_walk = config['deterministic_walk']
         
 
         data_sets = [
@@ -113,13 +114,21 @@ class RobotConfig:
              nicla["goal_dist_thresh"],
              nicla["max_move_x"],
              nicla["goal_ratio"],
-             nicla["yaw_move_threshold"]]
+             nicla["yaw_move_threshold"]],
+            [30, 0,
+             deterministic_walk["SWITCH_TIME"],
+             deterministic_walk["NUM_ZIGS"],
+             deterministic_walk["Z_LEVEL"],
+             deterministic_walk["TIME_ROTATE"],
+             deterministic_walk["ANGLE_THRESH"],
+             deterministic_walk["STEP_ZIG_ZAG"],
+             deterministic_walk["FORWARD_FORCE"]]
         ]
 
         for data in data_sets:
-            time.sleep(.1)
             if not self._send_data(data, BRODCAST_CHANNEL):
                 return False
+            time.sleep(.1)
 
         print("All Flags Sent on ", self.slave_index, " for ", CONFIG_INDEX)
         return True
@@ -234,6 +243,9 @@ class RobotConfig:
         self.startTranseiver(BRODCAST_CHANNEL, MASTER_MAC)  # Start communication
 
     def send_flags(self):
+
+        with open(self.config_file, 'r') as f:
+            self.configs = json.load(f)
         self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # sent.
 
 

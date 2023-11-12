@@ -11,7 +11,7 @@
                         "Croll" : 1,
                         "Cpitch" : 0, 
                         "Cyaw" : 1,
-                        "Cx" : 0.3,
+                        "Cx" : 0.5,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -28,8 +28,8 @@
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0,
-                        "kdy" : 0,
+                        "kpy" : 0.02,
+                        "kdy" : 0.01,
                         "kpz" : 0.4,
                         "kdz" : 0.5,
                         "kiz" : 0.0,
@@ -95,6 +95,15 @@
             "max_move_x" : 0.2,
             "goal_ratio" : 1,
             "yaw_move_threshold" : 0.2
+        },
+        "deterministic_walk": {
+            "SWITCH_TIME": 5,
+            "NUM_ZIGS": 5,
+            "Z_LEVEL" : 3,
+            "TIME_ROTATE" : 4,
+            "ANGLE_THRESH" : 10,
+            "STEP_ZIG_ZAG" : 15,
+            "FORWARD_FORCE" : 10
         }
     }
 }

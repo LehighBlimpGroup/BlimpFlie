@@ -26,13 +26,18 @@ IBusBM IBus;
 
 
 randomwalk_values_t randomwalk_specs = {
-        .forward_force = 0.3,
-        .desired_z = 5,
+        .forward_force = 0.4,
+        .desired_z = 7,
         .desired_yaw = 0,
-        .min_distance = 400,
+        .min_distance = 500,
+        .NUM_ZIGS = 5,
+        .Z_LEVEL = 3,
+        .SWITCH_TIME = 5000,
+        .TIME_ROTATE = 4000,
+        .ANGLE_THRESH = 10,
+        .STEP_ZIG_ZAG = 15.0 * 3.14 / 180.0,
         .randomWalk_enabled = 1,
 };
-
 
 robot_specs_s robot_specs = {
         .min_thrust = 1050,
@@ -262,7 +267,9 @@ void setup() {
     randomWalk.begin();
 
 
+    zigzag.setForwardForce(randomwalk_specs.forward_force);
     zigzag.begin();
+    
 
 
 }
@@ -326,11 +333,25 @@ void loop() {
     outputs.ready = false;
     z_integral = 0;
 
-  } else if (raws.flag == 30) {//custom flags
+  } else if (flag == 30 && flag != lastflag) {//custom flags
     for (int i = 0; i < 11; i ++){
         customFlags[i] = raws.data[i];
     }
-    
+    randomwalk_specs.SWITCH_TIME = customFlags[0];
+    randomwalk_specs.NUM_ZIGS = customFlags[1];
+    randomwalk_specs.Z_LEVEL = customFlags[2];
+    randomwalk_specs.TIME_ROTATE = (int)customFlags[3];
+    randomwalk_specs.ANGLE_THRESH = customFlags[4];
+    randomwalk_specs.STEP_ZIG_ZAG = customFlags[5] * 3.14 / 180;
+    randomwalk_specs.forward_force = customFlags[6];
+
+    Serial.print("Set force: ");
+    Serial.println(randomwalk_specs.forward_force);    
+    zigzag.setForwardForce(randomwalk_specs.forward_force);
+
+    Serial.print("Set flags: ");
+    Serial.println(flag);
+
   } else if (flag == 20){ //motor servo level control
           outputs.ready = raws.ready;
           outputs.m1 = raws.data[0];

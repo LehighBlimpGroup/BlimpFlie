@@ -95,6 +95,16 @@
             "max_move_x" : 0.2,
             "goal_ratio" : 1,
             "yaw_move_threshold" : 0.2
+        },
+        "deterministic_walk": {
+            "SWITCH_TIME": 5,
+            "NUM_ZIGS": 5,
+            "Z_LEVEL" : 3,
+            "TIME_ROTATE" : 4,
+            "ANGLE_THRESH" : 10,
+            "STEP_ZIG_ZAG" : 15,
+            "FORWARD_FORCE" : 1
         }
     }
 }
+

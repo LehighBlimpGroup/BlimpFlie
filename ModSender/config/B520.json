@@ -1,17 +1,17 @@
 {
     "bicopterbasic": {
         "feedbackPD" : { "roll" : 0,
-                        "pitch" : 0,
-                        "yaw" : 0,
+                        "pitch" : 1,
+                        "yaw" : 1,
                         "x" : 0,
                         "y" : 0,
                         "z" : 1,
                         "rotation" : 0,
 
                         "Croll" : 1,
-                        "Cpitch" : 0, 
+                        "Cpitch" : 0,
                         "Cyaw" : 1,
-                        "Cx" : 0.1,
+                        "Cx" : 0.15,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -20,7 +20,7 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1,
+                        "kpyaw" : -1.6,
                         "kdyaw" : -0.01,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
@@ -95,6 +95,15 @@
             "max_move_x" : 0.2,
             "goal_ratio" : 1,
             "yaw_move_threshold" : 0.2
+        },
+        "deterministic_walk": {
+            "SWITCH_TIME": 5,
+            "NUM_ZIGS": 5,
+            "Z_LEVEL" : 3,
+            "TIME_ROTATE" : 4,
+            "ANGLE_THRESH" : 10,
+            "STEP_ZIG_ZAG" : 15,
+            "FORWARD_FORCE" : 0.5
         }
     }
 }
