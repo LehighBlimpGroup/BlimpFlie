@@ -16,11 +16,15 @@ import numpy as np
 
 import matplotlib.widgets as widgets
 import matplotlib.patches as patches
+from matplotlib.widgets import Slider
 
 from parameters import BRODCAST_CHANNEL, MASTER_MAC, ROBOT_JASON
 
 
 LOW_BATTERY = 3.2
+
+
+
 
 
 class SensorGUI:
@@ -42,10 +46,10 @@ class SensorGUI:
 
         self.fig, self.ax = plt.subplots()
         # Set background color to black
-        self.fig.patch.set_facecolor("black")
+        # self.fig.patch.set_facecolor("black")
         self.ax.set_facecolor("black")
 
-        self.ax.set_xlim(-1.1, 3)
+        self.ax.set_xlim(-1.1, 5)
         self.ax.set_ylim(-1.1, 1.5)
         self.ax.set_aspect("equal", "box")
         self.circle = plt.Circle((0, 0), 1, fill=False, color="white", linewidth=2)
@@ -111,7 +115,7 @@ class SensorGUI:
         self.toggle = widgets.CheckButtons(self.toggle_ax, ['On/Off'], [False])
         self.toggle.on_clicked(self.on_toggle_click)
 
-
+        self._draw_sliders()
 
         ### Case Selection Radio Buttons
         # self.radio_ax = plt.axes([0.8, 0.80, 0.15, 0.05*3])  # Adjust the position and size of the radio buttons
@@ -247,13 +251,68 @@ class SensorGUI:
         else:
             self.battery_value.set_color("r")
 
+
+
         plt.draw()
+
+    def _draw_sliders(self):
+        # Define the slider properties
+        xoff=0.5
+        slider_ax1 = plt.axes([xoff+0.2, 0.70, 0.20, 0.03], facecolor='white')
+        slider_ax2 = plt.axes([xoff+0.2, 0.60, 0.2, 0.03], facecolor='lightgoldenrodyellow')
+        slider_ax3 = plt.axes([xoff+0.2, 0.50, 0.2, 0.03], facecolor='lightgoldenrodyellow')
+        slider_ax4 = plt.axes([xoff+0.2, 0.40, 0.2, 0.03], facecolor='lightgoldenrodyellow')
+        slider_ax5 = plt.axes([xoff+0.2, 0.30, 0.2, 0.03], facecolor='lightgoldenrodyellow')
+
+
+
+
+        # Define the slider variables and ranges
+        self.force_x_slider = Slider(slider_ax1, 'Force x', 0, 1, valinit=0)
+        self.z_level_slider = Slider(slider_ax2, 'z level', 1, 3, valinit=1)
+        self.time_to_rotate_slider = Slider(slider_ax3, 'Time to Rotate', 0, 10, valinit=0)
+        self.angle_slider = Slider(slider_ax4, 'Angle', -90, 90, valinit=0)
+        self.zigzag_slider = Slider(slider_ax5, 'Zig Zag', 0, 15, valinit=0)
+
+        self.force_x_slider.label.set_color('white')
+        self.z_level_slider.label.set_color('white')
+        self.time_to_rotate_slider.label.set_color('white')
+        self.angle_slider.label.set_color('white')
+        self.zigzag_slider.label.set_color('white')
+
+        # self.force_x_slider.val.set_color('white')
+        self.z_level_slider.label.set_color('white')
+        self.time_to_rotate_slider.label.set_color('white')
+        self.angle_slider.label.set_color('white')
+        self.zigzag_slider.label.set_color('white')
+
+
+        def update_sliders(val):
+            force_x = self.force_x_slider.val
+            z_level = self.z_level_slider.val
+            time_to_rotate = self.time_to_rotate_slider.val
+            angle = self.angle_slider.val
+            zigzag = self.zigzag_slider.val
+            # Connect the sliders to the update function
+
+            # Add your code here to use the slider values
+            print(
+                f"Force x: {force_x}, z level: {z_level}, Time to Rotate: {time_to_rotate}, Angle: {angle}, Zig Zag: {zigzag}")
+
+        self.force_x_slider.on_changed(update_sliders)
+        self.z_level_slider.on_changed(update_sliders)
+        self.time_to_rotate_slider.on_changed(update_sliders)
+        self.angle_slider.on_changed(update_sliders)
+        self.zigzag_slider.on_changed(update_sliders)
+
 
     def on_btn_reconnect_click(self, event):
         self.robConfig.initialize_system()
         print("Restart")
 
     def on_btn_flags_click(self, event):
+        self.update_config_flags()
+
         self.robConfig.send_flags()
         print("Send Flags")
 
@@ -275,17 +334,25 @@ class SensorGUI:
         else:
             time.sleep(delay)
 
+    def update_config_flags(self):
+        force_x = self.force_x_slider.val
+        z_level = self.z_level_slider.val
+        time_to_rotate = self.time_to_rotate_slider.val
+        angle = self.angle_slider.val
+        zigzag = self.zigzag_slider.val
+
+
 
 
 
 if __name__ == "__main__":
     mygui1 = SensorGUI(True)
-    mygui2 = SensorGUI(True)
+    # mygui2 = SensorGUI(True)
 
     # Test plotting with increasing numbers
     for i in range(100):
         # mygui1.update_interface(i*2*pi/100, pi*random()/6, i*0.2, 0, i,0)
-        mygui2.update_interface(i * 2 * pi / 100, pi * random() / 6, i * 0.2, 0, i,5*(1-1/(100-i)))
+        mygui1.update_interface(i * 2 * pi / 100, pi * random() / 6, i * 0.2, 0, i,5*(1-1/(100-i)))
         mygui1.sleep()
 
     plt.ioff()
