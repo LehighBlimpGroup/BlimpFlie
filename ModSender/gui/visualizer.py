@@ -313,7 +313,7 @@ class SensorGUI:
     def on_btn_flags_click(self, event):
         self.update_config_flags()
 
-        self.robConfig.send_flags()
+        self.robConfig.send_flags(read_file=False)
         print("Send Flags")
 
     def on_toggle_click(self, label):
@@ -340,6 +340,17 @@ class SensorGUI:
         time_to_rotate = self.time_to_rotate_slider.val
         angle = self.angle_slider.val
         zigzag = self.zigzag_slider.val
+
+        deterministic_walk = self.robConfig.get_config(ROBOT_JASON)['deterministic_walk']
+
+        [deterministic_walk["SWITCH_TIME"],
+        deterministic_walk["NUM_ZIGS"],
+        deterministic_walk["Z_LEVEL"],
+        deterministic_walk["TIME_ROTATE"],
+        deterministic_walk["ANGLE_THRESH"],
+        deterministic_walk["STEP_ZIG_ZAG"],
+        deterministic_walk["FORWARD_FORCE"]] = [10, 5, z_level, time_to_rotate, angle, zigzag, force_x]
+
 
 
 
