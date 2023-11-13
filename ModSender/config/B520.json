@@ -97,12 +97,12 @@
             "yaw_move_threshold" : 0.2
         },
         "deterministic_walk": {
-            "SWITCH_TIME": 5000,
+            "SWITCH_TIME": 10000,
             "NUM_ZIGS": 5,
             "Z_LEVEL" : 3,
             "TIME_ROTATE" : 5000,
             "ANGLE_THRESH" : 10,
-            "STEP_ZIG_ZAG" : 180,
+            "STEP_ZIG_ZAG" : 15,
             "FORWARD_FORCE" : 0.4
         }
     }

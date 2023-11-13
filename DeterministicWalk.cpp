@@ -71,6 +71,8 @@ void DeterministicWalk::choose_action(int distance_sensor, float yaw_sensor) {
       _zz_counter = 0;
       _forward_zig_zag *= -1;
     }
+
+
   } else if (_current_action == 1 && time_elapsed > _time_backward) {
     _current_action = 2;
     restart_timer();
@@ -128,9 +130,9 @@ void DeterministicWalk::action_rotate(float yaw_sensor, float &force, int &z, fl
     float normalized_yaw = atan2(sin(yaw_sensor), cos(yaw_sensor));
 
     if (normalized_yaw > 0) {
-        _des_yaw += radians(270 + 8) + _STEP_ZIG_ZAG * _forward_zig_zag;
+        _des_yaw = radians(270 + ANGLE_OFFSET) + _STEP_ZIG_ZAG * _forward_zig_zag;
     } else {
-        _des_yaw += radians(90 + 8) - _STEP_ZIG_ZAG * _forward_zig_zag;
+        _des_yaw = radians(90 + ANGLE_OFFSET) - _STEP_ZIG_ZAG * _forward_zig_zag;
     }
 
     Serial.print("des_yaw");

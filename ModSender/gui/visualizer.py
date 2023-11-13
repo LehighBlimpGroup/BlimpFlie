@@ -343,16 +343,17 @@ class SensorGUI:
 
         deterministic_walk = self.robConfig.get_config(ROBOT_JASON)['deterministic_walk']
 
-        [deterministic_walk["SWITCH_TIME"],
-        deterministic_walk["NUM_ZIGS"],
-        deterministic_walk["Z_LEVEL"],
-        deterministic_walk["TIME_ROTATE"],
-        deterministic_walk["ANGLE_THRESH"],
-        deterministic_walk["STEP_ZIG_ZAG"],
-        deterministic_walk["FORWARD_FORCE"]] = [10, 5, z_level, time_to_rotate, angle, zigzag, force_x]
+        # [deterministic_walk["SWITCH_TIME"],
+        # deterministic_walk["NUM_ZIGS"],
+        # deterministic_walk["Z_LEVEL"],
+        # deterministic_walk["TIME_ROTATE"],
+        # deterministic_walk["ANGLE_THRESH"],
+        # deterministic_walk["STEP_ZIG_ZAG"],
+        # deterministic_walk["FORWARD_FORCE"]] = [10, 5, z_level, time_to_rotate, angle, zigzag, force_x]
 
-
-
+        deterministic_walk["FORWARD_FORCE"] = force_x
+        deterministic_walk["STEP_ZIG_ZAG"] = zigzag
+        deterministic_walk["SWITCH_TIME"] = time_to_rotate * 1000
 
 
 

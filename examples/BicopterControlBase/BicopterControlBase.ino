@@ -383,7 +383,7 @@ void loop() {
     if (actionFlag == 1){// nicla controller
       addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning);
     } else if (actionFlag == 2) { //random walk
-      Sonar_sensor(&controls, sonar_sensor_enabled, randomWalk_enabled);
+      Sonar_sensor(&controls, &sensors, sonar_sensor_enabled, randomWalk_enabled);
     } else if (actionFlag == 3) { // full control flow
       actionFlag = 0; // put control flow function to do state control here. 
     } //else just use joystick controls
