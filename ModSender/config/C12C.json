@@ -20,7 +20,7 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.6,
+                        "kpyaw" : -1,
                         "kdyaw" : -0.01,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
@@ -111,7 +111,7 @@
             "Z_LEVEL" : 3,
             "TIME_ROTATE" : 5000,
             "ANGLE_THRESH" : 10,
-            "STEP_ZIG_ZAG" : 15,
+            "STEP_ZIG_ZAG" : 5,
             "FORWARD_FORCE" : 0.5
         }
     }

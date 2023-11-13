@@ -11,41 +11,42 @@
                         "Croll" : 1,
                         "Cpitch" : 0, 
                         "Cyaw" : 1,
-                        "Cx" : 1,
+                        "Cx" : 0.3,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
 
-                        "kproll" : -0.02,
-                        "kdroll" : 0,
+                        "kproll" : 0,
+                        "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.50,
-                        "kdyaw" : -0.03,
+                        "kpyaw" : -1,
+                        "kdyaw" : -0.01,
+                        "kiyaw": 0,
+                        "kiyawrate" : -0.00,
+                        "yawRateIntegralRange"  : 2,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.07,
-                        "kdy" : 0.06,
-                        "kpz" : 0.4,
-                        "kdz" : 0.4,
-                        "kiz" : 0.03,
+                        "kpy" : 0.1,
+                        "kdy" : 0.1,
+                        "kpz" : 1,
+                        "kdz" : 0.5,
+                        "kiz" : 0.1,
 
-                        "kiyaw": -1,
-                        "kiyawrate" : -1,
-                        "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
 
+
                         "integral_dt" : 0,
                         "z_int_low" : 0,
-                        "z_int_high" : 0.15,
+                        "z_int_high" : 200,
 
                         "lx" : 0.15,
                         "pitchSign" : 1,
                         "pitchOffset" : 0,
                         "rollSign" : 1,
-                        "rollOffset" : 3.14,
+                        "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
                         "servo1offset" : 0.1,
@@ -94,6 +95,15 @@
             "max_move_x" : 0.2,
             "goal_ratio" : 1,
             "yaw_move_threshold" : 0.2
+        },
+        "deterministic_walk": {
+            "SWITCH_TIME": 10000,
+            "NUM_ZIGS": 5,
+            "Z_LEVEL" : 3,
+            "TIME_ROTATE" : 5000,
+            "ANGLE_THRESH" : 10,
+            "STEP_ZIG_ZAG" : 5,
+            "FORWARD_FORCE" : 0.5
         }
     }
 }

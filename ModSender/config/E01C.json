@@ -20,7 +20,7 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.6,
+                        "kpyaw" : -1,
                         "kdyaw" : -0.01,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
@@ -28,11 +28,11 @@
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.02,
-                        "kdy" : 0.01,
-                        "kpz" : 0.4,
+                        "kpy" : 0.1,
+                        "kdy" : 0.1,
+                        "kpz" : 1,
                         "kdz" : 0.5,
-                        "kiz" : 0.0,
+                        "kiz" : 0.1,
 
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
@@ -97,12 +97,12 @@
             "yaw_move_threshold" : 0.2
         },
         "deterministic_walk": {
-            "SWITCH_TIME": 5,
+            "SWITCH_TIME": 10000,
             "NUM_ZIGS": 5,
             "Z_LEVEL" : 3,
-            "TIME_ROTATE" : 4,
+            "TIME_ROTATE" : 5000,
             "ANGLE_THRESH" : 10,
-            "STEP_ZIG_ZAG" : 15,
+            "STEP_ZIG_ZAG" : 5,
             "FORWARD_FORCE" : 0.5
         }
     }
