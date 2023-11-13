@@ -107,17 +107,18 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
   _yaw = sensors->yaw;
   _height = sensors->estimatedZ - sensors->groundZ;
 
+
   if (init_bool) {
     des_height = 8.5;
     height_diff = controls->fz - _height;
     control_yaw = controls->tz;
     goal_yaw = controls->tz;
     //nicla_tuning->goal_theta_back = _yaw;
-    state2start();
-    //state3start();
+    state2start(); // just track goal
+    //state3start(); // go to correct goal side
   }
 
-  if ((last_tracking_x == 0 && last_tracking_y == 0)||!tracked){//!tracked || !solid || max(detection_h, detection_w) < 15) {
+  if (!tracked){//!tracked || !solid || max(detection_h, detection_w) < 15) {
     detected = false;
     fresh = false;
   } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
@@ -151,7 +152,7 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
               face towards the goal and go to goal tracking.     
     */
 
-  if (state == 4){
+  if (state == 4) {
     if (millis() - walk_timer < control_time) {
       if (millis() - walk_timer > 5000 && sonar < 400){
         control_angle = control_angle + PI;
@@ -293,22 +294,48 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
           chargeGoal(controls, goal_act, robot_to_goal, nicla_tuning);
         }
 
+        random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
+      }
+    }
+  }  if (state == 5) { //balloon follow
+  
+    if (millis() - full_charge_timer < 3000){
+      random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
+      fullCharge(controls, nicla_tuning);
+    } else {
+      if (fresh){
+        changeHeight(tracking_y, size, _height, nicla_tuning);
+      }
+      charged = false;
+      if (detected == false) { // if there is no detection, random walk
+        randomWalkGoal(controls,  nicla_tuning);
         
-          
-            
-        // } else{
-        // }
+      } else { // if there is a detection, try to position better relative to the goal
+      
+        if (max(last_detection_w, last_detection_h) > nicla_tuning->goal_dist_thresh){
+          full_charge_timer = millis();
+          fullCharge(controls, nicla_tuning);
+        } else{
+        
+          chargeGoal(controls, goal_act, robot_to_goal, nicla_tuning);
+        }
 
         random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
       }
     }
   }
+    
   
-  
-  
+
   controls->fz = des_height;
   controls->tz = control_yaw;
   controls->fx = control_fx;
+  // Serial.print("des height: ");
+  // Serial.println(des_height);
+  // Serial.print("des yaw: ");
+  // Serial.println(control_yaw);
+  // Serial.print("des fx: ");
+  // Serial.println(control_fx);
 
   last_tracking_x = tracking_x;
   last_tracking_y = tracking_y;
@@ -327,7 +354,7 @@ void chargeGoal(controller_t *controls, float goal_act, float robot_to_goal, nic
         Once we have charged through, we should try to determine if we have passed through by turing around and detecting a large goal.
           If not true then we move away and try again
   */
-  
+
   control_yaw = goal_yaw;
   if (abs((detection_y / max_y) - nicla_tuning->height_threshold) < .1){
     control_fx = 0;
@@ -365,11 +392,11 @@ void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
 }
 
 void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuning) {
-  float y_cal = (_y / max_y); 
-  
+  float y_cal = (_y / max_y);
+
   if (_h < nicla_tuning->goal_dist_thresh && _h > 20){
     // if (y_cal - h_cal/2 > nicla_tuning->height_threshold || y_cal + h_cal/2 < nicla_tuning->height_threshold) {
-    des_height = des_height - ((y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength)*((float)dt)/1000000.0f;
+    des_height = _height - (y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength;
   }
 }
 
@@ -411,6 +438,13 @@ void state4start(float control_angle_4, int control_time_4){
   walk_timer = millis();
   control_angle = control_angle_4;
   control_time = control_time_4;
+
+}
+
+void state5start(){
+  state = 5;
+  walk_timer = millis();
+  
 
 }
 // check if goal is in the proper position or if it is actually seeing a wall. 

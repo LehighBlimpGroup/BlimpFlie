@@ -114,6 +114,10 @@ void ModBlimp::changeServoPins(){
 
 HardwareSerial MySerial0(0);
 
+void ModBlimp::sendMySerial(char byte_message){
+  MySerial0.write(byte_message);
+}
+
 void ModBlimp::setFlags(init_flags_t *init_flagsIn, init_sensors_t *init_sensorsIn, feedback_t *feedbackPDIn){
   init_sensors = init_sensorsIn;
   init_flags = init_flagsIn;

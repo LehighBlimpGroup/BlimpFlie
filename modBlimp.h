@@ -63,6 +63,7 @@ class ModBlimp {
         void changeServoPins();
         void initDefault(); //contains an example of how to initialize the system
         void init(init_flags_t *init_flags, init_sensors_t  *sensors, feedback_t *PDterms);//sets up the control flags in the system
+        void sendMySerial(char byte_message);
         void setFlags(init_flags_t *init_flags, init_sensors_t  *sensors, feedback_t *PDterms);//sets up the control flags in the system
         void magnetometerCalibration(float (&offset)[3], float (&matrix)[3][3]);
 
