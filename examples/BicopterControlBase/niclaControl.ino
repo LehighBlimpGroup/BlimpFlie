@@ -83,7 +83,7 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
     randomWalkGoal(controls,  nicla_tuning);
   } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
     float x_cal = tracking_x / max_x;
-        //detect edge cases when only the edges of the goal are detected
+    //detect edge cases when only the edges of the goal are detected
     //save the ratio of the w and h of the goal over time
     // if there is a sudden change in the ratio
     //
@@ -131,6 +131,12 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
   controls->fz = des_height;
   controls->tz = control_yaw;
   controls->fx = control_fx;
+  // Serial.print("des height: ");
+  // Serial.println(des_height);
+  // Serial.print("des yaw: ");
+  // Serial.println(control_yaw);
+  // Serial.print("des fx: ");
+  // Serial.println(control_fx);
 
   last_tracking_x = tracking_x;
   last_tracking_y = tracking_y;
@@ -183,7 +189,7 @@ void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuni
 
   if (_h < nicla_tuning->goal_dist_thresh && _h > 20){
     // if (y_cal - h_cal/2 > nicla_tuning->height_threshold || y_cal + h_cal/2 < nicla_tuning->height_threshold) {
-    des_height = des_height - ((y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength)*((float)dt)/1000000.0f;
+    des_height = _height - (y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength;
   }
 }
 

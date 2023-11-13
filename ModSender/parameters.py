@@ -26,7 +26,7 @@ LIST_OF_MAC_ADDRESS = [
     # "34:85:18:8F:36:B0" # Diego
 ]
 
-MASTER_MAC = "C0:49:EF:EB:FE:34" #"C0:49:EF:E3:34:78"
+MASTER_MAC = "34:85:18:91:24:F0" #"C0:49:EF:E3:34:78"
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
 
