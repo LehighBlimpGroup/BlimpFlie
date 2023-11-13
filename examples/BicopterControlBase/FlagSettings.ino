@@ -144,6 +144,6 @@ void setPDflags(init_flags_t *init_flags,feedback_t *PDterms, sensor_weights_t *
     nicla_tuning->height_strength = raws->data[7];
     nicla_tuning->x_cal_weight = raws->data[8];
     nicla_tuning->spiral_strength = raws->data[9];
-  }
+  } 
 
 }

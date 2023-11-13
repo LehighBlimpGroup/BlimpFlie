@@ -9,7 +9,7 @@ class RobotConfig:
         self.mac = mac_address
         self.slave_index = slave_index
 
-        self.config_file = "config/" + mac_address.replace(":", "")[-4:] + ".json"
+        self.config_file = "ModSender/config/" + mac_address.replace(":", "")[-4:] + ".json"
 
         self.esp_now = esp_now
 

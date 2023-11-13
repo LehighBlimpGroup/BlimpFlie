@@ -275,7 +275,7 @@ void loop() {
   getLatestSensorData(&sensors);
   blimp.getSensorRaws(&sensorData); //reading from Ultrasound wireless
 
-
+  int nicla_flag = -1;
 
   int sonar_sensor_enabled = 1;  // FIXME make this a flag
 
@@ -320,7 +320,7 @@ void loop() {
     actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
 
     if (actionFlag == 1){// nicla controller
-      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, init_bool);
+      nicla_flag = addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, sensorData.values[0], init_bool);
       init_bool = false;
     } else if (actionFlag == 2) { //random walk
       actionFlag = 0;// put random walk here
@@ -387,7 +387,7 @@ void loop() {
       espSendData2.values[1] = (float)blimp.IBus.readChannel(6);
       espSendData2.values[2] = (float)blimp.IBus.readChannel(7);
       espSendData2.values[3] = (float)blimp.IBus.readChannel(8);
-      espSendData2.values[4] = (float)blimp.IBus.readChannel(9);
+      espSendData2.values[4] = nicla_flag;
       espSendData2.values[5] = battery_level;
       blimp.send_esp_feedback(transceiverAddress, &espSendData2);
     }
