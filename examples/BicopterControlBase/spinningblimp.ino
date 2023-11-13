@@ -43,13 +43,13 @@ void SpinniggetOutputs(controller_t *controls, sensors_t *sensors, actuation_t *
   // sf1 and sf2 variables associated with the spinning blimp motor values
   // Bang Bang motor configuration
 
-  // // For CW spinning blimp
-  // sf1 = controls->fz + (tau); // LHS motor
-  // sf2 = controls->fz - (tau); // RHS motor
+  // For CW spinning blimp
+  sf1 = controls->fz + (tau); // LHS motor
+  sf2 = controls->fz - (tau); // RHS motor
 
-  // For CCW spinning blimp
-  sf1 = controls->fz - (tau); // LHS motor
-  sf2 = controls->fz + (tau); // RHS motor
+  // // For CCW spinning blimp
+  // sf1 = controls->fz - (tau); // LHS motor
+  // sf2 = controls->fz + (tau); // RHS motor
 
   // Motor outputs
   out->m1 = clamp(sf1, 0, 1);

@@ -83,7 +83,7 @@ class JoystickHandler:
         if self.yaw_sensor_enabled and yaw_mode == 1:
             # self.tz += -.1 * self.right_horizontal
 
-            des_yaw = atan2(self.right_vertical, -self.right_horizontal)
+            des_yaw = atan2(-self.right_vertical, -self.right_horizontal)
             magnitude = sqrt(self.right_vertical**2 + self.right_horizontal**2)
 
             if magnitude > 0.5:

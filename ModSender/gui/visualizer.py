@@ -166,6 +166,9 @@ class SensorGUI:
         cur_x, cur_y = self._angle_to_coordinates(cur_yaw + math.pi)
         des_x, des_y = self._angle_to_coordinates(des_yaw + math.pi)
 
+        # cur_x, cur_y = self._angle_to_coordinates(cur_yaw)
+        # des_x, des_y = self._angle_to_coordinates(des_yaw)
+
         # Remove the previous yaws1
         self.current_yaw.remove()
         self.desired_yaw.remove()
@@ -184,7 +187,7 @@ class SensorGUI:
         self.desired_yaw = self.ax.arrow(
             0,
             0,
-            -des_x,
+            des_x,
             -des_y,
             head_width=0.1,
             head_length=0.1,

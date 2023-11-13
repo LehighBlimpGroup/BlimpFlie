@@ -1,7 +1,7 @@
 #include "modBlimp.h"
 
 #include "BNO85.h"
-#include "baro280.h"
+#include "baro390.h"
 #include "GY_US42V2.h"  // Include the header file
 
 // #include "BNO55.h"
@@ -9,7 +9,7 @@
 
 ModBlimp blimp;
 BNO85 bno;
-baro280 baro;
+baro390 baro;
 GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
 
 

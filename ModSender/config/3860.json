@@ -58,7 +58,7 @@
                     "rollRateGamma" : 0.7,
                     "yawRateGamma" : 0.975,
                     "pitchRateGamma" : 0.7,
-                    "zGamma" : 0.4,
+                    "zGamma" : 0.5,
                     "vzGamma" : 0.5
                     },
         "initflags": {

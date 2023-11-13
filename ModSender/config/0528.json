@@ -30,9 +30,9 @@
                         "kdx" : 0,
                         "kpy" : 0,
                         "kdy" : 0,
-                        "kpz" : 0.15,
-                        "kdz" : 0.3,
-                        "kiz" : 0.1,
+                        "kpz" : 0.13,
+                        "kdz" : 0.0,
+                        "kiz" : 0.0,
 
                         "kiyaw": -1,
                         "kiyawrate" : -1,
@@ -58,7 +58,7 @@
                     "rollRateGamma" : 0.7,
                     "yawRateGamma" : 0.975,
                     "pitchRateGamma" : 0.7,
-                    "zGamma" : 0.4,
+                    "zGamma" : 0.5,
                     "vzGamma" : 0.5
                     },
         "initflags": {
@@ -80,7 +80,7 @@
                     "mode" : 2,
                     "control" : 0,
                     "min_thrust": 1050,
-                    "max_thrust": 2000
+                    "max_thrust": 1500
                     },
         "hardware": {
             "kf1": 1,
