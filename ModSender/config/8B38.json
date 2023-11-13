@@ -11,35 +11,35 @@
                         "Croll" : 1,
                         "Cpitch" : 0, 
                         "Cyaw" : 1,
-                        "Cx" : 1,
+                        "Cx" : 0.5,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
 
-                        "kproll" : 0,
+                        "kproll" : 0.02,
                         "kdroll" : 0,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.5,
-                        "kdyaw" : -0.03,
+                        "kpyaw" : -0.50,
+                        "kdyaw" : -0.01,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.08,
-                        "kdy" : 0.08,
-                        "kpz" : 0.4,
-                        "kdz" : 0.3,
-                        "kiz" : 0.03,
+                        "kpy" : 0.025,
+                        "kdy" : 0.01,
+                        "kpz" : 2.0,
+                        "kdz" : 2.5,
+                        "kiz" : 0.1,
 
-                        "kiyaw": -0.7,
+                        "kiyaw": -0.5,
                         "kiyawrate" : 0,
                         "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
 
                         "integral_dt" : 0,
-                        "z_int_low" : 0,
-                        "z_int_high" : 0.15,
+                        "z_int_low" : 0.05,
+                        "z_int_high" : 0.2,
 
                         "lx" : 0.15,
                         "pitchSign" : 1,
@@ -48,15 +48,15 @@
                         "rollOffset" : 3.14,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.0,
-                        "servo2offset" : 0.25
+                        "servo1offset" : 0.1,
+                        "servo2offset" : 0.1
                         },
         "weights": { "eulerGamma" : 0,
-                    "rollRateGamma" : 0.7,
+                    "rollRateGamma" : 0.5,
                     "yawRateGamma" : 0.95,
                     "pitchRateGamma" : 0.7,
-                    "zGamma" : 0.8,
-                    "vzGamma" : 0.9
+                    "zGamma" : 0.5,
+                    "vzGamma" : 0.5
                     },
         "initflags": {
                     "_comment": "flags to be used in the init", 
@@ -91,13 +91,14 @@
             "goal_theta_back": 0,
             "goal_theta_front": 3.14,
             "goal_dist_thresh" : 240,
-            "max_move_x" : 0.13,
+            "max_move_x" : 0.12,
             "goal_ratio" : 1.0,
-            "yaw_move_threshold" : 0.4,
-            "height_threshold" : 0.2,
-            "height_strength" : 5,
-            "x_cal_weight" : 1,
-            "spiral_strength" : 0.3
+            "yaw_move_threshold" : 0.2,
+            "height_threshold" : 0.75,
+            "height_strength" : 7.5,
+            "x_cal_weight" : 2.0,
+            "spiral_strength" : 0.2
+
         }
     }
 }

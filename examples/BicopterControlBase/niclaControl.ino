@@ -56,12 +56,14 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
   */
   blimp->IBus.loop();
   int nicla_flag = (int)blimp->IBus.readChannel(0);
-  //tracking is exact
-  tracking_x = (float)blimp->IBus.readChannel(1); 
+  bool tracked =  (bool) (nicla_flag & 0b10000000);
+  bool solid =    (bool) (nicla_flag & 0b00000100);
+  bool green =    (bool) (nicla_flag & 0b00000010);
+  bool goal =     (bool) (nicla_flag & 0b00000001);
+  tracking_x = (float)blimp->IBus.readChannel(1);
   tracking_y = (float)blimp->IBus.readChannel(2);
   tracking_w = (float)blimp->IBus.readChannel(3);
   tracking_h = (float)blimp->IBus.readChannel(4);
-  //detection is the larger slower bounding box
   detection_x = (float)blimp->IBus.readChannel(5);
   detection_y = (float)blimp->IBus.readChannel(6);
   detection_w = (float)blimp->IBus.readChannel(7);
@@ -70,92 +72,71 @@ void addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp
   _yaw = sensors->yaw;
   _height = sensors->estimatedZ - sensors->groundZ;
 
+
   if (init_bool) {
     des_height = controls->fz;
     height_diff = controls->fz - _height;
   }
 
-  if (nicla_flag == 3 || nicla_flag == 4) {
+  if (!tracked) {
     detected = false;
+    randomWalkGoal(controls,  nicla_tuning);
   } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
     float x_cal = tracking_x / max_x;
-        //detect edge cases when only the edges of the goal are detected
+    //detect edge cases when only the edges of the goal are detected
     //save the ratio of the w and h of the goal over time
     // if there is a sudden change in the ratio
-    // 
+    //
     des_yaw = ((x_cal - 0.5) * nicla_tuning->x_cal_weight);
-    robot_to_goal = _yaw - des_yaw; 
+    robot_to_goal = _yaw - des_yaw;
     float relative_to_goal = nicla_tuning->goal_theta_back - robot_to_goal;
     relative_to_goal = atan2(sin(relative_to_goal), cos(relative_to_goal));
     goal_act = nicla_tuning->goal_theta_back;
     goal_yaw = robot_to_goal * nicla_tuning->goal_ratio;
     changeHeight(tracking_y, max(detection_h, detection_w), _height, nicla_tuning);
     detected = true;
-    
-    if (nicla_flag == 1) {
-      last_front_goal_time = millis();
-      
-      // check if goal is in the proper position or if it is actually seeing a wall. 
-      // if (abs(relative_to_goal) > 3*PI/4) { // seeing front goal
-      //   goal_act = goal_act + PI;
-      //   goal_act = atan2(sin(goal_act), cos(goal_act));
-      //   goal_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
-      //   goal_yaw = atan2(sin(goal_yaw), cos(goal_yaw));
-      //   last_front_goal_time = millis();
-      //   changeHeight(_y, max(_h, _w), _height, nicla_tuning);
-      //   detected = true;
-      // }
-      // else if (abs(relative_to_goal) > PI/2){ //seeing noise
-      //   last_noise_time = millis();
-      //   detected = false;
-        
-      // } else{ // seeing back goal
-      //   last_back_goal_time = millis();
-      //   goal_act = atan2(sin(goal_act), cos(goal_act));
-      //   goal_yaw = robot_to_goal * nicla_tuning->goal_ratio - goal_act * (1 - nicla_tuning->goal_ratio);
-      //   goal_yaw = atan2(sin(goal_yaw), cos(goal_yaw));
-      //   changeHeight(_y, max(_h, _w), _height, nicla_tuning);
-      //   detected = true;
-      // }
-    }
-  } 
-  
-  // do stuff with the information gathered.
-  if (rolling_dist > 300){
-    near_time_dist = millis();// tof is not detecting something close by 
-  }
-  
-  if (millis() - near_time_dist > 3000){//detect if time of flight is too near (stuck on a goal)
-  //TODO make a flag that turns this off
-    tooCloseGoal(nicla_tuning);
-  } else if (millis() - full_charge_timer < 6000){
-    random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
-    fullCharge(controls, nicla_tuning);
-  } else {
-    charged = false;
-    if (detected == false) { // if there is no detection, random walk
-      randomWalkGoal(controls,  nicla_tuning);
-    } else { // if there is a detection, try to position better relative to the goal
-      // if (_h > nicla_tuning->goal_dist_thresh){
-      //   full_charge_timer = millis();
-      //   fullCharge(controls, nicla_tuning);
-      
-        
-      //   charged = true;
-          
-      // } else{
-        chargeGoal(controls, goal_act, robot_to_goal, nicla_tuning);
-      // }
-
+    if (!goal){
+      // balloon tracking flag
+      control_yaw = atan2(sin(robot_to_goal), cos(robot_to_goal));
+      changeHeight(tracking_y, detection_h, _height, nicla_tuning);
       random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
+      if (max(last_detection_w, last_detection_h) > nicla_tuning->goal_dist_thresh){
+        fullCharge(controls, nicla_tuning);
+      } else{
+        chargeGoal(controls, goal_act, robot_to_goal, nicla_tuning);
+      }
+    } else if (max(detection_h, detection_w) >= 15) {
+      // Goal detection flag
+      // do stuff with the information gathered.
+      if (rolling_dist > 300){
+        near_time_dist = millis();// tof is not detecting something close by
+      }
+      last_front_goal_time = millis();
+      if (millis() - near_time_dist > 3000){//detect if time of flight is too near (stuck on a goal)
+      //TODO make a flag that turns this off
+        tooCloseGoal(nicla_tuning);
+      } else if (millis() - full_charge_timer < 6000){
+        random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
+        fullCharge(controls, nicla_tuning);
+      } else {
+        charged = false;
+        chargeGoal(controls, goal_act, robot_to_goal, nicla_tuning);
+        random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
+      }
+    } else {
+        
     }
   }
-  
-  
-  
+
   controls->fz = des_height;
   controls->tz = control_yaw;
   controls->fx = control_fx;
+  // Serial.print("des height: ");
+  // Serial.println(des_height);
+  // Serial.print("des yaw: ");
+  // Serial.println(control_yaw);
+  // Serial.print("des fx: ");
+  // Serial.println(control_fx);
 
   last_tracking_x = tracking_x;
   last_tracking_y = tracking_y;
@@ -173,7 +154,7 @@ void chargeGoal(controller_t *controls, float goal_act, float robot_to_goal, nic
         Once we have charged through, we should try to determine if we have passed through by turing around and detecting a large goal.
           If not true then we move away and try again
   */
-  
+
   control_yaw = goal_yaw;
   if (abs(control_yaw - _yaw) < nicla_tuning->yaw_move_threshold){
     control_fx = nicla_tuning->max_move_x/4;
@@ -204,11 +185,11 @@ void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
 }
 
 void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuning) {
-  float y_cal = (_y / max_y); 
-  
+  float y_cal = (_y / max_y);
+
   if (_h < nicla_tuning->goal_dist_thresh && _h > 20){
     // if (y_cal - h_cal/2 > nicla_tuning->height_threshold || y_cal + h_cal/2 < nicla_tuning->height_threshold) {
-    des_height = des_height - ((y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength)*((float)dt)/1000000.0f;
+    des_height = _height - (y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength;
   }
 }
 
