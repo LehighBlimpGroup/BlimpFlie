@@ -26,6 +26,7 @@ LIST_OF_MAC_ADDRESS = [
     # "48:27:E2:E6:ED:24", # Bella
     # "34:85:18:91:BC:94" # Joy
     "34:85:18:8D:8B:38" # KKL 2.0
+    # "34:85:18:AC:C2:6C" # KKL 3.0
 ]
 
 MASTER_MAC = "34:85:18:91:B5:B4" #address of the transceiver
