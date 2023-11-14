@@ -89,15 +89,15 @@
         },
         "nicla": {
             "goal_theta_back": 0,
-            "goal_theta_front": 3.14,
-            "goal_dist_thresh" : 40,
-            "max_move_x" : 0.2,
+            "goal_theta_front": 110,
+            "goal_dist_thresh" : 110,
+            "max_move_x" : 0.25,
             "goal_ratio" : 1.0,
-            "yaw_move_threshold" : 0.3,
-            "height_threshold" : 0.6,
-            "height_strength" : 2.0,
-            "x_cal_weight" : 1.5,
-            "spiral_strength" : 0.35
+            "yaw_move_threshold" : 0.2,
+            "height_threshold" : 0.42,
+            "height_strength" : 1.75,
+            "x_cal_weight" : 1.0,
+            "spiral_strength" : 0.7
         }
     }
 }
