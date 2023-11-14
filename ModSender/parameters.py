@@ -29,12 +29,13 @@ LIST_OF_MAC_ADDRESS = [
     # "34:85:18:AB:EF:E8", #15 spinning blimp 4
     # "34:85:18:AC:05:28", #16 spinning blimp 5
     # "34:85:18:91:20:A8", #small blended bicopter
+    # "48:27:E2:E6:E6:D4" # jiawei's robot
 ]
-MASTER_MAC = "34:85:18:91:49:C0"
+MASTER_MAC = "48:27:E2:E6:E4:0C"
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
 
-JOYSTICK_YAW_MODE = 1
+JOYSTICK_YAW_MODE = 0
 GUI_ENABLED = True
 
 

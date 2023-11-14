@@ -41,8 +41,8 @@ class ZigZagWalk(Walk):
         # print("Fwd=", self.forward_zig_zag, "ZZ=", self.zz_counter, self.actions[self.current_action].__name__, degrees(abs(self._angle_bounded(feedback[1]-self.des_yaw))),self.des_yaw,self.yaw )
         # return self.actions[self.current_action]
 
-        # ---------- Switch actions based on timer and dZigZagWalk.pyistance -----------
-        if self.current_action == 0 and (distance < self.min_distance or time_elapsed > SWITCH_TIME) and time_elapsed > SAFETY_TIME:
+        # Check for wall angle in addition to distance
+        if self.current_action == 0 and (feedback[2] < self.min_distance or self._check_wall_angle()) and self._time_elapsed() > SAFETY_TIME:
             self.current_action = 2  # Rotate
             self._restart_timer()
         # elif self.current_action == 3 and time_elapsed > TIME_ROTATE:
@@ -85,3 +85,9 @@ class ZigZagWalk(Walk):
         :return:
         """
         return atan2(sin(angle), cos(angle))
+
+    def _check_wall_angle(self):
+        current_yaw_deg = degrees(self._angle_bounded(self.yaw))
+        if not (abs(current_yaw_deg - 183) < ANGLE_THRESH or abs(current_yaw_deg - 3) < ANGLE_THRESH):
+            return True
+        return False

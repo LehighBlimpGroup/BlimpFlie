@@ -1,4 +1,4 @@
-from autonomy.ZigZagWalk import ZigZagWalk
+from autonomy.ZigZagWalkUpdate import ZigZagWalk
 from autonomy.RandomWalk import RandomWalk
 from parameters import *
 from teleop.joystickHandler import JoystickHandler
@@ -10,6 +10,9 @@ from gui.visualizer import SensorGUI
 # Override feedback params for multiple robots
 YAW_SENSOR = True
 Z_SENSOR = True
+
+# # Initialize toggle states for each robot
+# x_key_toggle_states = [False]
 
 
 # User interface
@@ -44,7 +47,7 @@ for robot_behavior in behavior_robots:
 y_pressed = False
 try:
     while not y_pressed:
-        outputs, y_pressed, a_key_pressed = joyhandler.get_outputs(yaw_mode=JOYSTICK_YAW_MODE)  # get joystick input
+        outputs, y_pressed, a_key_pressed, x_key_pressed = joyhandler.get_outputs(yaw_mode=JOYSTICK_YAW_MODE)  # get joystick input
         #outputs[8] = int(a_key_pressed)
 
         # For each robot
@@ -52,13 +55,21 @@ try:
             feedback = esp_now.getFeedback(i)  # get sensor data from robot
             # nicla = esp_now.getFeedback(2)  # get sensor data from robot
 
+            # # Toggle des_z with x_key
+            # if x_key_pressed:
+            #     x_key_toggle_states[i] = not x_key_toggle_states[i]  # Toggle state
+
              # ------- Autonomous mode ----------
             if a_key_pressed:
                 des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
+
+                # # Set des_z to current height if toggle is active
+                # if x_key_toggle_states[i]:
+                #     des_z = feedback[0]  # Current height from feedback array
+
                 outputs[1] = des_fx  # Forward
                 outputs[3] = des_z  # Z
                 joyhandler.tz = des_yaw  # Yaw control
-
 
             # Display sensors and output
             # sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)
