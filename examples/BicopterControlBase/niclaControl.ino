@@ -421,12 +421,14 @@ void tooCloseGoal(nicla_tuning_s *nicla_tuning){
 }
 
 void state0start(){ //randomwalk
+  changeNiclaTarget(0x81);
   state =0;
   walk_timer = millis();
 
 }
 
 void state1start(){ //spin search
+  changeNiclaTarget(0x81);
   walk_timer = millis();
   state = 1;
   for (int i = 0; i < 20; i++){
@@ -438,17 +440,20 @@ void state1start(){ //spin search
 }
 
 void state2start(){
+  changeNiclaTarget(0x81);
   state = 2;
   walk_timer = millis();
 }
 
 void state3start(){
+  changeNiclaTarget(0x81);
   state = 3;
   walk_timer = millis();
 }
 
 
 void state4start(float control_angle_4, int control_time_4){
+  changeNiclaTarget(0x81);
   state = 4;
   walk_timer = millis();
   control_angle = control_angle_4;
@@ -457,9 +462,16 @@ void state4start(float control_angle_4, int control_time_4){
 
 
 void state5start(){
+  changeNiclaTarget(0x80);
   des_height = _height;
   state = 5;
   walk_timer = millis();
+}
+
+void changeNiclaTarget(char state) {
+  // 0x80 for balloon, 0x81 for goal
+  Serial.println(int(state));
+  blimp.sendMySerial(state);
 }
 // check if goal is in the proper position or if it is actually seeing a wall. 
       // if (abs(relative_to_goal) > 3*PI/4) { // seeing front goal

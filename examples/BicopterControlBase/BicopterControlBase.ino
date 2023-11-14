@@ -320,7 +320,7 @@ void loop() {
     actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
 
     if (actionFlag == 1){// nicla controller
-      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, init_bool);
+      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, sensorData.values[0], init_bool);
       init_bool = false;
     } else if (actionFlag == 2) { //random walk
       actionFlag = 0;// put random walk here
