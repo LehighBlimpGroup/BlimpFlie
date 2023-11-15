@@ -38,9 +38,9 @@ for robConfig in robotConfigs:
 
 
 # Autonomous Behavior
-behavior_robots = [ZigZagWalk() for _ in robotConfigs]
-for robot_behavior in behavior_robots:
-    robot_behavior.begin()
+# behavior_robots = [ZigZagWalk() for _ in robotConfigs]
+# for robot_behavior in behavior_robots:
+#     robot_behavior.begin()
 
 ###### Communicate until Y button (Exit) is pressed #####
 y_pressed = False
@@ -51,7 +51,8 @@ try:
         # For each robot
         for i, robotConfig in enumerate(robotConfigs):
             feedback = esp_now.getFeedback(i)  # get sensor data from robot
-
+            if i==0:
+                print(i, feedback)
             #  # ------- Autonomous mode ----------
             # if a_key_pressed:
             #     des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
@@ -60,12 +61,12 @@ try:
             #     outputs[6] = des_yaw  # Yaw control
 
              # ------- Autonomous mode ----------
-            if a_key_pressed:
+            if a_key_pressed and not sensor_guis[i].toggle_joy:
                 # outputs[6] = 0
                 outputs[8] = 2 # send 2 for randomwalk
                 outputs[9] = 1
-                print(outputs)
-                print("autonomous")
+                # print(outputs)
+                print("autonomous", i)
                 # des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
                 # outputs[1] = des_fx  # Forward
                 # outputs[3] = des_z  # Z
@@ -73,7 +74,7 @@ try:
             else:
                 outputs[8] = 0  # send 0 for normal flight
                 outputs[9] = 0
-                print(outputs)
+                # print(outputs)
 
             # Display sensors and output
             # sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)
@@ -81,17 +82,16 @@ try:
 
 
             if sensor_guis[i].toggle_power:
-
                 # Send message to all robots
                 esp_now.send([21] + outputs[:-1], BRODCAST_CHANNEL, robotConfig.slave_index)  # send control command to robot
-            else:
-                esp_now.send([21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], BRODCAST_CHANNEL, robotConfig.slave_index)
+            # else:
+                # esp_now.send([21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], BRODCAST_CHANNEL, robotConfig.slave_index)
         # time.sleep(0.02)
         sensor_guis[0].sleep(0.02)
 
 except KeyboardInterrupt:
     print("Loop terminated by user.")
 
-for robotConfig in robotConfigs:
-    esp_now.send([21, 0,0,0,0,0,0,0,0,0,0,0,0], BRODCAST_CHANNEL, robotConfig.slave_index)
+# for robotConfig in robotConfigs:
+#     esp_now.send([21, 0,0,0,0,0,0,0,0,0,0,0,0], BRODCAST_CHANNEL, robotConfig.slave_index)
 esp_now.close()

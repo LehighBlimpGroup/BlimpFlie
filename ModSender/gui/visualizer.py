@@ -37,6 +37,7 @@ class SensorGUI:
 
         # Flag to turn of the robot 1 is power, 0 is off
         self.toggle_power = 1
+        self.toggle_joy = 0
 
         if not enable_gui:
             return
@@ -112,8 +113,14 @@ class SensorGUI:
 
         ### Toggle Button
         self.toggle_ax = plt.axes([0.8, 0.9, 0.15, 0.05])  # Adjust the position and size of the toggle button
-        self.toggle = widgets.CheckButtons(self.toggle_ax, ['On/Off'], [False])
+        self.toggle = widgets.CheckButtons(self.toggle_ax, ['On/Off'], [True])
         self.toggle.on_clicked(self.on_toggle_click)
+
+        ### Toggle Button
+        self.toggle_ax2 = plt.axes([0.8, 0.11, 0.15, 0.05])  # Adjust the position and size of the toggle button
+        self.toggle2 = widgets.CheckButtons(self.toggle_ax2, ['Joy On/Off'], [False])
+        self.toggle2.on_clicked(self.on_toggle_joy_click)
+
 
         self._draw_sliders()
 
@@ -145,6 +152,9 @@ class SensorGUI:
             zorder=3  # ensure it's drawn on top
         )
         self.ax.add_patch(self.nicla_rect)
+
+        # Set window position
+        # self.set_window_position(0, y_pos)
 
 
     def _angle_to_coordinates(self, radians: float, radius: float = 1.0) -> tuple:
@@ -318,7 +328,11 @@ class SensorGUI:
 
     def on_toggle_click(self, label):
         print(f'Toggle {label} clicked.')
-        self.toggle_power = not self.toggle.get_status()[0]
+        self.toggle_power = self.toggle.get_status()[0]
+
+    def on_toggle_joy_click(self, label):
+        print(f'Toggle {label} clicked.')
+        self.toggle_joy = self.toggle2.get_status()[0]
 
     def on_radio_click(self, label):
         print(f'Radio button {label} selected.')

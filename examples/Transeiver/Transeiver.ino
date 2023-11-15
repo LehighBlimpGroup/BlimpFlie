@@ -67,6 +67,7 @@ void loop()
     {
       // Toggle the receivingPackage flag to indicate the start or end of the address package
       receivingPackage = !receivingPackage;
+      
       // If the flag is false, we have received the end of the address package
       if (!receivingPackage)
       {

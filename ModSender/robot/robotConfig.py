@@ -169,7 +169,7 @@ class RobotConfig:
     def startBNO(self, BRODCAST_CHANNEL):
         time.sleep(0.1)
         if not self._send_data([97], BRODCAST_CHANNEL):
-            time.sleep(1)
+            time.sleep(0.1)
             return False
         time.sleep(1)
     
@@ -177,7 +177,7 @@ class RobotConfig:
     def startBaro(self, BRODCAST_CHANNEL):
         time.sleep(0.1)
         if not self._send_data([98], BRODCAST_CHANNEL):
-            time.sleep(1)
+            time.sleep(0.1)
             return False
         time.sleep(1)
     
@@ -235,8 +235,8 @@ class RobotConfig:
         self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # Redundant sent.
 
         # Configure sensors
-        self.startBNO(BRODCAST_CHANNEL)  # Configure IMU
-        self.startBaro(BRODCAST_CHANNEL)  # Configure Barometer
+        # self.startBNO(BRODCAST_CHANNEL)  # Configure IMU
+        # self.startBaro(BRODCAST_CHANNEL)  # Configure Barometer
 
 
         self.startThrustRange(BRODCAST_CHANNEL, "bicopterbasic")  # Motor specifications

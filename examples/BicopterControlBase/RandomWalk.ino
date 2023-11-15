@@ -14,12 +14,12 @@ void Sonar_sensor(controller_t *controls, sensors_t *sensors, int sonar_sensor_e
         // controls->fz = randomW_z;
         controls->tz += randomW_yaw;
         
-        Serial.print("des_yaw_actual = ");
-        Serial.print(degrees(controls->tz));
-        Serial.print("des_yaw = ");
-        Serial.print(degrees(randomW_yaw));
-        Serial.print("randomW_force = ");
-        Serial.println(degrees(randomW_force));
+        // Serial.print("des_yaw_actual = ");
+        // Serial.print(degrees(controls->tz));
+        // Serial.print("des_yaw = ");
+        // Serial.print(degrees(randomW_yaw));
+        // Serial.print("randomW_force = ");
+        // Serial.println(degrees(randomW_force));
       // }else{
         // }
     // }

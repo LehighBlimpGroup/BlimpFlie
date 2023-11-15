@@ -101,8 +101,8 @@
             "NUM_ZIGS": 5,
             "Z_LEVEL" : 3,
             "TIME_ROTATE" : 5000,
-            "ANGLE_THRESH" : 10,
-            "STEP_ZIG_ZAG" : 5,
+            "ANGLE_THRESH" : 0,
+            "STEP_ZIG_ZAG" : 0,
             "FORWARD_FORCE" : 0.5
         }
     }
