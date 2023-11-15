@@ -47,7 +47,13 @@ y_pressed = False
 try:
     while not y_pressed:
         outputs, y_pressed, a_key_pressed = joyhandler.get_outputs(yaw_mode=JOYSTICK_YAW_MODE)  # get joystick input
-        outputs[8] = int(a_key_pressed)
+        if a_key_pressed:
+            outputs[8] = 1
+        elif joyhandler.x_state:
+            outputs[8] = 2
+
+
+
         
         # For each robot
         for i, robotConfig in enumerate(robotConfigs):

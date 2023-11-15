@@ -90,14 +90,14 @@
         "nicla": {
             "goal_theta_back": 0,
             "goal_theta_front": 110,
-            "goal_dist_thresh" : 110,
+            "goal_dist_thresh" : 40,
             "max_move_x" : 0.25,
             "goal_ratio" : 1.0,
             "yaw_move_threshold" : 0.2,
-            "height_threshold" : 0.42,
-            "height_strength" : 1.75,
-            "x_cal_weight" : 1.0,
-            "spiral_strength" : 0.7
+            "height_threshold" : 0.6,
+            "height_strength" : 0.8,
+            "x_cal_weight" : 0.8,
+            "spiral_strength" : 0.35
         }
     }
 }

@@ -66,7 +66,7 @@ int state = 0;
 
 */
 
-int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp, nicla_tuning_s *nicla_tuning, float sonar, bool init_bool){
+int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp, nicla_tuning_s *nicla_tuning, float sonar,bool init_bool, int init_nicla){
   /*
     This part of the code is meant to parse the nicla information in combination with the sensor values.
     There are 5 sensors: camera (nicla), tof (nicla), yaw, height, and time
@@ -106,15 +106,24 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
   tof_dist = (float)blimp->IBus.readChannel(9);
   _yaw = sensors->yaw;
   _height = sensors->estimatedZ - sensors->groundZ;
-
   if (init_bool) {
-    des_height = 8.5;
-    height_diff = controls->fz - _height;
-    control_yaw = controls->tz;
-    goal_yaw = controls->tz;
-    //nicla_tuning->goal_theta_back = _yaw;
-    state5start(); // just track goal
-    //state3start(); // go to correct goal side
+      if (init_nicla == 1) {
+        des_height = 8.5;
+        height_diff = controls->fz - _height;
+        control_yaw = controls->tz;
+        goal_yaw = controls->tz;
+        //nicla_tuning->goal_theta_back = _yaw;
+        state5start(); // just track goal
+        //state3start(); // go to correct goal side
+      } else if (init_nicla == 2) {
+        des_height = 8.5;
+        height_diff = controls->fz - _height;
+        control_yaw = controls->tz;
+        goal_yaw = controls->tz;
+        //nicla_tuning->goal_theta_back = _yaw;
+        state2start(); // just track goal
+        //state3start(); // go to correct goal side
+      }
   }
 
   if (!tracked){//!tracked || !solid || max(detection_h, detection_w) < 15) {
@@ -304,11 +313,11 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
     } else {
       if (fresh){
         changeHeight(tracking_y, size, _height, nicla_tuning);
+        control_height = _height;
       }
       charged = false;
       if (detected == false) { // if there is no detection, random walk
-        randomWalkGoal(controls,  nicla_tuning);
-
+        randomWalkBalloon(controls,  nicla_tuning);
       } else { // if there is a detection, try to position better relative to the goal
         if (max(last_detection_w, last_detection_h) > nicla_tuning->goal_dist_thresh){
           full_charge_timer = millis();
@@ -401,10 +410,30 @@ void randomWalkGoal(controller_t *controls,  nicla_tuning_s *nicla_tuning){
   control_fx = random_spiral;
 }
 
+void randomWalkBalloon(controller_t *controls,  nicla_tuning_s *nicla_tuning){
+  /*
+    If I have seen a 'wall' recently time < 10 seconds, then I want to stop(move backwards) (3 seconds), turn around opposite to the wall found(2 seconds), then move foward for 5 seconds
+    If I have not seen a wall recently > 10 seconds and I havent seen a goal recently > 10 seconds, then I want to perform a random walk for 10 seconds up and down the highbay,
+              this procedure stops and resets if a goal has been seen or 10 more seconds have passed.
+    If I have not seen anything in 20 seconds, reset by finding a wall again.
+  */
+  random_spiral -= .05 * ((float)dt)/1000000.0f;
+  if (random_spiral < .02) {
+    random_spiral = nicla_tuning->max_move_x;
+  }
+  control_yaw = control_yaw  + nicla_tuning->spiral_strength*((float)dt)/1000000.0f; //TODO add constant for speed of spin
+  control_yaw = atan2(sin(control_yaw), cos(control_yaw));
+  control_fx = random_spiral;
+  des_height = 3.75 + sin(control_yaw);
+}
+
 void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
   // control_yaw = control_yaw;
   control_fx = nicla_tuning->max_move_x;
 }
+
+
+
 
 void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuning) {
   float y_cal = (_y / max_y);
@@ -463,7 +492,7 @@ void state4start(float control_angle_4, int control_time_4){
 
 void state5start(){
   changeNiclaTarget(0x80);
-  des_height = _height;
+  control_height = 3.75;
   state = 5;
   walk_timer = millis();
 }
