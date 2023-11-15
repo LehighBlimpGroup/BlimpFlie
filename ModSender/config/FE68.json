@@ -9,9 +9,9 @@
                         "rotation" : 0,
 
                         "Croll" : 1,
-                        "Cpitch" : 0, 
+                        "Cpitch" : 0,
                         "Cyaw" : 1,
-                        "Cx" : 1,
+                        "Cx" : 0.3,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -28,11 +28,11 @@
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0,
-                        "kdy" : 0,
-                        "kpz" : 0.5,
-                        "kdz" : 0.2,
-                        "kiz" : 0,
+                        "kpy" : 0.1,
+                        "kdy" : 0.1,
+                        "kpz" : 1,
+                        "kdz" : 0.5,
+                        "kiz" : 0.1,
 
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
@@ -49,8 +49,8 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.1,
-                        "servo2offset" : 0.0
+                        "servo1offset" : 0.0,
+                        "servo2offset" : 0.1
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.7,
@@ -60,7 +60,7 @@
                     "vzGamma" : 0.5
                     },
         "initflags": {
-                    "_comment": "flags to be used in the init", 
+                    "_comment": "flags to be used in the init",
                     "_comment": "-bool verbose: allows some debug print statments",
                     "_comment": "-bool sensors: enables or disables the sensorsuite package: if false all values will be 0, and sensorReady =false in the sensor ",
                     "_comment":"-bool UDP: starts up the UDP connection such that other UDP functions will be enabled",
@@ -103,7 +103,7 @@
             "TIME_ROTATE" : 5000,
             "ANGLE_THRESH" : 0,
             "STEP_ZIG_ZAG" : 0,
-            "FORWARD_FORCE" : 0.5
+            "FORWARD_FORCE" : 1
         }
     }
 }

@@ -3,9 +3,9 @@
 
 DeterministicWalk::DeterministicWalk(float forward_force, int min_distance, int des_z)
 : _forward_force(forward_force), _min_distance(min_distance), _des_z(des_z),
-  _time_backward(2000), _TIME_ROTATE(2000), _des_yaw(radians(295)), _SWITCH_TIME(10000),
+  _time_backward(2000), _TIME_ROTATE(2000), _des_yaw(radians(270)), _SWITCH_TIME(10000),
   _current_action(0), _time_elapse(0), _forward_zig_zag(1), _zz_counter(0),
-  _STEP_ZIG_ZAG(radians(15)) {}
+  _STEP_ZIG_ZAG(radians(0)) {}
 
 void DeterministicWalk::begin() {
   restart_timer();

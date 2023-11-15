@@ -29,7 +29,7 @@ randomwalk_values_t randomwalk_specs = {
         .forward_force = 0.4,
         .desired_z = 7,
         .desired_yaw = 0,
-        .STEP_ZIG_ZAG = 15,
+        .STEP_ZIG_ZAG = 0,
         .min_distance = 500,
         .NUM_ZIGS = 5,
         .Z_LEVEL = 3,
@@ -247,18 +247,20 @@ int sonar_sensor_enabled = 1;  //FIXME make this a flag
 int randomWalk_enabled = 1; //FIXME make this a flag
 
 
-void setup() {
+float biasyaw = 0;
 
+
+void setup() {
 
     //initializes systems based on flags and saves flags into the system
     blimp.init(&init_flags, &init_sensors, &feedbackPD);
+
 
     delay(100);
     // baro.init();
     //bno.init();
 
     bno.init();
-
     baro.init();
     
     getLatestSensorData(&sensors);
@@ -274,6 +276,15 @@ void setup() {
 
     getLatestSensorData(&sensors);
     sensors.groundZ = baro.getEstimatedZ();
+
+
+    // bno.updateSensors(sensors, &weights, &rollPitchAdjust);
+    biasyaw = sensors.yaw;
+
+
+    Serial.print("bias = ");
+    Serial.println(biasyaw);
+
 
 
 
@@ -326,6 +337,10 @@ void loop() {
 
   int flag = raws.flag;
   getLatestSensorData(&sensors);
+
+  // sensors.yaw = sensors.yaw ;
+
+  // sensors.yaw = sensors.yaw - biasyaw;
   // blimp.getSensorRaws(&sensorData); //reading from Ultrasound wireless
 
 
@@ -475,16 +490,20 @@ void loop() {
 
 
 
-
-
 void getLatestSensorData(sensors_t *sensors) {
 
-    bno.updateSensors(sensors, &weights, &rollPitchAdjust);
+    bno.updateSensors(sensors, &weights, &rollPitchAdjust, biasyaw);
+
+    // sensorsyaw =  sensors.yaw - biasyaw;
+
+    
     if (baro.updateBarometer())
     {
         sensors->estimatedZ = sensors->estimatedZ * weights.zGamma  + baro.getEstimatedZ()* (1 - weights.zGamma);
         sensors->velocityZ = sensors->velocityZ * weights.vzGamma + baro.getVelocityZ()*(1 - weights.zGamma);
     }
+    // sensors->yaw = atan2(sin(sensors->yaw), cos(sensors->yaw));
+    
 }
 
 

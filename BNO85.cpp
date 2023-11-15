@@ -53,7 +53,7 @@ void BNO85::setReports(void) {
   }
 }
 
-void BNO85::updateSensors(sensors_t *sensors, sensor_weights_t *weights, RollPitchAdjustments *rollPitchAdjust){
+void BNO85::updateSensors(sensors_t *sensors, sensor_weights_t *weights, RollPitchAdjustments *rollPitchAdjust, float biasyaw){
     // Serial.println("BNO Update!");
   //bnoOn = false;
   if (bnoOn){
@@ -69,6 +69,7 @@ void BNO85::updateSensors(sensors_t *sensors, sensor_weights_t *weights, RollPit
         sensors->roll = (myIMU.getRoll()) ; // In radians
         sensors->pitch = (myIMU.getPitch()); // In radians
         sensors->yaw = (myIMU.getYaw()) ; // In radians
+        sensors->yaw = sensors->yaw - biasyaw;
         
         while (sensors->yaw > 3.1416f){
           sensors->yaw -= 3.1416f*2;

@@ -228,9 +228,9 @@ class RobotConfig:
             self.configs = json.load(f)
 
         # Bicopter basic contains configs for a robot with no feedback
-        active = self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)
-        if not active:
-            quit()
+        # active = self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)
+        # if not active:
+        #     quit()
 
         self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # Redundant sent.
 
