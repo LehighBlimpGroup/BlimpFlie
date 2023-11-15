@@ -25,6 +25,7 @@ LIST_OF_MAC_ADDRESS = [
 #     # "48:27:E2:E6:E4:0C", #10 Big Wall
     # "48:27:E2:E6:E1:00", #11 david
     # "34:85:18:8F:36:B0" # Diego
+    # "48:27:E2:E6:E6:50",
 ]
 
 MASTER_MAC = "C0:49:EF:EB:FE:34" #"C0:49:EF:E3:34:78"

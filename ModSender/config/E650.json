@@ -25,8 +25,8 @@
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.05,
-                        "kdy" : 0.05,
+                        "kpy" : 0.06,
+                        "kdy" : 0.06,
                         "kpz" : 0.7,
                         "kdz" : 0.6,
                         "kiz" : 0.05,
@@ -48,8 +48,8 @@
                         "rollOffset" : 3.14,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : -0.4,
-                        "servo2offset" : 0.2
+                        "servo1offset" : 0.1,
+                        "servo2offset" : 0.1
                         },
         "weights": { "eulerGamma" : 0,
                     "rollRateGamma" : 0.5,
@@ -89,13 +89,13 @@
         },
         "nicla": {
             "goal_theta_back": 0,
-            "goal_theta_front": 100,
-            "goal_dist_thresh" : 120,
+            "goal_theta_front": 110,
+            "goal_dist_thresh" : 110,
             "max_move_x" : 0.25,
             "goal_ratio" : 1,
             "yaw_move_threshold" : 0.2,
-            "height_threshold" : 0.42,
-            "height_strength" : 15,
+            "height_threshold" : 0.48,
+            "height_strength" : 10,
             "x_cal_weight" : 0.8,
             "spiral_strength" : 0.75
 
