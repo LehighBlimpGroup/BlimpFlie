@@ -70,7 +70,7 @@ class ZigZagWalk(Walk):
         # self.des_yaw += np.random.uniform(0, np.pi) + np.pi / 2
         yaw = self._angle_bounded(self.yaw)  # bound angle from -pi to pi
 
-        if yaw < 0: # 90
+        if yaw > 0: # 90
             self.des_yaw = np.radians(183) + 1 * self.step_zig_zag * self.forward_zig_zag
         else:
             self.des_yaw = np.radians(3) - 1 * self.step_zig_zag * self.forward_zig_zag

@@ -11,7 +11,7 @@ from autonomy.Behavior import Behavior
 
 class Walk(Behavior):
 
-    def __init__(self, forward_force=0.1, min_distance=600, des_z=8):
+    def __init__(self, forward_force=0.1, min_distance=600, des_z=10):
         # Constants
         self.forward_zig_zag = 1
         self.zz_counter = 0

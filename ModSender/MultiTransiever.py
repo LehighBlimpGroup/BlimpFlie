@@ -11,9 +11,6 @@ from gui.visualizer import SensorGUI
 YAW_SENSOR = True
 Z_SENSOR = True
 
-# # Initialize toggle states for each robot
-# x_key_toggle_states = [False]
-
 
 # User interface
 
@@ -55,21 +52,13 @@ try:
             feedback = esp_now.getFeedback(i)  # get sensor data from robot
             # nicla = esp_now.getFeedback(2)  # get sensor data from robot
 
-            # # Toggle des_z with x_key
-            # if x_key_pressed:
-            #     x_key_toggle_states[i] = not x_key_toggle_states[i]  # Toggle state
-
              # ------- Autonomous mode ----------
             if a_key_pressed:
                 des_fx, des_z, des_yaw = behavior_robots[i].execute(feedback)
-
-                # # Set des_z to current height if toggle is active
-                # if x_key_toggle_states[i]:
-                #     des_z = feedback[0]  # Current height from feedback array
-
                 outputs[1] = des_fx  # Forward
                 outputs[3] = des_z  # Z
                 joyhandler.tz = des_yaw  # Yaw control
+
 
             # Display sensors and output
             # sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)

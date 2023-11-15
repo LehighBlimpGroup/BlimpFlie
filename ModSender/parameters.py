@@ -23,19 +23,20 @@ LIST_OF_MAC_ADDRESS = [
     # "48:27:E2:E6:E4:0C", #10 Big Wall
     # "48:27:E2:E6:E1:00",  # 11 david
     # "34:85:18:8F:36:B0" # Diego
-    "48:27:E2:E6:E6:44", #12 spinning blimp 1
-    # "34:85:18:91:B7:4C", #13 spinning blimp 2
+    # "48:27:E2:E6:E6:44", #12 spinning blimp 1
+    "34:85:18:91:B7:4C" #13 spinning blimp 2
     # "34:85:18:91:38:60", #14 spinning blimp 3
     # "34:85:18:AB:EF:E8", #15 spinning blimp 4
     # "34:85:18:AC:05:28", #16 spinning blimp 5
     # "34:85:18:91:20:A8", #small blended bicopter
-    # "48:27:E2:E6:E6:D4" # jiawei's robot
+    # "48:27:E2:E6:E6:D4", # jiawei's robot
+    # "DC:54:75:D7:B3:E8" # attacker bicopter
 ]
 MASTER_MAC = "48:27:E2:E6:E4:0C"
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
 
-JOYSTICK_YAW_MODE = 0
+JOYSTICK_YAW_MODE = 1
 GUI_ENABLED = True
 
 
