@@ -10,6 +10,7 @@ PORT = "COM16" #serial port for the transiever
 
 
 LIST_OF_MAC_ADDRESS = [
+    #"48:27:E2:E6:EC:CC", # Edward - 1
     "48:27:E2:E6:E6:D4" # Jiawei - 2
     # "48:27:E2:E6:ED:24", # Bella - 3
     # "34:85:18:8D:8B:38" # KKL2 - 4
