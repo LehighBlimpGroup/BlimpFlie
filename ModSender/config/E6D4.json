@@ -91,7 +91,7 @@
             "goal_theta_back": 0,
             "goal_theta_front": 110,
             "goal_dist_thresh" : 40,
-            "max_move_x" : 0.25,
+            "max_move_x" : 0.20,
             "goal_ratio" : 1.0,
             "yaw_move_threshold" : 0.2,
             "height_threshold" : 0.6,

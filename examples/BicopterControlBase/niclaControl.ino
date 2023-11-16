@@ -20,7 +20,6 @@ float last_tracking_h = 0;
 float tof_dist = 0;
 
 float _yaw, Ky, _height;
-float control_height = 0;
 float control_fx = 0;
 float des_height, gamma2;
 float height_diff = 0;
@@ -108,10 +107,9 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
   _height = sensors->estimatedZ - sensors->groundZ;
   if (init_bool) {
       if (init_nicla == 1) {
-        des_height = 8.5;
-        height_diff = controls->fz - _height;
+        // des_height = 3.0;
         control_yaw = controls->tz;
-        goal_yaw = controls->tz;
+        goal_yaw = _yaw;
         //nicla_tuning->goal_theta_back = _yaw;
         state5start(); // just track goal
         //state3start(); // go to correct goal side
@@ -129,7 +127,7 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
   if (!tracked){//!tracked || !solid || max(detection_h, detection_w) < 15) {
     detected = false;
     fresh = false;
-  } else if (last_tracking_x != tracking_x || last_tracking_y != tracking_y || last_detection_w != detection_w || last_detection_h != detection_h) {
+  } else if (last_detection_x != detection_x || last_detection_y != detection_y || last_detection_w != detection_w || last_detection_h != detection_h) {
     rolling_dist = rolling_dist *dist_gamma + tof_dist * (1-dist_gamma);
     float x_cal = tracking_x / max_x;
     float des_yaw = ((x_cal - 0.5) * nicla_tuning->x_cal_weight);
@@ -306,28 +304,17 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
     }
   }
   if (state == 5) {
-    //balloon follow
-    if (millis() - full_charge_timer < 3000){
-      random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
-      fullCharge(controls, nicla_tuning);
-    } else {
-      if (fresh){
-        changeHeight(tracking_y, size, _height, nicla_tuning);
-        control_height = _height;
-      }
-      charged = false;
-      if (detected == false) { // if there is no detection, random walk
-        randomWalkBalloon(controls,  nicla_tuning);
-      } else { // if there is a detection, try to position better relative to the goal
-        if (max(last_detection_w, last_detection_h) > nicla_tuning->goal_dist_thresh){
-          full_charge_timer = millis();
-          fullCharge(controls, nicla_tuning);
-        } else{
-          chargeBalloon(controls, goal_act, robot_to_goal, nicla_tuning);
-        }
-        random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
-      }
+    // balloon follow
+    // control_yaw = _yaw;  
+    if (detected == false) { // if there is no detection, random walk
+      randomWalkBalloon(controls,  nicla_tuning);
+      // Serial.println("Random!");
+    } else { // if there is a detection, try to position better relative to the goal
+      changeHeight(tracking_y, size, _height, nicla_tuning);
+      chargeAttack(controls, goal_act, robot_to_goal, nicla_tuning);
+      // Serial.println("Attacking!");
     }
+    random_spiral = nicla_tuning->max_move_x; //reset spiral for random walk
   }
     
   
@@ -344,6 +331,10 @@ int addNiclaControl(controller_t *controls, sensors_t *sensors, ModBlimp *blimp,
 
   last_tracking_x = tracking_x;
   last_tracking_y = tracking_y;
+  last_tracking_w = tracking_w;
+  last_tracking_h = tracking_h;
+  last_detection_x = detection_x;
+  last_detection_y = detection_y;
   last_detection_w = detection_w;
   last_detection_h = detection_h;
   return int(state);
@@ -394,6 +385,24 @@ void chargeBalloon(controller_t *controls, float goal_act, float robot_to_goal, 
   }
 }
 
+void chargeAttack(controller_t *controls, float goal_act, float robot_to_goal, nicla_tuning_s *nicla_tuning){
+  /*
+    If I see a goal at the proper angle, I want to charge towards it and pass through
+      If the goal is small in the image, I want to change height and adjust
+        maybe we should include the centering command to the code, also make sure that last known location in yaw is used if we want to random search for it again.
+      if the goal is large, the change in angle and height should be massively reduced or non exsistant, so that it can confidently move through the hole
+        Once we have charged through, we should try to determine if we have passed through by turing around and detecting a large goal.
+          If not true then we move away and try again
+  */
+
+  control_yaw = goal_yaw;
+  if (abs(control_yaw - _yaw) < nicla_tuning->yaw_move_threshold){
+    control_fx = nicla_tuning->max_move_x;
+  } else {
+    control_fx = nicla_tuning->max_move_x/5;
+  }
+}
+
 void randomWalkGoal(controller_t *controls,  nicla_tuning_s *nicla_tuning){
   /*
     If I have seen a 'wall' recently time < 10 seconds, then I want to stop(move backwards) (3 seconds), turn around opposite to the wall found(2 seconds), then move foward for 5 seconds
@@ -421,10 +430,10 @@ void randomWalkBalloon(controller_t *controls,  nicla_tuning_s *nicla_tuning){
   if (random_spiral < .02) {
     random_spiral = nicla_tuning->max_move_x;
   }
-  control_yaw = control_yaw  + nicla_tuning->spiral_strength*((float)dt)/1000000.0f; //TODO add constant for speed of spin
+  control_yaw = _yaw  + nicla_tuning->spiral_strength*((float)dt)/1000000.0f; //TODO add constant for speed of spin
   control_yaw = atan2(sin(control_yaw), cos(control_yaw));
   control_fx = random_spiral;
-  des_height = 3.75 + sin(control_yaw);
+  des_height = des_height * 0.999 + min(max(_height + random(-5, 5) / 100.0, 3.5), 7.5) * 0.001;
 }
 
 void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
@@ -437,10 +446,10 @@ void fullCharge(controller_t *controls,  nicla_tuning_s *nicla_tuning) {
 
 void changeHeight(float _y, float _h, float _height,  nicla_tuning_s *nicla_tuning) {
   float y_cal = (_y / max_y);
-
   if (_h < nicla_tuning->goal_dist_thresh && _h > 20){
     // if (y_cal - h_cal/2 > nicla_tuning->height_threshold || y_cal + h_cal/2 < nicla_tuning->height_threshold) {
-    des_height = _height - (y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength;
+    des_height = des_height * 0.98 +  (_height - (y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength) * 0.02;
+    // des_height = _height - (y_cal - nicla_tuning->height_threshold) * nicla_tuning->height_strength;
   }
 }
 
@@ -453,7 +462,6 @@ void state0start(){ //randomwalk
   changeNiclaTarget(0x81);
   state =0;
   walk_timer = millis();
-
 }
 
 void state1start(){ //spin search
@@ -463,9 +471,7 @@ void state1start(){ //spin search
   for (int i = 0; i < 20; i++){
     goal_wheel[i] = 0;
   }
-  
   state1yaw = 0;
-
 }
 
 void state2start(){
@@ -492,7 +498,8 @@ void state4start(float control_angle_4, int control_time_4){
 
 void state5start(){
   changeNiclaTarget(0x80);
-  control_height = 3.75;
+  des_height = _height;
+  control_yaw = _yaw;
   state = 5;
   walk_timer = millis();
 }
@@ -502,42 +509,25 @@ void changeNiclaTarget(char state) {
   Serial.println(int(state));
   blimp.sendMySerial(state);
 }
-// check if goal is in the proper position or if it is actually seeing a wall. 
-      // if (abs(relative_to_goal) > 3*PI/4) { // seeing front goal
-      //   goal_act = goal_act + PI;
-      //   goal_act = atan2(sin(goal_act), cos(goal_act));
-        
-      //   goal_yaw = robot_to_goal - nicla_tuning->goal_theta_front*atan2(sin(goal_act - robot_to_goal), cos(goal_act - robot_to_goal))/
-      //             (nicla_tuning->goal_ratio - (nicla_tuning->goal_ratio-1) * max(detection_h, max(detection_w,max_y))/max_y );
-      //   goal_yaw = atan2(sin(goal_yaw), cos(goal_yaw));
-      //   last_front_goal_time = millis();
-      //   changeHeight(tracking_y, max(detection_h, detection_w), _height, nicla_tuning);
-        
-      //   detected = true;
-      // }
-      // else if (abs(relative_to_goal) > PI/2){ //seeing noise
-      //   last_noise_time = millis();
-      //   detected = false;
-        
-      // } else{ // seeing back goal
-      //   last_back_goal_time = millis();
-      //   goal_act = atan2(sin(goal_act), cos(goal_act));
-      //   goal_yaw = robot_to_goal - nicla_tuning->goal_theta_front*atan2(sin(goal_act - robot_to_goal), cos(goal_act - robot_to_goal))/
-      //             (nicla_tuning->goal_ratio - (nicla_tuning->goal_ratio-1) * max(detection_h, max(detection_w,max_y))/max_y );
-      //   goal_yaw = atan2(sin(goal_yaw), cos(goal_yaw));
-      //   changeHeight(tracking_y, size, _height, nicla_tuning);
-        
-      //   detected = true;
-      // }
 
-
-        
-  // // do stuff with the information gathered.
-  // if (rolling_dist > 300){
-  //   near_time_dist = millis();// tof is not detecting something close by 
-  // }
-  
-  // if (millis() - near_time_dist > 3000){//detect if time of flight is too near (stuck on a goal)
-  // //TODO make a flag that turns this off
-  //   tooCloseGoal(nicla_tuning);
-  // } else
+/*
+int walk_time_levi = 0;
+float random_angle = 0;
+void state6start(){
+  walk = false;
+  walk_timer = millis();
+  walk_time_levi = 30*(pow(random(130, 1000)/1000, -1.0 / 3.0) - 1);
+  random_angle = ((float) random(0, 180)) / PI;
+  state = 6;
+}
+void randomLeviWalk(){
+  if (millis() - walk_timer < walk_time_levi * 1000) {
+    control_yaw = random_angle;
+    control_fx = .3;
+    if (detected){
+      state2start();
+    }
+  } else {
+    state6start();
+  }
+} */

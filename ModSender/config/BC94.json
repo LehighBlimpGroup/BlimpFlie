@@ -20,18 +20,18 @@
                         "kdroll" : 0,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.50,
+                        "kpyaw" : -0.60,
                         "kdyaw" : -0.03,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.06,
-                        "kdy" : 0.06,
-                        "kpz" : 0.7,
-                        "kdz" : 0.5,
-                        "kiz" : 0.05,
+                        "kpy" : 0.05,
+                        "kdy" : 0.02,
+                        "kpz" : 2.5,
+                        "kdz" : 2.5,
+                        "kiz" : 0.1,
 
-                        "kiyaw": -1,
+                        "kiyaw": -0.5,
                         "kiyawrate" : 0,
                         "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
@@ -59,7 +59,7 @@
                     "vzGamma" : 0.5
                     },
         "initflags": {
-                    "_comment": "flags to be used in the init", 
+                    "_comment": "flags to be used in the init",
                     "_comment": "-bool verbose: allows some debug print statments",
                     "_comment": "-bool sensors: enables or disables the sensorsuite package: if false all values will be 0, and sensorReady =false in the sensor ",
                     "_comment":"-bool UDP: starts up the UDP connection such that other UDP functions will be enabled",
@@ -89,16 +89,15 @@
         },
         "nicla": {
             "goal_theta_back": 0,
-            "goal_theta_front": 3.14,
-            "goal_dist_thresh" : 40,
+            "goal_theta_front": 110,
+            "goal_dist_thresh" : 50,
             "max_move_x" : 0.4,
-            "goal_ratio" : 1,
+            "goal_ratio" : 1.0,
             "yaw_move_threshold" : 0.2,
-            "height_threshold" : 0.55,
-            "height_strength" : 10,
-            "x_cal_weight" : 0.75,
-            "spiral_strength" : 0.5
-
+            "height_threshold" : 0.7,
+            "height_strength" : 2.0,
+            "x_cal_weight" : 0.7,
+            "spiral_strength" : 0.75
         }
     }
 }

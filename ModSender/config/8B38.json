@@ -11,7 +11,7 @@
                         "Croll" : 1,
                         "Cpitch" : 0, 
                         "Cyaw" : 1,
-                        "Cx" : 1,
+                        "Cx" : 0.8,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -20,18 +20,18 @@
                         "kdroll" : 0,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1.50,
-                        "kdyaw" : -0.03,
+                        "kpyaw" : -0.50,
+                        "kdyaw" : -0.01,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.06,
-                        "kdy" : 0.06,
-                        "kpz" : 0.7,
-                        "kdz" : 0.5,
-                        "kiz" : 0.05,
+                        "kpy" : 0.025,
+                        "kdy" : 0.01,
+                        "kpz" : 0.5,
+                        "kdz" : 0.7,
+                        "kiz" : 0.04,
 
-                        "kiyaw": -1,
+                        "kiyaw": -0.5,
                         "kiyawrate" : 0,
                         "yawRateIntegralRange"  : 200,
                         "errorYawrateRange" : 0.6,
@@ -91,14 +91,13 @@
             "goal_theta_back": 0,
             "goal_theta_front": 3.14,
             "goal_dist_thresh" : 40,
-            "max_move_x" : 0.4,
-            "goal_ratio" : 1,
+            "max_move_x" : 0.12,
+            "goal_ratio" : 1.0,
             "yaw_move_threshold" : 0.2,
-            "height_threshold" : 0.55,
-            "height_strength" : 10,
-            "x_cal_weight" : 0.75,
-            "spiral_strength" : 0.5
-
+            "height_threshold" : 0.75,
+            "height_strength" : 2.5,
+            "x_cal_weight" : 1.5,
+            "spiral_strength" : 0.35
         }
     }
 }
