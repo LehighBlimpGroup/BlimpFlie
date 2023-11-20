@@ -87,7 +87,7 @@ try:
 
 
         # time.sleep(0.02)
-        sensor_guis[0].sleep(0.02)
+        sensor_guis[0].sleep(0.20)
 
 except KeyboardInterrupt:
     print("Loop terminated by user.")
