@@ -228,8 +228,18 @@ void setup() {
     blimp.init(&init_flags, &init_sensors, &feedbackPD);
 
     delay(100);
-    // baro.init();
-    //bno.init();
+    baro.init();
+    getLatestSensorData(&sensors);
+    delay(30);
+    sensors.groundZ = baro.getEstimatedZ();
+    delay(30);
+    getLatestSensorData(&sensors);
+    while (abs(sensors.groundZ - baro.getEstimatedZ()) > .4 || sensors.groundZ == baro.getEstimatedZ()){
+        sensors.groundZ = baro.getEstimatedZ();
+        delay(100);
+        getLatestSensorData(&sensors);
+    }
+    bno.init();
 
     getLatestSensorData(&sensors);
     sensors.groundZ = baro.getEstimatedZ();

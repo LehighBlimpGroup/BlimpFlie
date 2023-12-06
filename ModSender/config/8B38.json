@@ -96,7 +96,7 @@
             "yaw_move_threshold" : 0.2,
             "height_threshold" : 0.55,
             "height_strength" : 5,
-            "x_cal_weight" : 1.3,
+            "x_cal_weight" : 0.75,
             "spiral_strength" : 0.5
 
         }

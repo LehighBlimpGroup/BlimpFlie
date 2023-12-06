@@ -9,7 +9,7 @@ class RobotConfig:
         self.mac = mac_address
         self.slave_index = slave_index
 
-        self.config_file = "config/" + mac_address.replace(":", "")[-4:] + ".json"
+        self.config_file = "ModSender/config/" + mac_address.replace(":", "")[-4:] + ".json"
 
         self.esp_now = esp_now
 
@@ -31,7 +31,8 @@ class RobotConfig:
             count += 1
             if count > 20:
                 print("Gave up sending on ", self.slave_index)
-                return False
+                break
+                # return False
             time.sleep(0.05)
         return True
 
@@ -224,13 +225,13 @@ class RobotConfig:
         if not active:
             quit()
 
-        self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # Redundant sent.
+        # self.sendAllFlags(BRODCAST_CHANNEL, ROBOT_JASON)  # Redundant sent.
 
         # Configure sensors
-        self.startBNO(BRODCAST_CHANNEL)  # Configure IMU
-        self.startBaro(BRODCAST_CHANNEL)  # Configure Barometer
+        # self.startBNO(BRODCAST_CHANNEL)  # Configure IMU
+        # self.startBaro(BRODCAST_CHANNEL)  # Configure Barometer
 
 
         self.startThrustRange(BRODCAST_CHANNEL, "bicopterbasic")  # Motor specifications
-        self.startTranseiver(BRODCAST_CHANNEL, MASTER_MAC)  # Start communication
+        # self.startTranseiver(BRODCAST_CHANNEL, MASTER_MAC)  # Start communication
 
