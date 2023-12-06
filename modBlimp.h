@@ -9,10 +9,10 @@
 #include <ESPNOW.h>
 
 
-#define SERVO1 D9
-#define SERVO2 D10
-#define THRUST1 D1
-#define THRUST2 D0
+#define SERVO1 D10
+#define SERVO2 D9
+#define THRUST1 D0
+#define THRUST2 D1
 #define BATT A2
 
 
@@ -50,7 +50,9 @@ class ModBlimp {
 
         volatile unsigned long time_end;
         void escarm(Servo& thrust1, Servo& thrust2);
+        void escarm4(Servo& thrust1, Servo& thrust2, Servo& thrust3, Servo& thrust4);
         void calibrate_esc(Servo& thrust1, Servo& thrust2);
+        void calibrate_esc4(Servo& thrust1, Servo& thrust2, Servo& thrust3, Servo& thrust4);
         void initMotors(); //runs the escarm and initializes motors and servos
         void initSensors(init_sensors_t  *sensors); //attempts to connect to the sensors using sensorswuite.
 

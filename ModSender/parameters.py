@@ -6,7 +6,7 @@ ROBOT_JASON = "bicopterbasic"
 #ESPNOW PARAMS
 # MASTER_MAC = "34:85:18:91:C7:80" #address of the transceiver
 ESP_VERBOSE = True
-PORT = "COM24" #serial port for the transiever
+PORT = "COM6" #serial port for the transiever
 
 
 LIST_OF_MAC_ADDRESS = [
@@ -24,10 +24,11 @@ LIST_OF_MAC_ADDRESS = [
 #     # "48:27:E2:E6:E4:0C", #10 Big Wall
     # "48:27:E2:E6:E1:00", #11 david
     # "34:85:18:8F:36:B0" # Diego
-    "34:85:18:8D:8B:38" #eddie 2
+    # "34:85:18:8D:8B:38" #eddie 2
+    "34:85:18:91:B3:44"
 ]
 
-MASTER_MAC = "C0:49:EF:EB:FE:34" #"C0:49:EF:E3:34:78"
+MASTER_MAC = "34:85:18:8D:86:70" #"C0:49:EF:E3:34:78"
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
 

@@ -13,6 +13,9 @@ baro390 baro;
 GY_US42V2 sonar_sensor;  // Create an instance of the GY_US42V2 class
 
 
+#define SERVO3 D8
+Servo servo3;
+
 IBusBM IBus;
 
 
@@ -52,13 +55,13 @@ init_flags_t init_flags = {
         .escarm = true,
         .calibrate_esc = false,
         .UDP = false,
-        .Ibus = true,
+        .Ibus = false,
         .ESPNOW = true,
         .servo = false,
         .PORT = 1345,
         .motor_type = 0,
         .mode = 2,
-        .control = 0,
+        .control = 3,
 };
 
 
@@ -124,27 +127,27 @@ feedback_t feedbackPD = {
         .z = false,
         .rotation = false,
 
-        .Croll = 1,
+        .Croll = 0,
         .Cpitch = 0,
         .Cyaw = 1,
         .Cx = 1,
-        .Cy = 0,
-        .Cz = 1,
-        .Cabsz = 1,
+        .Cy = 1,
+        .Cz = 0,
+        .Cabsz = 0,
 
         .kproll = 0,
         .kdroll = 0.0f,
         .kppitch = 0,
         .kdpitch = 0,
-        .kpyaw = 3.0f,
-        .kdyaw = -150.0f,//-70//5f,
+        .kpyaw = 0.0f,
+        .kdyaw = 0.0f,//-70//5f,
 
         .kpx = 0,
         .kdx = 0,
         .kpy = 0,
         .kdy = 0,
-        .kpz = 0.1f,//.4f
-        .kdz = -0.5f,
+        .kpz = 0.0f,//.4f
+        .kdz = 0.0f,
 
         .lx = .15,
 };
@@ -226,23 +229,25 @@ void setup() {
 
     //initializes systems based on flags and saves flags into the system
     blimp.init(&init_flags, &init_sensors, &feedbackPD);
+    servo3.attach(SERVO3, 500, 2500);
+    servo3.setPeriodHertz(47); // Standard 50hz servo
 
     delay(100);
-    baro.init();
-    getLatestSensorData(&sensors);
-    delay(30);
-    sensors.groundZ = baro.getEstimatedZ();
-    delay(30);
-    getLatestSensorData(&sensors);
-    while (abs(sensors.groundZ - baro.getEstimatedZ()) > .4 || sensors.groundZ == baro.getEstimatedZ()){
-        sensors.groundZ = baro.getEstimatedZ();
-        delay(100);
-        getLatestSensorData(&sensors);
-    }
-    bno.init();
+    // baro.init();
+    // getLatestSensorData(&sensors);
+    // delay(30);
+    // sensors.groundZ = baro.getEstimatedZ();
+    // delay(30);
+    // getLatestSensorData(&sensors);
+    // while (abs(sensors.groundZ - baro.getEstimatedZ()) > .4 || sensors.groundZ == baro.getEstimatedZ()){
+    //     sensors.groundZ = baro.getEstimatedZ();
+    //     delay(100);
+    //     getLatestSensorData(&sensors);
+    // }
+    // bno.init();
 
-    getLatestSensorData(&sensors);
-    sensors.groundZ = baro.getEstimatedZ();
+    // getLatestSensorData(&sensors);
+    // sensors.groundZ = baro.getEstimatedZ();
 
 
 }
@@ -254,6 +259,8 @@ bool snapon = 0;
 unsigned long timed = micros();
 
 bool init_bool = true;
+
+int servo_angle = 90;
 
 int lastflag = 0;
 
@@ -309,12 +316,12 @@ void loop() {
     z_integral = 0;
 
   } else if (flag == 20){ //motor servo level control
-          outputs.ready = raws.ready;
-          outputs.m1 = raws.data[0];
-          outputs.m2 = raws.data[1];
-          outputs.s1 = raws.data[2];
-          outputs.s2 = raws.data[3];
-      
+    outputs.ready = raws.ready;
+    outputs.m1 = raws.data[0];
+    outputs.m2 = raws.data[1];
+    outputs.s1 = raws.data[2];
+    outputs.s2 = raws.data[3];
+    servo_angle = raws.data[4];
 
   }
   else if (flag == 21){ // A-matrix high level control
@@ -328,32 +335,35 @@ void loop() {
     controls.tz = raws.data[5];
     controls.absz = raws.data[6];
     actionFlag = (int)raws.data[7]; // for the spinning blimp switch states
+    servo_angle = (int)controls.absz; // for the spinning blimp switch states
 
-    if (actionFlag == 1){// nicla controller
-      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, sensorData.values[0], init_bool);
-      init_bool = false;
-    } else if (actionFlag == 2) { //random walk
-      addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, sensorData.values[0], init_bool);
-      init_bool = false;
-    } else if (actionFlag == 3) { // full control flow
-      actionFlag = 0; // put control flow function to do state control here. 
-    } 
-    else {//else just use joystick controls 
-      init_bool = true;
-    }
+    // if (actionFlag == 1){// nicla controller
+    //   addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, sensorData.values[0], init_bool);
+    //   init_bool = false;
+    // } else if (actionFlag == 2) { //random walk
+    //   addNiclaControl(&controls, &sensors, &blimp, &nicla_tuning, sensorData.values[0], init_bool);
+    //   init_bool = false;
+    // } else if (actionFlag == 3) { // full control flow
+    //   actionFlag = 0; // put control flow function to do state control here. 
+    // } 
+    // else {//else just use joystick controls 
+    //   init_bool = true;
+    // }
     addFeedback(&controls, &sensors); //this function is implemented here for you to customize
+    getOutputs(&controls, &sensors, &outputs);
 
-    // Init flags to select which getOutput function is selected
-    if (init_flags.servo == 0){
-        // 180 degree servo getOutputs
-        getOutputs(&controls, &sensors, &outputs);
-    } else {
-        // 270 degree servo getOutputs
-        getOutputs270(&controls, &sensors, &outputs);
-    }
+    // // Init flags to select which getOutput function is selected
+    // if (init_flags.servo == 0){
+    //     // 180 degree servo getOutputs
+    //     getOutputs(&controls, &sensors, &outputs);
+    // } else {
+    //     // 270 degree servo getOutputs
+    //     getOutputs270(&controls, &sensors, &outputs);
+    // }
 
   }
   
+  servo3.write((int)(servo_angle));
   battery_level = blimp.executeOutputs(&outputs, &robot_specs);
   dt = (int)(micros()-timed);
   while (4000 - dt > 0){
@@ -363,23 +373,16 @@ void loop() {
   timed = micros();
   counter2 += 1;
   if (counter2 >= 25){
-    // Serial.print(dt);
-    // Serial.print(',');
-    // Serial.print((bool)controls.ready);
-    // Serial.print(',');
-    // Serial.print(sensors.estimatedZ - sensors.groundZ);
-    // Serial.print(',');
-    // Serial.print(sensors.yaw);
-    // Serial.print(',');
-    // Serial.print(battery_level);
-    // Serial.print(',');
-    // Serial.print(espSendData2.values[0]);
-    // Serial.print(',');
-    // Serial.print(espSendData2.values[1]);
-    // Serial.print(',');
-    // Serial.print(espSendData2.values[2]);
-    // Serial.print(',');
-    // Serial.println(espSendData2.values[3]);
+    Serial.print(dt);
+    Serial.print(',');
+    Serial.print((bool)controls.ready);
+    Serial.print(',');
+    Serial.print(controls.fx);
+    Serial.print(',');
+    Serial.print(controls.fy);
+    Serial.print(',');
+    Serial.println(controls.tz);
+    
     counter2 = 0;
     if (transceiverEnabled){
       

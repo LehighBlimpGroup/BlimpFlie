@@ -186,10 +186,31 @@ void ModBlimp::init(init_flags_t *init_flagsIn, init_sensors_t *init_sensorsIn, 
     servo2.attach(SERVO2, 1000, 2000);
     servo1.setPeriodHertz(50); // Standard 50hz servo
     servo2.setPeriodHertz(50); // Standard 50hz servo
-    thrust1.attach(THRUST1, 1000, 2300);
-    thrust2.attach(THRUST2, 1000, 2300);
+    thrust1.attach(THRUST1, 1000, 2000);
+    thrust2.attach(THRUST2, 1000, 2000);
     thrust1.setPeriodHertz(55);
     thrust2.setPeriodHertz(55);
+
+  } else if (init_flags->control == 3) {
+    servo1.attach(SERVO1, 1000, 2000);
+    servo2.attach(SERVO2, 1000, 2000);
+    servo1.setPeriodHertz(50); // Standard 50hz servo
+    servo2.setPeriodHertz(50); // Standard 50hz servo
+    thrust1.attach(THRUST1, 1000, 2000);
+    thrust2.attach(THRUST2, 1000, 2000);
+    thrust1.setPeriodHertz(55);
+    thrust2.setPeriodHertz(55);
+
+    // Calibrate brushless motors befor arming them
+    if (init_flags->calibrate_esc)
+    {
+      calibrate_esc4(thrust1, thrust2, servo1, servo2);
+    }
+    // Arm brushless motors
+    if (init_flags->escarm)
+    {
+      escarm4(thrust1, thrust2, servo1, servo2);
+    }
 
   }
 
@@ -614,6 +635,21 @@ float ModBlimp::executeOutputs(actuation_t *outputs, robot_specs_s *robot_specs)
         analogWrite(SERVO1, (int)0);
         analogWrite(SERVO2, (int)0);
       }
+  } else if (init_flags->control == 3){
+      if (outputs->ready)
+      {
+        thrust1.writeMicroseconds((int)((outputs->m1) * (robot_specs->max_thrust - robot_specs->min_thrust) + robot_specs->min_thrust));
+        thrust2.writeMicroseconds((int)((outputs->m2) * (robot_specs->max_thrust - robot_specs->min_thrust) + robot_specs->min_thrust));
+        servo1.writeMicroseconds((int)((outputs->s1) * (robot_specs->max_thrust - robot_specs->min_thrust) + robot_specs->min_thrust));
+        servo2.writeMicroseconds((int)((outputs->s2) * (robot_specs->max_thrust - robot_specs->min_thrust) + robot_specs->min_thrust));
+      }
+      else
+      {
+        thrust1.writeMicroseconds((int) 0);
+        thrust2.writeMicroseconds((int) 0);
+        servo1.writeMicroseconds((int) 0);
+        servo2.writeMicroseconds((int) 0);
+      }
   }
   return Vbattf;
 }
@@ -682,6 +718,53 @@ void ModBlimp::escarm(Servo &thrust1, Servo &thrust2)
   delay(10);
 }
 
+// Enter arming sequence for ESC
+void ModBlimp::escarm4(Servo &thrust1, Servo &thrust2, Servo &thrust3, Servo &thrust4)
+{
+  // ESC arming sequence for BLHeli S
+  thrust1.writeMicroseconds(1000);
+  delay(10);
+  thrust2.writeMicroseconds(1000);
+  delay(10);
+  thrust3.writeMicroseconds(1000);
+  delay(10);
+  thrust4.writeMicroseconds(1000);
+  delay(10);
+
+  // Sweep up
+  for (int i = 1100; i < 1500; i++)
+  {
+    thrust1.writeMicroseconds(i);
+    delay(5);
+    thrust2.writeMicroseconds(i);
+    delay(5);
+    thrust3.writeMicroseconds(i);
+    delay(5);
+    thrust4.writeMicroseconds(i);
+    delay(5);
+  }
+  // Sweep down
+  for (int i = 1500; i > 1100; i--)
+  {
+    thrust1.writeMicroseconds(i);
+    delay(5);
+    thrust2.writeMicroseconds(i);
+    delay(5);
+    thrust3.writeMicroseconds(i);
+    delay(5);
+    thrust4.writeMicroseconds(i);
+    delay(5);
+  }
+  // Back to minimum value
+  thrust1.writeMicroseconds(1000);
+  delay(10);
+  thrust2.writeMicroseconds(1000);
+  delay(10);
+  thrust3.writeMicroseconds(1000);
+  delay(10);
+  thrust4.writeMicroseconds(1000);
+  delay(10);
+}
 
 void ModBlimp::getSensorRaws(ReceivedData *sensorData)
 {
@@ -706,6 +789,36 @@ void ModBlimp::calibrate_esc(Servo &thrust1, Servo &thrust2)
   thrust2.writeMicroseconds(1000);
   delay(10);
 
+
+
+  Serial.println("Calibration completed");
+}
+
+// Enter arming sequence for ESC
+void ModBlimp::calibrate_esc4(Servo &thrust1, Servo &thrust2,Servo &thrust3, Servo &thrust4)
+{
+  delay(1000);
+  Serial.println("Calibrating ESCs....");
+  // ESC arming sequence for BLHeli S
+  thrust1.writeMicroseconds(2000);
+  delay(10);
+  thrust2.writeMicroseconds(2000);
+  delay(10);
+  thrust3.writeMicroseconds(2000);
+  delay(10);
+  thrust4.writeMicroseconds(2000);
+  delay(15000);
+
+
+  // Back to minimum value
+  thrust1.writeMicroseconds(1000);
+  delay(10);
+  thrust2.writeMicroseconds(1000);
+  delay(10);
+  thrust3.writeMicroseconds(2000);
+  delay(10);
+  thrust4.writeMicroseconds(2000);
+  delay(10);
 
 
   Serial.println("Calibration completed");

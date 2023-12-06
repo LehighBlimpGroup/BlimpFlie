@@ -21,12 +21,12 @@
                         "kppitch" : 0,
                         "kdpitch" : 0,
                         "kpyaw" : -1.50,
-                        "kdyaw" : -0.03,
+                        "kdyaw" : -0.025,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0.06,
-                        "kdy" : 0.06,
+                        "kpy" : 0.04,
+                        "kdy" : 0.04,
                         "kpz" : 0.7,
                         "kdz" : 0.5,
                         "kiz" : 0.05,
@@ -92,10 +92,10 @@
             "goal_theta_front": 110,
             "goal_dist_thresh" : 110,
             "max_move_x" : 0.3,
-            "goal_ratio" : 1,
+            "goal_ratio" : 1.5,
             "yaw_move_threshold" : 0.2,
             "height_threshold" : 0.55,
-            "height_strength" : 5,
+            "height_strength" : 2.5,
             "x_cal_weight" : 0.75,
             "spiral_strength" : 0.5
 

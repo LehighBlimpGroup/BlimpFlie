@@ -75,31 +75,14 @@ class JoystickHandler:
         self.time_start = time.time()
 
         # self.fx = -1 * self.right_vertical
-        self.fx = (self.right_trigger + 1)/2 - (self.left_trigger + 1) / 2
-        self.fz = self.fz + -1* self.left_vertical * dt if self.b_state else base_height
-        # Z in range
-        self.fz = min(max(self.fz, MIN_Z), MAX_Z)
-
-        if self.yaw_sensor_enabled and yaw_mode == 1:
-            # self.tz += -.1 * self.right_horizontal
-
-            des_yaw = atan2(-self.right_vertical, self.right_horizontal)
-            magnitude = sqrt(self.right_vertical**2 + self.right_horizontal**2)
-
-            if magnitude > 0.5:
-                self.tz = des_yaw
-
-            if not self.b_state:
-                self.tz = base_yaw
-
-        elif self.yaw_sensor_enabled and yaw_mode == 0:
-            self.tz += -1 * self.right_horizontal*dt if self.b_state else base_yaw
-        else:
-            self.tz = -1 * self.right_horizontal
+        self.fx = -.5*self.left_vertical
+        self.fy = .5*self.left_horizontal
+        servo = (self.right_trigger + 1)/2 - (self.left_trigger + 1) / 2
+        self.tz = -.5 * self.right_horizontal
         
         
 
-        return [int(self.b_state), self.fx, self.fy, self.fz, self.tx, self.ty, self.tz, 0, 0, 0, 0, 0, 0]
+        return [int(self.b_state), self.fx, self.fy, 0, 0, 0, self.tz, int(servo * 90 + 90), 0, 0, 0, 0, 0]
 
     def get_sblimp_controls(self):
         """Return controls for sblimp."""

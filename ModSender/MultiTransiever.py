@@ -31,10 +31,10 @@ robotConfigs = [RobotConfig(esp_now, i, robot_mac) for i, robot_mac in enumerate
 sensor_guis = [SensorGUI(GUI_ENABLED,robConfig=robConfig) for robConfig in robotConfigs]
 
 # Send flags to each robot
-for robConfig in robotConfigs:
-    # Set configs for all slave indexes that you want to use
-    print("Connecting to robot %d: "%robConfig.slave_index, robConfig.mac)
-    robConfig.initialize_system()
+# for robConfig in robotConfigs:
+#     # Set configs for all slave indexes that you want to use
+#     print("Connecting to robot %d: "%robConfig.slave_index, robConfig.mac)
+#     robConfig.initialize_system()
 
 
 # Autonomous Behavior
@@ -47,7 +47,8 @@ y_pressed = False
 try:
     while not y_pressed:
         outputs, y_pressed, a_key_pressed = joyhandler.get_outputs(yaw_mode=JOYSTICK_YAW_MODE)  # get joystick input
-        outputs[8] = int(a_key_pressed)
+        if a_key_pressed:
+            outputs[8] = 1
         
         # For each robot
         for i, robotConfig in enumerate(robotConfigs):
@@ -63,18 +64,26 @@ try:
 
 
             # Display sensors and output
-            sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)
-            sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[1])  # display sensor data
+            # sensor_guis[i].update_nicla_box(nicla[0], 160 - nicla[1], nicla[2], nicla[3], 240, 160)
+            # sensor_guis[i].update_interface(feedback[1], outputs[6], feedback[0], outputs[3], feedback[1])  # display sensor data
 
             # Send message to all robots
+            # outputs[0] = 1
+            # outputs[1] = 0 #fx
+            # outputs[2] = 0 #fy
+            # outputs[3] = 0 #fz
+            # outputs[4] = 0 #tx
+            # outputs[5] = 0 #ty
+            # outputs[6] = 0 #tz
+            # outputs[7] = 0 #servo
             sent = esp_now.send([21] + outputs[:-1], BRODCAST_CHANNEL, robotConfig.slave_index)  # send control command to robot
 
 
         # time.sleep(0.02)
         if not sent:
-            sensor_guis[0].sleep(0.18)
+            sensor_guis[0].sleep(0.22)
 
-        sensor_guis[0].sleep(0.02)
+        sensor_guis[0].sleep(0.10)
 
 except KeyboardInterrupt:
     print("Loop terminated by user.")
