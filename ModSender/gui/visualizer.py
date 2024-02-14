@@ -327,6 +327,11 @@ class SensorGUI:
         print("Send Flags")
 
     def on_toggle_click(self, label):
+
+
+
+
+
         print(f'Toggle {label} clicked.')
         self.toggle_power = self.toggle.get_status()[0]
 

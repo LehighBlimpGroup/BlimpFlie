@@ -9,10 +9,10 @@
 #include <ESPNOW.h>
 
 
-#define SERVO1 D9
-#define SERVO2 D10
-#define THRUST1 D1
-#define THRUST2 D0
+#define SERVO1 D0
+#define SERVO2 D1
+#define THRUST1 D9
+#define THRUST2 D10
 #define BATT A2
 
 

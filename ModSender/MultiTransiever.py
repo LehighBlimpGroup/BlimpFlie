@@ -14,9 +14,6 @@ Z_SENSOR = True
 
 # User interface
 
-
-
-
 # Joystick
 joyhandler = JoystickHandler(yaw_sensor=YAW_SENSOR)
 

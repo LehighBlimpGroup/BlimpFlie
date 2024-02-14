@@ -4,7 +4,7 @@ ROBOT_JASON = "bicopterbasic"
 #ESPNOW PARAMS
 # MASTER_MAC = "34:85:18:91:C7:80" #address of the transceiver
 ESP_VERBOSE = False
-PORT = "COM9" #serial port for the transiever
+PORT = "COM4" #serial port for the transiever
 
 
 LIST_OF_MAC_ADDRESS = [
@@ -24,23 +24,26 @@ LIST_OF_MAC_ADDRESS = [
 #     "34:85:18:8F:36:B0", # Diego
 #     "34:85:18:91:CF:40"
 # From here
-#     "48:27:E2:E6:E6:50", #1 check
+#    "34:85:18:91:CF:40"     #     "48:27:E2:E6:E6:50", #1 check
 #     "48:27:E2:E6:E5:64", #2 check
-#     "48:27:E2:E6:E1:00", #3 check
-#     "34:85:18:91:BD:B0", #4 no working
-#
-#     "34:85:18:91:BC:94" #5
-#     "48:27:E2:E6:E0:1C", #6
-#     "34:85:18:91:C1:2C", #7
+#     "48:27:E2:E6:E1:00", #3 check final
+# #     "34:85:18:91:BD:B0", #4 no working,MM,
+# #     "34:85:18:91:BC:94", #5
+# #     "48:27:E2:E6:E0:1C", #6 check
+#     "34:85:18:91:C1:2C",#7 final
 #     "34:85:18:AC:B5:20", #8 check
-    "34:85:18:AC:0E:30", #9
-    # "34:85:18:8D:A0:D4", #10
+#     "34:85:18:AC:0E:30", #9
+#     "34:85:18:8D:A0:D4", #10
     # "34:85:18:AC:0E:30"  #11
     # "DC:54:75:D7:F7:A4",
     # "34:85:18:AB:FE:68"
+    # "34:85:18:AB:FE:68" #NEW_RING
+    "48:27:E2:E6:E0:1C",
+    # "34:85:18:AB:FE:68"
+    # "34:85:18:AC:BB:70"
 ]
 
-MASTER_MAC = "34:85:18:AB:ED:C0" #"C0:49:EF:E3:34:78"
+MASTER_MAC = "34:85:18:8D:86:70" #"C0:49:EF:E3:34:78"
 BRODCAST_CHANNEL = 1 # SLAVE_INDEX will override this value if SLAVE_INDEX is not -1
 
 
