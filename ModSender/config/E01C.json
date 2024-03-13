@@ -1,6 +1,6 @@
 {
     "bicopterbasic": {
-        "feedbackPD" : { "roll" : 0,
+    "feedbackPD" : { "roll" : 0,
                         "pitch" : 1,
                         "yaw" : 1,
                         "x" : 0,
@@ -9,9 +9,9 @@
                         "rotation" : 0,
 
                         "Croll" : 1,
-                        "Cpitch" : 0, 
+                        "Cpitch" : 0,
                         "Cyaw" : 1,
-                        "Cx" : 1,
+                        "Cx" : 0.3,
                         "Cy" : 0,
                         "Cz" : 1,
                         "Cabsz" : 1,
@@ -20,19 +20,19 @@
                         "kdroll" : 0 ,
                         "kppitch" : 0,
                         "kdpitch" : 0,
-                        "kpyaw" : -1,
-                        "kdyaw" : -0.01,
+                        "kpyaw" : -0.8,
+                        "kdyaw" : -0.02,
                         "kiyaw": 0,
                         "kiyawrate" : -0.00,
                         "yawRateIntegralRange"  : 2,
 
                         "kpx" : 0,
                         "kdx" : 0,
-                        "kpy" : 0,
-                        "kdy" : 0,
-                        "kpz" : 0.5,
-                        "kdz" : 0.2,
-                        "kiz" : 0,
+                        "kpy" : 0.01,
+                        "kdy" : 0.01,
+                        "kpz" : 1,
+                        "kdz" : 0.5,
+                        "kiz" : 0.1,
 
                         "errorYawrateRange" : 0.6,
                         "errorYawRange" : 1,
@@ -49,7 +49,7 @@
                         "rollOffset" : 0,
                         "rollPitchSwitch" : 0,
 
-                        "servo1offset" : 0.1,
+                        "servo1offset" : 0.0,
                         "servo2offset" : 0.0
                         },
         "weights": { "eulerGamma" : 0,
@@ -99,11 +99,11 @@
         "deterministic_walk": {
             "SWITCH_TIME": 10000,
             "NUM_ZIGS": 5,
-            "Z_LEVEL" : 3,
+            "Z_LEVEL" : 4,
             "TIME_ROTATE" : 5000,
             "ANGLE_THRESH" : 0,
             "STEP_ZIG_ZAG" : 0,
-            "FORWARD_FORCE" : 0.5
+            "FORWARD_FORCE" : -2
         }
     }
 }
